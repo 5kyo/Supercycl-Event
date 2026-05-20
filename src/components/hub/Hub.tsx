@@ -9,22 +9,19 @@ import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
 import { LiveSlotCounter } from '@/components/shared/LiveSlotCounter';
 import { useMockState } from '@/lib/mock-state';
+import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
+import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 
-// TEMPORARY stub modals — replaced by Tasks 14-16
-function StubModal({ id, onClose }: { id: string; onClose: () => void }) {
+// TEMPORARY survey stub modal — replaced by Task 16
+import { Modal } from '@/components/modals/Modal';
+function SurveyStub({ onClose }: { onClose: () => void }) {
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={`stub-${id}`}
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60"
-      onClick={onClose}
-    >
-      <div className="rounded-xl bg-surface-solid p-8" onClick={e => e.stopPropagation()}>
-        <p className="mb-4">[Stub modal: {id}]</p>
-        <button onClick={onClose} className="rounded bg-mono-green px-4 py-2 text-bg">Close</button>
+    <Modal title="[Stub] Survey" onClose={onClose}>
+      <p className="text-sm">Survey modal will be implemented in Task 16.</p>
+      <div className="mt-4 flex justify-end">
+        <button type="button" onClick={onClose} className="rounded-lg bg-mono-green px-4 py-2 text-sm font-semibold text-bg">OK</button>
       </div>
-    </div>
+    </Modal>
   );
 }
 
@@ -46,7 +43,9 @@ export function Hub() {
       </section>
       <HubCtaBar onStartSurvey={() => setOpen('survey')} />
 
-      {open && <StubModal id={open} onClose={() => setOpen(null)} />}
+      {open === 'usdt' && <UsdtRegistrationModal onClose={() => setOpen(null)} />}
+      {open === 'icx' && <IcxRegistrationModal onClose={() => setOpen(null)} />}
+      {open === 'survey' && <SurveyStub onClose={() => setOpen(null)} />}
     </main>
   );
 }
