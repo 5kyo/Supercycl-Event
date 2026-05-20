@@ -11,19 +11,7 @@ import { LiveSlotCounter } from '@/components/shared/LiveSlotCounter';
 import { useMockState } from '@/lib/mock-state';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
-
-// TEMPORARY survey stub modal — replaced by Task 16
-import { Modal } from '@/components/modals/Modal';
-function SurveyStub({ onClose }: { onClose: () => void }) {
-  return (
-    <Modal title="[Stub] Survey" onClose={onClose}>
-      <p className="text-sm">Survey modal will be implemented in Task 16.</p>
-      <div className="mt-4 flex justify-end">
-        <button type="button" onClick={onClose} className="rounded-lg bg-mono-green px-4 py-2 text-sm font-semibold text-bg">OK</button>
-      </div>
-    </Modal>
-  );
-}
+import { SurveyModal } from '@/components/modals/SurveyModal';
 
 export function Hub() {
   const { state } = useMockState();
@@ -45,7 +33,7 @@ export function Hub() {
 
       {open === 'usdt' && <UsdtRegistrationModal onClose={() => setOpen(null)} />}
       {open === 'icx' && <IcxRegistrationModal onClose={() => setOpen(null)} />}
-      {open === 'survey' && <SurveyStub onClose={() => setOpen(null)} />}
+      {open === 'survey' && <SurveyModal onClose={() => setOpen(null)} />}
     </main>
   );
 }

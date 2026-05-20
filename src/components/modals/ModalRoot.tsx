@@ -1,20 +1,10 @@
 'use client';
 
-import { Modal } from './Modal';
 import { useMockState } from '@/lib/mock-state';
 import { pickAutoModal, dismissKeyFor } from '@/lib/modalPriority';
-
-// TEMPORARY stub modals — replaced by Task 16
-function StubAutoModal({ id, onClose }: { id: string; onClose: () => void }) {
-  return (
-    <Modal title={`[Stub] ${id}`} onClose={onClose}>
-      <p className="text-sm">This modal will be implemented in Task 16.</p>
-      <div className="mt-4 flex justify-end">
-        <button type="button" onClick={onClose} className="rounded-lg bg-mono-green px-4 py-2 text-sm font-semibold text-bg">OK</button>
-      </div>
-    </Modal>
-  );
-}
+import { SlotSecuredModal } from './SlotSecuredModal';
+import { MilestoneCardModal } from './MilestoneCardModal';
+import { NpsModal } from './NpsModal';
 
 export function ModalRoot() {
   const { state, dispatch } = useMockState();
@@ -22,5 +12,10 @@ export function ModalRoot() {
   if (!id) return null;
 
   const close = () => dispatch({ type: 'DISMISS', key: dismissKeyFor(id) });
-  return <StubAutoModal id={id} onClose={close} />;
+
+  switch (id) {
+    case 'slotSecured':      return <SlotSecuredModal onClose={close} />;
+    case 'halfwayMilestone': return <MilestoneCardModal onClose={close} />;
+    case 'nps':              return <NpsModal onClose={close} />;
+  }
 }
