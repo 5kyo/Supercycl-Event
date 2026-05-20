@@ -29,6 +29,7 @@ export type DismissedFlags = {
   halfwayMilestone?: boolean;
   slotSecuredModal?: boolean;
   npsModal?: boolean;
+  surveyCompleteSeen?: boolean;
 };
 
 export type MockState = {

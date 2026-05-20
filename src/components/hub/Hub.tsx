@@ -1,20 +1,92 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HubHeader } from './HubHeader';
 import { ProgressTracker } from './ProgressTracker';
 import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
+import { HubPending } from './HubPending';
+import { HubCompleted } from './HubCompleted';
+import { HubExpired } from './HubExpired';
 import { SlotTension } from '@/components/shared/SlotTension';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 import { SurveyModal } from '@/components/modals/SurveyModal';
+import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
+import { useMockState, hubVariant } from '@/lib/mock-state';
+
+type Open = 'usdt' | 'icx' | 'survey' | 'surveyComplete' | null;
 
 export function Hub() {
-  const [open, setOpen] = useState<'usdt' | 'icx' | 'survey' | null>(null);
+  const { state, dispatch } = useMockState();
+  const [open, setOpen] = useState<Open>(null);
+  const variant = hubVariant(state);
 
+  useEffect(() => {
+    if (
+      state.surveyCompleted &&
+      !state.dismissedFlags.surveyCompleteSeen &&
+      open === null
+    ) {
+      setOpen('surveyComplete');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.surveyCompleted, state.dismissedFlags.surveyCompleteSeen]);
+
+  function closeSurveyComplete() {
+    dispatch({ type: 'DISMISS', key: 'surveyCompleteSeen' });
+    setOpen(null);
+  }
+
+  function registerIcxFromSurveyComplete() {
+    dispatch({ type: 'DISMISS', key: 'surveyCompleteSeen' });
+    setOpen('icx');
+  }
+
+  const modals = (
+    <>
+      {open === 'usdt' && <UsdtRegistrationModal onClose={() => setOpen(null)} />}
+      {open === 'icx' && <IcxRegistrationModal onClose={() => setOpen(null)} />}
+      {open === 'survey' && <SurveyModal onClose={() => setOpen(null)} />}
+      {open === 'surveyComplete' && (
+        <SurveyCompleteModal
+          onClose={closeSurveyComplete}
+          onRegisterIcx={registerIcxFromSurveyComplete}
+        />
+      )}
+    </>
+  );
+
+  if (variant === 'pending') {
+    return (
+      <main className="pb-2xl">
+        <HubPending onRegisterUsdt={() => setOpen('usdt')} />
+        {modals}
+      </main>
+    );
+  }
+
+  if (variant === 'completed') {
+    return (
+      <main className="pb-2xl">
+        <HubCompleted />
+        {modals}
+      </main>
+    );
+  }
+
+  if (variant === 'expired') {
+    return (
+      <main className="pb-2xl">
+        <HubExpired />
+        {modals}
+      </main>
+    );
+  }
+
+  // Default: trade-track active, building progress toward $500
   return (
     <main className="pb-24 lg:pb-12">
       <HubHeader />
@@ -28,10 +100,7 @@ export function Hub() {
         <IcxRewardCard onRegister={() => setOpen('icx')} />
       </section>
       <HubCtaBar onStartSurvey={() => setOpen('survey')} />
-
-      {open === 'usdt' && <UsdtRegistrationModal onClose={() => setOpen(null)} />}
-      {open === 'icx' && <IcxRegistrationModal onClose={() => setOpen(null)} />}
-      {open === 'survey' && <SurveyModal onClose={() => setOpen(null)} />}
+      {modals}
     </main>
   );
 }

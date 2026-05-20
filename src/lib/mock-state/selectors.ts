@@ -41,6 +41,36 @@ export function registrationCutoffPassed(s: MockState): boolean {
   return s.simulatedDate > REGISTRATION_CUTOFF;
 }
 
+export function eventEnded(s: MockState): boolean {
+  return s.simulatedDate > CAMPAIGN_END;
+}
+
+export type HubVariant = 'default' | 'pending' | 'completed' | 'expired';
+
+/** Pick which Hub layout to render based on user/event state. */
+export function hubVariant(s: MockState): HubVariant {
+  // Expired: past Aug 6 cutoff with at least one unredeemed reward.
+  if (registrationCutoffPassed(s)) {
+    const hasUnredeemedUsdt =
+      isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료';
+    const hasUnredeemedIcx =
+      s.surveyCompleted && s.icxPayoutStatus !== '완료';
+    if (hasUnredeemedUsdt || hasUnredeemedIcx) return 'expired';
+  }
+
+  // Completed: both rewards paid.
+  if (s.usdtPayoutStatus === '완료' && s.icxPayoutStatus === '완료') {
+    return 'completed';
+  }
+
+  // Pending: $500 trade hit (qualified) but USDT not paid yet.
+  if (isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료') {
+    return 'pending';
+  }
+
+  return 'default';
+}
+
 export function bannerType(s: MockState): BannerType {
   if (!inCampaignWindow(s)) return null;
   const d = daysUntilEnd(s);

@@ -1,27 +1,32 @@
 'use client';
 
 import { en } from '@/content/en';
-import { useMockState } from '@/lib/mock-state';
+import { useMockState, daysUntilEnd } from '@/lib/mock-state';
 
 export function HubHeader() {
   const { state, dispatch } = useMockState();
   const showWelcome = !state.dismissedFlags.welcomeCard;
+  const days = daysUntilEnd(state);
 
   return (
-    <header className="px-6 py-8 lg:py-12">
+    <header className="px-6 py-lg lg:py-2xl">
       <div className="mx-auto flex max-w-6xl flex-col gap-md">
-        <p className="text-label-sm uppercase tracking-[0.22em] text-accent">
-          {en.meta.period}
-        </p>
-        <h1 className="text-title-lg font-bold lg:text-display-lg">{en.meta.title}</h1>
-        <a
-          href="https://supercycl-mobile.vercel.app"
-          className="inline-flex items-center gap-1 text-body-md text-accent hover:text-accent-light"
-        >
-          {en.cta.goToMain} <span aria-hidden>→</span>
-        </a>
+        {/* LIVE + identity row (V2 design: small compact row at top) */}
+        <div className="flex items-center justify-between">
+          <p className="upper-label text-accent">● LIVE · D-{days}</p>
+          <span
+            className="font-mono text-text-tertiary"
+            style={{ fontSize: 11, letterSpacing: '0.08em' }}
+          >
+            @youthmember
+          </span>
+        </div>
+
         {showWelcome && (
-          <div className="card-elevated mt-md flex items-start justify-between gap-md" style={{ padding: '18px' }}>
+          <div
+            className="card-elevated flex items-start justify-between gap-md"
+            style={{ padding: 18 }}
+          >
             <p className="text-body-md text-text-primary">{en.hub.welcomeCard}</p>
             <button
               type="button"

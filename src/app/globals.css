@@ -60,6 +60,16 @@
   --warning: #FFA726;
   --info: #29B6F6;
   --info-tint: rgba(41,182,246,0.12);
+  --info-border: rgba(41,182,246,0.25);
+  --warning-tint: rgba(255,167,38,0.10);
+  --warning-border: rgba(255,167,38,0.25);
+
+  /* === Festival aura colors (decorative only) === */
+  --aura-cyan: #22D3EE;
+  --aura-cyan-soft: rgba(34,211,238,0.18);
+  --aura-magenta: #D946EF;
+  --aura-magenta-soft: rgba(217,70,239,0.14);
+  --accent-gradient-bold: linear-gradient(135deg, #7EF0A8 0%, #00E676 45%, #00B254 100%);
 
   /* === Ambient Glow (§2.6) === */
   --glow-primary: rgba(0,230,118,0.26);
@@ -95,6 +105,7 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 20px;
+  --radius-2xl: 28px;
   --radius-full: 9999px;
 
   /* === Blur (§2.10) === */

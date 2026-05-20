@@ -1,18 +1,16 @@
 'use client';
 
+import { DesktopTopBar } from './DesktopTopBar';
 import { LandingHero } from './LandingHero';
 import { RewardSummaryCard } from './RewardSummaryCard';
 import { ThreeStepGuide } from './ThreeStepGuide';
 import { JoinCta } from './JoinCta';
-import { SlotTension } from '@/components/shared/SlotTension';
 
 export function Landing() {
   return (
     <main>
+      <DesktopTopBar />
       <LandingHero />
-      <section className="mx-auto max-w-6xl px-6">
-        <SlotTension size="lg" />
-      </section>
       <RewardSummaryCard />
       <ThreeStepGuide />
       <JoinCta />

@@ -80,6 +80,7 @@ const config: Config = {
         md: '10px',
         lg: '14px',
         xl: '20px',
+        '2xl': '28px',
       },
       boxShadow: {
         card: '0 4px 24px rgba(0,230,118,0.08)',
