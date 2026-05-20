@@ -4,19 +4,15 @@ import { useEffect, useState } from 'react';
 import { AuthSection } from './AuthSection';
 import { TradingSection } from './TradingSection';
 import { SlotsSection } from './SlotsSection';
+import { UsdtSection } from './UsdtSection';
+import { SurveySection } from './SurveySection';
+import { IcxSection } from './IcxSection';
+import { TimeSection } from './TimeSection';
+import { ViewportSection } from './ViewportSection';
+import { FlagsSection } from './FlagsSection';
 import { useMockState } from '@/lib/mock-state';
 import { clearState } from '@/lib/mock-state/persistence';
 import { initialState } from '@/lib/mock-state';
-
-// TEMPORARY stub sections — replaced by Task 18
-function StubSection({ name }: { name: string }) {
-  return (
-    <section>
-      <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-muted">{name}</h3>
-      <p className="text-xs text-muted italic">[Stub — Task 18]</p>
-    </section>
-  );
-}
 
 export function DebugDrawer() {
   const [open, setOpen] = useState(false);
@@ -71,12 +67,12 @@ export function DebugDrawer() {
             <AuthSection />
             <TradingSection />
             <SlotsSection />
-            <StubSection name="USDT" />
-            <StubSection name="Survey" />
-            <StubSection name="ICX" />
-            <StubSection name="Time" />
-            <StubSection name="Viewport" />
-            <StubSection name="Flags" />
+            <UsdtSection />
+            <SurveySection />
+            <IcxSection />
+            <TimeSection />
+            <ViewportSection />
+            <FlagsSection />
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
