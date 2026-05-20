@@ -11,34 +11,37 @@ export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
   const reg = state.usdtRegistration;
 
   return (
-    <article className="flex flex-col gap-3 rounded-xl bg-surface p-5 ring-1 ring-muted/20">
-      <header className="flex items-baseline justify-between">
-        <h3 className="font-semibold">{en.rewards.usdtCardTitle}</h3>
+    <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
+      <header className="flex items-baseline justify-between gap-md">
+        <h3 className="text-title-md">{en.rewards.usdtCardTitle}</h3>
         <RewardStatusLabel status={state.usdtPayoutStatus} />
       </header>
       {!qualified && state.usdtPayoutStatus === '미달성' && (
-        <p className="text-sm text-muted">
+        <p className="text-body-md text-text-secondary">
           Trade ${Math.max(0, 500 - state.tradingVolume)} more to unlock.
         </p>
       )}
       {reg.status === 'wallet' && (
-        <p className="text-xs text-muted">Wallet: {reg.trc20Address.slice(0, 4)}…{reg.trc20Address.slice(-4)}</p>
+        <p className="text-body-sm text-text-tertiary">
+          Wallet: {reg.trc20Address.slice(0, 4)}…{reg.trc20Address.slice(-4)}
+        </p>
       )}
       {reg.status === 'exchange' && (
-        <p className="text-xs text-muted">OKX UID: {reg.okxUid}</p>
+        <p className="text-body-sm text-text-tertiary">OKX UID: {reg.okxUid}</p>
       )}
       {state.usdtPayoutStatus === '완료' && state.usdtTxHash && (
-        <p className="text-xs text-muted">TX: {state.usdtTxHash.slice(0, 10)}…</p>
+        <p className="text-body-sm text-text-tertiary">TX: {state.usdtTxHash.slice(0, 10)}…</p>
       )}
       {needsRegistration && registrationCutoffPassed(state) && (
-        <p className="rounded-md bg-surface px-3 py-2 text-xs italic text-muted">{en.outsideWindow.registrationClosed}</p>
+        <p
+          className="rounded-md text-body-sm italic text-text-tertiary"
+          style={{ background: 'var(--surface-2)', padding: '10px 12px' }}
+        >
+          {en.outsideWindow.registrationClosed}
+        </p>
       )}
       {needsRegistration && !registrationCutoffPassed(state) && (
-        <button
-          type="button"
-          onClick={onRegister}
-          className="rounded-lg bg-mono-green px-4 py-2 text-sm font-semibold text-bg transition hover:brightness-110"
-        >
+        <button type="button" onClick={onRegister} className="btn-primary-sm self-start">
           {en.cta.registerUsdt}
         </button>
       )}

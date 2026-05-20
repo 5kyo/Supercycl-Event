@@ -4,6 +4,9 @@ import { CAMPAIGN_START, CAMPAIGN_END } from '@/lib/mock-state';
 
 type Props = { variant: BannerType };
 
+/* Keeps legacy palette names (mono-green/amber/orange/red/blue) so existing
+ * TopBanner.test.tsx assertions continue to pass; alpha syntax now works
+ * thanks to channel-format color tokens. */
 const colorByVariant: Record<NonNullable<BannerType>, string> = {
   'campaign-running': 'bg-mono-green/10 text-mono-green border-mono-green/30',
   'slots-100':        'bg-amber/15 text-amber border-amber/40',
@@ -25,7 +28,11 @@ function textFor(variant: NonNullable<BannerType>): string {
 export function TopBanner({ variant }: Props) {
   if (!variant) return null;
   return (
-    <div className={`border-b px-4 py-3 text-center text-sm ${colorByVariant[variant]}`} role="region" aria-live="polite">
+    <div
+      className={`border-b px-md py-md text-center text-label-lg backdrop-blur-subtle ${colorByVariant[variant]}`}
+      role="region"
+      aria-live="polite"
+    >
       <div className="mx-auto max-w-6xl">{textFor(variant)}</div>
     </div>
   );

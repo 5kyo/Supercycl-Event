@@ -12,11 +12,22 @@ function tensionClass(remaining: number): string {
 export function LiveSlotCounter({ remaining }: Props) {
   const tension = tensionClass(remaining);
   return (
-    <div className="flex flex-col gap-1" aria-live="polite">
-      <span className="text-sm text-muted">{en.slot.label}</span>
+    <div
+      className="card flex flex-col gap-1"
+      style={{ padding: '20px' }}
+      aria-live="polite"
+    >
+      <span className="text-label-sm uppercase tracking-wider text-text-secondary">
+        {en.slot.label}
+      </span>
       <div className="flex items-baseline gap-2">
-        <span className={`event-countdown-numerals text-4xl font-bold ${tension}`}>{remaining}</span>
-        <span className="text-lg text-muted">{en.slot.suffix}</span>
+        <span
+          className={`event-countdown-numerals text-5xl font-bold lg:text-6xl ${tension || 'text-accent'}`}
+          style={{ fontVariantNumeric: 'tabular-nums' }}
+        >
+          {remaining}
+        </span>
+        <span className="text-title-md text-text-tertiary">{en.slot.suffix}</span>
       </div>
     </div>
   );

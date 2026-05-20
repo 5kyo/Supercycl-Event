@@ -1,12 +1,13 @@
 import './globals.css';
-import { Inter, IBM_Plex_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { MockStateProvider } from '@/lib/mock-state';
 import { DebugDrawer } from '@/components/debug/DebugDrawer';
 import { ViewportFrame } from '@/components/ViewportFrame';
 import { InconsistentStateWarning } from '@/components/shared/InconsistentStateWarning';
 
-const inter = Inter({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -30,11 +31,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" className={`${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
       <body className="font-sans">
         <a
           href="#main-content"
-          className="absolute left-2 top-2 z-[100] -translate-y-20 rounded-md bg-mono-green px-3 py-2 text-bg transition focus:translate-y-0"
+          className="absolute left-2 top-2 z-[100] -translate-y-20 rounded-md bg-mono-green px-3 py-2 text-text-inverse transition focus:translate-y-0"
         >
           Skip to main content
         </a>

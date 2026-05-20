@@ -14,8 +14,11 @@ export function ViewportFrame({ children }: { children: ReactNode }) {
   if (state.debugViewport === 'auto') return <>{children}</>;
   const width = WIDTHS[state.debugViewport]!;
   return (
-    <div className="flex min-h-screen justify-center bg-black/40 p-6">
-      <div className="border border-mono-green/40 shadow-2xl" style={{ width, minHeight: '90vh', maxWidth: '100%' }}>
+    <div className="flex min-h-screen justify-center p-6">
+      <div
+        className="border border-border-glass-strong rounded-xl shadow-card backdrop-blur-card"
+        style={{ width, minHeight: '90vh', maxWidth: '100%' }}
+      >
         {children}
       </div>
     </div>

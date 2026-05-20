@@ -1,0 +1,211 @@
+/* Component primitives — ported from Supercycl-Mobile theme-design.css §3.
+ * Uses CSS variables from globals.css (Mobile token set).
+ * Apply via class names: .card, .btn-primary, .input, .modal, etc.
+ */
+
+/* ───────────────────────────────────────────────────────────────────
+ * Cards
+ * ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--card-padding);
+}
+.card-elevated {
+  background: var(--card-elevated-bg);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  border: var(--card-elevated-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--card-padding);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Buttons
+ * ─────────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-height);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  box-shadow: var(--btn-primary-shadow);
+  border-radius: var(--btn-primary-radius);
+  padding: var(--btn-primary-padding);
+  font: var(--btn-primary-font);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out), filter var(--duration-fast) var(--ease-out);
+}
+.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+.btn-primary:active:not(:disabled) { transform: scale(0.98); }
+.btn-primary:disabled,
+.btn-primary.disabled {
+  background: var(--accent-disabled);
+  cursor: default;
+  box-shadow: none;
+}
+
+.btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-sm-height);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  box-shadow: var(--btn-primary-shadow);
+  border-radius: var(--btn-primary-radius);
+  padding: var(--btn-sm-padding);
+  font: var(--btn-sm-font);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out), filter var(--duration-fast) var(--ease-out);
+}
+.btn-primary-sm:hover:not(:disabled) { filter: brightness(1.08); }
+.btn-primary-sm:active:not(:disabled) { transform: scale(0.98); }
+.btn-primary-sm:disabled,
+.btn-primary-sm.disabled {
+  background: var(--accent-disabled);
+  cursor: default;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-height);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-fg);
+  border: var(--btn-secondary-border);
+  border-radius: var(--btn-secondary-radius);
+  padding: var(--btn-secondary-padding);
+  font: var(--btn-secondary-font);
+  cursor: pointer;
+  backdrop-filter: var(--blur-subtle);
+  -webkit-backdrop-filter: var(--blur-subtle);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--surface-press); }
+
+.btn-secondary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-sm-height);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-fg);
+  border: var(--btn-secondary-border);
+  border-radius: var(--btn-secondary-radius);
+  padding: var(--btn-sm-padding);
+  font: var(--btn-sm-font);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.btn-secondary-sm:hover:not(:disabled) { background: var(--surface-press); }
+
+.btn-ghost {
+  background: var(--btn-ghost-bg);
+  color: var(--btn-ghost-fg);
+  border: none;
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font: var(--font-body-md);
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.btn-ghost:hover:not(:disabled) { color: var(--text-primary); background: var(--surface-press); }
+
+/* ───────────────────────────────────────────────────────────────────
+ * Inputs
+ * ─────────────────────────────────────────────────────────────────── */
+.input {
+  display: block;
+  width: 100%;
+  height: var(--input-height);
+  background: var(--input-bg);
+  border: var(--input-border);
+  border-radius: var(--input-radius);
+  padding: var(--input-padding);
+  font: var(--input-font);
+  color: var(--text-primary);
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.input::placeholder { color: var(--text-tertiary); }
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  border: var(--input-border-focus);
+  box-shadow: var(--input-focus-ring);
+}
+.input[aria-invalid="true"],
+.input.error {
+  border-color: var(--border-error);
+}
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Modal / Bottom Sheet
+ * ─────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--surface-overlay);
+  backdrop-filter: var(--modal-blur);
+  -webkit-backdrop-filter: var(--modal-blur);
+  z-index: 40;
+}
+
+.modal {
+  background: var(--modal-bg);
+  backdrop-filter: var(--modal-blur);
+  -webkit-backdrop-filter: var(--modal-blur);
+  border: var(--modal-border);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Chips (status labels)
+ * ─────────────────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  height: 22px;
+  padding: 0 var(--space-sm);
+  border-radius: var(--radius-full);
+  font: var(--font-label-sm);
+  white-space: nowrap;
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Stepper number chip (Phase 2 use)
+ * ─────────────────────────────────────────────────────────────────── */
+.step-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--accent-tint);
+  color: var(--accent);
+  font: var(--font-title-sm);
+  border: 1px solid var(--accent-border-soft);
+}
+.step-chip-active {
+  background: var(--accent-gradient);
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: var(--shadow-btn-primary);
+}

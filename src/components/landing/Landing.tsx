@@ -12,7 +12,7 @@ export function Landing() {
   return (
     <main>
       <LandingHero />
-      <section className="mx-auto max-w-6xl px-6 py-6">
+      <section className="mx-auto max-w-6xl px-6">
         <LiveSlotCounter remaining={state.slotsRemaining} />
       </section>
       <RewardSummaryCard />

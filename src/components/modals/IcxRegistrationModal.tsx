@@ -32,29 +32,32 @@ export function IcxRegistrationModal({ onClose }: { onClose: () => void }) {
   return (
     <>
       <Modal title={en.modal.icx.title} onClose={onClose}>
-        <label className="flex flex-col gap-1">
-          <span className="text-sm">{en.modal.icx.addressLabel}</span>
+        <label className="flex flex-col gap-xs">
+          <span className="text-label-lg text-text-secondary">{en.modal.icx.addressLabel}</span>
           <input
             aria-invalid={!!errors.addr}
             aria-describedby={errors.addr ? 'err-addr' : undefined}
             value={addr}
             onChange={e => setAddr(e.target.value)}
-            className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20"
+            className="input"
           />
-          {errors.addr && <span id="err-addr" className="text-xs text-red">{errors.addr}</span>}
+          {errors.addr && <span id="err-addr" className="text-body-sm text-sell">{errors.addr}</span>}
         </label>
-        <label className="mt-4 flex items-start gap-2 text-sm">
-          <input type="checkbox" checked={termsOk} onChange={e => setTermsOk(e.target.checked)} />
+        <label className="mt-lg flex items-start gap-sm text-body-md">
+          <input type="checkbox" checked={termsOk} onChange={e => setTermsOk(e.target.checked)} className="mt-1 accent-accent" />
           <span>
             {en.modal.icx.termsCheck}{' '}
-            <button type="button" onClick={() => setShowTerms(true)} className="text-mono-green underline">
+            <button type="button" onClick={() => setShowTerms(true)} className="text-accent underline hover:text-accent-light">
               {en.cta.viewTerms}
             </button>
           </span>
         </label>
-        {errors.terms && <p className="text-xs text-red">{errors.terms}</p>}
-        <div className="mt-6 flex justify-end">
-          <button type="button" onClick={submit} className="rounded-lg bg-mono-green px-5 py-2 font-semibold text-bg">
+        {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
+        <div className="mt-2xl flex justify-end gap-md">
+          <button type="button" onClick={onClose} className="btn-secondary-sm">
+            Cancel
+          </button>
+          <button type="button" onClick={submit} className="btn-primary-sm">
             {en.modal.icx.submit}
           </button>
         </div>

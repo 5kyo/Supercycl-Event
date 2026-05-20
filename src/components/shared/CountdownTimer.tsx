@@ -36,14 +36,24 @@ export function CountdownTimer({ endDate }: Props) {
   const { h, m, s, ended } = hms(now, endDate);
 
   if (ended && days === 0) {
-    return <span className="event-countdown-numerals text-mono-green">D-0</span>;
+    return <span className="event-countdown-numerals text-accent text-display-md">D-0</span>;
   }
   return (
-    <span className="event-countdown-numerals">
-      <span className="text-3xl font-bold text-mono-green">D-{days}</span>
-      <span className="ml-3 hidden text-lg text-muted lg:inline">
+    <div className="flex items-baseline gap-md">
+      <span
+        className="event-countdown-numerals text-3xl font-bold lg:text-display-lg"
+        style={{
+          backgroundImage: 'var(--accent-gradient)',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          color: 'transparent',
+        }}
+      >
+        D-{days}
+      </span>
+      <span className="event-countdown-numerals hidden text-body-lg text-text-tertiary lg:inline">
         {String(h).padStart(2, '0')}:{String(m).padStart(2, '0')}:{String(s).padStart(2, '0')}
       </span>
-    </span>
+    </div>
   );
 }

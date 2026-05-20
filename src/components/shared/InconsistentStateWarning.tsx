@@ -23,7 +23,10 @@ export function InconsistentStateWarning() {
   const list = inconsistencies(state);
   if (list.length === 0) return null;
   return (
-    <div className="border-l-4 border-red bg-red/10 px-4 py-2 text-xs text-red">
+    <div
+      className="border-l-4 border-red bg-red/10 px-md py-sm text-body-sm text-red"
+      role="alert"
+    >
       <p className="font-semibold">⚠️ {en.errors.inconsistentState}</p>
       <ul className="list-inside list-disc">
         {list.map(m => <li key={m}>{m}</li>)}

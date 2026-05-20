@@ -39,16 +39,16 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
   if (done) {
     return (
       <Modal title={en.modal.survey.completeTitle} onClose={onClose}>
-        <p className="mb-4 text-sm">{en.modal.survey.completeBody}</p>
-        <div className="rounded-lg bg-bg/40 p-4 text-sm">
-          <p className="mb-2 font-semibold">Mini report</p>
-          <ul className="list-inside list-disc text-muted">
+        <p className="mb-lg text-body-md">{en.modal.survey.completeBody}</p>
+        <div className="card text-body-md" style={{ padding: '16px' }}>
+          <p className="mb-sm text-title-sm">Mini report</p>
+          <ul className="list-inside list-disc text-text-secondary">
             <li>Answers recorded: {Object.keys(answers).length} / {surveyKo.length}</li>
             <li>Trader profile: {state.tradingVolume > 0 ? 'Yes' : 'No'}</li>
           </ul>
         </div>
-        <div className="mt-6 flex justify-end">
-          <button type="button" onClick={onClose} className="rounded-lg bg-mono-green px-4 py-2 font-semibold text-bg">
+        <div className="mt-2xl flex justify-end">
+          <button type="button" onClick={onClose} className="btn-primary-sm">
             {en.modal.survey.registerIcxCta}
           </button>
         </div>
@@ -58,23 +58,50 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
 
   if (!q) return null;
 
+  const pct = ((step + 1) / surveyKo.length) * 100;
+
   return (
     <Modal title={`${en.modal.survey.title} (${step + 1}/${surveyKo.length})`} onClose={onClose} size="lg">
-      <p className="mb-2 text-xs uppercase tracking-widest text-muted">{q.area}</p>
-      <p className="mb-4 text-lg">{q.question}</p>
+      {/* Progress indicator */}
+      <div
+        className="mb-lg h-1 w-full overflow-hidden rounded-full"
+        style={{ background: 'var(--surface-track)' }}
+        role="progressbar"
+        aria-valuenow={step + 1}
+        aria-valuemin={1}
+        aria-valuemax={surveyKo.length}
+      >
+        <div
+          className="h-full transition-all duration-300"
+          style={{ width: `${pct}%`, background: 'var(--accent-gradient)' }}
+        />
+      </div>
+
+      <p className="mb-sm text-label-sm uppercase tracking-[0.22em] text-accent">{q.area}</p>
+      <p className="mb-lg text-title-md">{q.question}</p>
 
       {q.type === 'multi' && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-sm">
           {q.options.map(opt => {
             const cur = (answers[q.id] as string[]) ?? [];
+            const selected = cur.includes(opt);
             return (
-              <label key={opt} className="flex items-center gap-2 rounded-lg bg-bg/40 p-3">
+              <label
+                key={opt}
+                className="flex items-center gap-md rounded-md cursor-pointer transition-colors"
+                style={{
+                  background: selected ? 'var(--accent-tint)' : 'var(--surface-2)',
+                  border: selected ? '1px solid var(--accent-border-soft)' : '1px solid var(--border-subtle)',
+                  padding: '12px 14px',
+                }}
+              >
                 <input
                   type="checkbox"
-                  checked={cur.includes(opt)}
+                  checked={selected}
                   onChange={e => setAnswer(e.target.checked ? [...cur, opt] : cur.filter(x => x !== opt))}
+                  className="accent-accent"
                 />
-                {opt}
+                <span className="text-body-md">{opt}</span>
               </label>
             );
           })}
@@ -82,13 +109,30 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
       )}
 
       {q.type === 'single' && (
-        <div className="flex flex-col gap-2">
-          {q.options.map(opt => (
-            <label key={opt} className="flex items-center gap-2 rounded-lg bg-bg/40 p-3">
-              <input type="radio" name={`q-${q.id}`} checked={answers[q.id] === opt} onChange={() => setAnswer(opt)} />
-              {opt}
-            </label>
-          ))}
+        <div className="flex flex-col gap-sm">
+          {q.options.map(opt => {
+            const selected = answers[q.id] === opt;
+            return (
+              <label
+                key={opt}
+                className="flex items-center gap-md rounded-md cursor-pointer transition-colors"
+                style={{
+                  background: selected ? 'var(--accent-tint)' : 'var(--surface-2)',
+                  border: selected ? '1px solid var(--accent-border-soft)' : '1px solid var(--border-subtle)',
+                  padding: '12px 14px',
+                }}
+              >
+                <input
+                  type="radio"
+                  name={`q-${q.id}`}
+                  checked={selected}
+                  onChange={() => setAnswer(opt)}
+                  className="accent-accent"
+                />
+                <span className="text-body-md">{opt}</span>
+              </label>
+            );
+          })}
         </div>
       )}
 
@@ -96,36 +140,41 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         <textarea
           value={(answers[q.id] as string) ?? ''}
           onChange={e => setAnswer(e.target.value)}
-          className="w-full rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20"
+          className="input w-full"
+          style={{ height: 'auto', minHeight: '96px', padding: '12px 14px', resize: 'vertical' }}
           rows={4}
         />
       )}
 
       {q.type === 'scale5' && (
-        <div className="flex justify-between gap-2">
-          {[1, 2, 3, 4, 5].map(n => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setAnswer(n)}
-              className={`flex-1 rounded-lg p-3 ${answers[q.id] === n ? 'bg-mono-green text-bg' : 'bg-bg/40'}`}
-            >
-              {n}
-            </button>
-          ))}
+        <div className="flex justify-between gap-sm">
+          {[1, 2, 3, 4, 5].map(n => {
+            const selected = answers[q.id] === n;
+            return (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setAnswer(n)}
+                className={selected ? 'btn-primary-sm flex-1' : 'btn-secondary-sm flex-1'}
+                style={{ minWidth: 0 }}
+              >
+                {n}
+              </button>
+            );
+          })}
         </div>
       )}
 
-      <div className="mt-6 flex justify-between">
+      <div className="mt-2xl flex justify-between">
         <button
           type="button"
           onClick={() => setStep(s => Math.max(0, s - 1))}
           disabled={step === 0}
-          className="rounded-lg px-4 py-2 disabled:opacity-40"
+          className="btn-ghost disabled:opacity-40"
         >
           {en.modal.survey.previous}
         </button>
-        <button type="button" onClick={next} className="rounded-lg bg-mono-green px-5 py-2 font-semibold text-bg">
+        <button type="button" onClick={next} className="btn-primary-sm">
           {last ? en.modal.survey.submit : en.modal.survey.next}
         </button>
       </div>

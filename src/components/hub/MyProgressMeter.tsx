@@ -11,16 +11,20 @@ export function MyProgressMeter() {
   const days = daysUntilEnd(state);
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-4">
-      <div className="flex flex-col gap-3 rounded-xl bg-surface p-5 ring-1 ring-mono-green/20">
+    <section className="mx-auto max-w-6xl px-6 py-md">
+      <div className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <span className="text-sm text-muted">{en.progress.volume(state.tradingVolume)}</span>
-          <span className="text-sm text-muted">{en.progress.daysLeft(days)}</span>
+          <span className="text-label-lg text-text-secondary">
+            {en.progress.volume(state.tradingVolume)}
+          </span>
+          <span className="text-label-sm text-text-tertiary">
+            {en.progress.daysLeft(days)}
+          </span>
         </div>
         <ProgressBar value={state.tradingVolume} max={500} ariaLabel="trading volume" />
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-mono-green">{en.progress.remaining(remaining)}</span>
-          <span className="text-muted">{en.progress.slotsLeft(state.slotsRemaining)}</span>
+        <div className="flex items-center justify-between text-label-lg">
+          <span className="text-accent">{en.progress.remaining(remaining)}</span>
+          <span className="text-text-tertiary">{en.progress.slotsLeft(state.slotsRemaining)}</span>
         </div>
       </div>
     </section>

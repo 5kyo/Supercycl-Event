@@ -16,7 +16,7 @@
   font-family: var(--font-mono), 'IBM Plex Mono', ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
-  text-shadow: 0 0 12px color-mix(in oklab, var(--color-mono-green) 40%, transparent);
+  text-shadow: 0 0 12px var(--accent-glow);
 }
 
 /* Progress shimmer — slow loop, lg: only */
@@ -45,9 +45,9 @@
 }
 
 /* Tension state colors for slot counter */
-.event-tension-100 { color: var(--color-amber); }
-.event-tension-50  { color: var(--color-orange); }
-.event-tension-10  { color: var(--color-red); animation: event-pulse 1.2s ease-in-out infinite; }
+.event-tension-100 { color: var(--warning); }
+.event-tension-50  { color: var(--warning); }
+.event-tension-10  { color: var(--sell); animation: event-pulse 1.2s ease-in-out infinite; }
 @keyframes event-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.55; }

@@ -7,10 +7,16 @@ type StepState = 'done' | 'inProgress' | 'locked';
 
 function badge(s: StepState): { text: string; cls: string } {
   switch (s) {
-    case 'done':       return { text: en.hub.stepDone, cls: 'text-mono-green' };
-    case 'inProgress': return { text: en.hub.stepInProgress, cls: 'text-blue' };
-    case 'locked':     return { text: en.hub.stepLocked, cls: 'text-muted' };
+    case 'done':       return { text: en.hub.stepDone, cls: 'text-accent' };
+    case 'inProgress': return { text: en.hub.stepInProgress, cls: 'text-info' };
+    case 'locked':     return { text: en.hub.stepLocked, cls: 'text-text-tertiary' };
   }
+}
+
+function chipClass(s: StepState): string {
+  if (s === 'inProgress') return 'step-chip step-chip-active';
+  if (s === 'done') return 'step-chip';
+  return 'step-chip opacity-50';
 }
 
 export function ProgressTracker() {
@@ -29,18 +35,22 @@ export function ProgressTracker() {
     { num: 3, label: en.steps.step3, state: step3 },
   ];
   return (
-    <section className="mx-auto max-w-6xl px-6 py-4">
-      <h2 className="mb-3 text-lg font-semibold">My progress</h2>
-      <ol className="flex flex-col gap-2">
+    <section className="mx-auto max-w-6xl px-6 py-md">
+      <h2 className="mb-md text-title-md">My progress</h2>
+      <ol className="flex flex-col gap-sm">
         {rows.map(r => {
           const b = badge(r.state);
           return (
-            <li key={r.num} className="flex items-center justify-between rounded-lg bg-surface px-4 py-3">
-              <span className="flex items-center gap-3">
-                <span className="event-countdown-numerals text-mono-green">{r.num}</span>
-                <span>{r.label}</span>
+            <li
+              key={r.num}
+              className="card flex items-center justify-between"
+              style={{ padding: '14px 18px' }}
+            >
+              <span className="flex items-center gap-md">
+                <span className={chipClass(r.state)} aria-hidden>{r.num}</span>
+                <span className="text-body-lg">{r.label}</span>
               </span>
-              <span className={`text-sm ${b.cls}`}>{b.text}</span>
+              <span className={`text-label-lg ${b.cls}`}>{b.text}</span>
             </li>
           );
         })}

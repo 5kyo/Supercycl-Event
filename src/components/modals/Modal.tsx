@@ -26,17 +26,30 @@ export function Modal({ title, onClose, children, size = 'md' }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 backdrop-blur lg:items-center"
+      className="modal-overlay flex items-end justify-center lg:items-center"
       onClick={onClose}
     >
       <div
         ref={ref}
         onClick={e => e.stopPropagation()}
-        className={`relative max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-surface-solid p-6 ring-1 ring-mono-green/20 lg:rounded-2xl ${size === 'lg' ? 'lg:max-w-3xl' : 'lg:max-w-xl'}`}
+        className={`modal relative max-h-[90vh] w-full overflow-y-auto lg:rounded-xl ${size === 'lg' ? 'lg:max-w-3xl' : 'lg:max-w-xl'}`}
+        style={{
+          padding: '24px',
+          /* Bottom sheet on mobile (no top corners), centered modal on lg */
+          borderTopLeftRadius: 'var(--radius-xl)',
+          borderTopRightRadius: 'var(--radius-xl)',
+        }}
       >
-        <header className="mb-4 flex items-start justify-between gap-3">
-          <h2 className="text-xl font-bold">{title}</h2>
-          <button type="button" aria-label="Close" onClick={onClose} className="text-muted hover:text-text">✕</button>
+        <header className="mb-lg flex items-start justify-between gap-md">
+          <h2 className="text-title-lg">{title}</h2>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="btn-ghost shrink-0"
+          >
+            ✕
+          </button>
         </header>
         {children}
       </div>

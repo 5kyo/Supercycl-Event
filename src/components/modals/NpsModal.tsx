@@ -14,24 +14,38 @@ export function NpsModal({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal title={en.modal.nps.title} onClose={onClose}>
-      <p className="mb-4 text-sm">{en.modal.nps.body}</p>
-      <div className="mb-6 flex flex-wrap gap-2">
-        {Array.from({ length: 11 }, (_, i) => i).map(n => (
-          <button
-            key={n}
-            type="button"
-            onClick={() => setScore(n)}
-            className={`min-w-[2.5rem] rounded-lg p-3 text-sm ${score === n ? 'bg-mono-green text-bg' : 'bg-bg/40'}`}
-          >
-            {n}
-          </button>
-        ))}
+      <p className="mb-lg text-body-md text-text-secondary">{en.modal.nps.body}</p>
+      <div className="mb-2xl grid grid-cols-6 gap-xs sm:grid-cols-11">
+        {Array.from({ length: 11 }, (_, i) => i).map(n => {
+          const selected = score === n;
+          return (
+            <button
+              key={n}
+              type="button"
+              onClick={() => setScore(n)}
+              className={selected ? 'btn-primary-sm' : 'btn-secondary-sm'}
+              style={{ minWidth: 0 }}
+            >
+              {n}
+            </button>
+          );
+        })}
       </div>
       {(needsUsdt || needsIcx) && (
-        <p className="mb-4 rounded-md bg-amber/10 p-3 text-sm text-amber">{en.modal.nps.registerReminder}</p>
+        <p
+          className="mb-lg rounded-md text-body-sm"
+          style={{
+            background: 'rgba(255,167,38,0.10)',
+            color: 'var(--warning)',
+            border: '1px solid rgba(255,167,38,0.25)',
+            padding: '12px',
+          }}
+        >
+          {en.modal.nps.registerReminder}
+        </p>
       )}
       <div className="flex justify-end">
-        <button type="button" onClick={onClose} className="rounded-lg bg-mono-green px-5 py-2 font-semibold text-bg">
+        <button type="button" onClick={onClose} className="btn-primary-sm">
           Submit
         </button>
       </div>

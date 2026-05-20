@@ -50,79 +50,106 @@ export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
   return (
     <>
       <Modal title={en.modal.usdt.title} onClose={onClose} size="lg">
-        <fieldset className="mb-4 flex flex-col gap-2">
+        <fieldset className="mb-lg flex flex-col gap-sm">
           <legend className="sr-only">Receiving method</legend>
-          <label className="flex items-center gap-3 rounded-lg bg-bg/40 p-3">
-            <input type="radio" name="m" checked={method === 'wallet'} onChange={() => setMethod('wallet')} />
-            {en.modal.usdt.methodWallet}
+          <label
+            className="flex items-center gap-md rounded-md cursor-pointer transition-colors"
+            style={{
+              background: method === 'wallet' ? 'var(--accent-tint)' : 'var(--surface-2)',
+              border: method === 'wallet' ? '1px solid var(--accent-border-soft)' : '1px solid var(--border-subtle)',
+              padding: '14px',
+            }}
+          >
+            <input type="radio" name="m" checked={method === 'wallet'} onChange={() => setMethod('wallet')} className="accent-accent" />
+            <span className="text-body-md">{en.modal.usdt.methodWallet}</span>
           </label>
-          <label className="flex items-center gap-3 rounded-lg bg-bg/40 p-3">
-            <input type="radio" name="m" checked={method === 'exchange'} onChange={() => setMethod('exchange')} />
-            {en.modal.usdt.methodExchange}
+          <label
+            className="flex items-center gap-md rounded-md cursor-pointer transition-colors"
+            style={{
+              background: method === 'exchange' ? 'var(--accent-tint)' : 'var(--surface-2)',
+              border: method === 'exchange' ? '1px solid var(--accent-border-soft)' : '1px solid var(--border-subtle)',
+              padding: '14px',
+            }}
+          >
+            <input type="radio" name="m" checked={method === 'exchange'} onChange={() => setMethod('exchange')} className="accent-accent" />
+            <span className="text-body-md">{en.modal.usdt.methodExchange}</span>
           </label>
         </fieldset>
 
         {method === 'wallet' ? (
-          <div className="flex flex-col gap-3">
-            <label className="flex flex-col gap-1">
-              <span className="text-sm">{en.modal.usdt.trc20Label}</span>
+          <div className="flex flex-col gap-md">
+            <label className="flex flex-col gap-xs">
+              <span className="text-label-lg text-text-secondary">{en.modal.usdt.trc20Label}</span>
               <input
                 aria-invalid={!!errors.trc20}
                 aria-describedby={errors.trc20 ? 'err-trc20' : undefined}
                 value={trc20}
                 onChange={e => setTrc20(e.target.value)}
-                className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20"
+                className="input"
               />
-              {errors.trc20 && <span id="err-trc20" className="text-xs text-red">{errors.trc20}</span>}
+              {errors.trc20 && <span id="err-trc20" className="text-body-sm text-sell">{errors.trc20}</span>}
             </label>
-            <p className="rounded-md bg-amber/10 p-3 text-xs text-amber">{en.modal.usdt.trc20Warning}</p>
-            <label className="flex items-start gap-2 text-sm">
-              <input type="checkbox" checked={networkOk} onChange={e => setNetworkOk(e.target.checked)} />
-              {en.modal.usdt.networkCheck}
+            <p
+              className="rounded-md text-body-sm"
+              style={{
+                background: 'rgba(255,167,38,0.10)',
+                color: 'var(--warning)',
+                border: '1px solid rgba(255,167,38,0.25)',
+                padding: '12px',
+              }}
+            >
+              {en.modal.usdt.trc20Warning}
+            </p>
+            <label className="flex items-start gap-sm text-body-md">
+              <input type="checkbox" checked={networkOk} onChange={e => setNetworkOk(e.target.checked)} className="mt-1 accent-accent" />
+              <span>{en.modal.usdt.networkCheck}</span>
             </label>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
-            <p className="text-sm text-muted">{en.modal.usdt.exchangeFixed}</p>
-            <label className="flex flex-col gap-1">
-              <span className="text-sm">{en.modal.usdt.okxUidLabel}</span>
+          <div className="flex flex-col gap-md">
+            <p className="text-label-lg text-text-secondary">{en.modal.usdt.exchangeFixed}</p>
+            <label className="flex flex-col gap-xs">
+              <span className="text-label-lg text-text-secondary">{en.modal.usdt.okxUidLabel}</span>
               <input
                 aria-invalid={!!errors.okxUid}
                 aria-describedby={errors.okxUid ? 'err-okxUid' : undefined}
                 value={okxUid}
                 onChange={e => setOkxUid(e.target.value)}
-                className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20"
+                className="input"
               />
-              {errors.okxUid && <span id="err-okxUid" className="text-xs text-red">{errors.okxUid}</span>}
+              {errors.okxUid && <span id="err-okxUid" className="text-body-sm text-sell">{errors.okxUid}</span>}
             </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-sm">{en.modal.usdt.okxEmailLabel}</span>
+            <label className="flex flex-col gap-xs">
+              <span className="text-label-lg text-text-secondary">{en.modal.usdt.okxEmailLabel}</span>
               <input
                 type="email"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'err-email' : undefined}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20"
+                className="input"
               />
-              {errors.email && <span id="err-email" className="text-xs text-red">{errors.email}</span>}
+              {errors.email && <span id="err-email" className="text-body-sm text-sell">{errors.email}</span>}
             </label>
           </div>
         )}
 
-        <label className="mt-4 flex items-start gap-2 text-sm">
-          <input type="checkbox" checked={termsOk} onChange={e => setTermsOk(e.target.checked)} />
+        <label className="mt-lg flex items-start gap-sm text-body-md">
+          <input type="checkbox" checked={termsOk} onChange={e => setTermsOk(e.target.checked)} className="mt-1 accent-accent" />
           <span>
             {en.modal.usdt.termsCheck}{' '}
-            <button type="button" onClick={() => setShowTerms(true)} className="text-mono-green underline">
+            <button type="button" onClick={() => setShowTerms(true)} className="text-accent underline hover:text-accent-light">
               {en.cta.viewTerms}
             </button>
           </span>
         </label>
-        {errors.terms && <p className="text-xs text-red">{errors.terms}</p>}
+        {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
 
-        <div className="mt-6 flex justify-end">
-          <button type="button" onClick={submit} className="rounded-lg bg-mono-green px-5 py-2 font-semibold text-bg">
+        <div className="mt-2xl flex justify-end gap-md">
+          <button type="button" onClick={onClose} className="btn-secondary-sm">
+            Cancel
+          </button>
+          <button type="button" onClick={submit} className="btn-primary-sm">
             {en.modal.usdt.submit}
           </button>
         </div>
