@@ -2,7 +2,7 @@
 
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
-import { useMockState, effectiveIcxPayout } from '@/lib/mock-state';
+import { useMockState, effectiveIcxPayout, registrationCutoffPassed } from '@/lib/mock-state';
 
 export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
   const { state } = useMockState();
@@ -25,7 +25,10 @@ export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
       {state.icxPayoutStatus === '완료' && state.icxTxHash && (
         <p className="text-xs text-muted">TX: {state.icxTxHash.slice(0, 10)}…</p>
       )}
-      {needsRegistration && (
+      {needsRegistration && registrationCutoffPassed(state) && (
+        <p className="rounded-md bg-surface px-3 py-2 text-xs italic text-muted">{en.outsideWindow.registrationClosed}</p>
+      )}
+      {needsRegistration && !registrationCutoffPassed(state) && (
         <button
           type="button"
           onClick={onRegister}

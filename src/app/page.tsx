@@ -11,7 +11,9 @@ export default function Page() {
   return (
     <>
       <TopBanner variant={bannerType(state)} />
-      {state.authStatus === 'logged_out' ? <Landing /> : <Hub />}
+      <div id="main-content">
+        {state.authStatus === 'logged_out' ? <Landing /> : <Hub />}
+      </div>
       <ModalRoot />
     </>
   );

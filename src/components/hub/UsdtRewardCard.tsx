@@ -2,7 +2,7 @@
 
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
-import { useMockState, isQualifiedForUsdt } from '@/lib/mock-state';
+import { useMockState, isQualifiedForUsdt, registrationCutoffPassed } from '@/lib/mock-state';
 
 export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
   const { state } = useMockState();
@@ -30,7 +30,10 @@ export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
       {state.usdtPayoutStatus === '완료' && state.usdtTxHash && (
         <p className="text-xs text-muted">TX: {state.usdtTxHash.slice(0, 10)}…</p>
       )}
-      {needsRegistration && (
+      {needsRegistration && registrationCutoffPassed(state) && (
+        <p className="rounded-md bg-surface px-3 py-2 text-xs italic text-muted">{en.outsideWindow.registrationClosed}</p>
+      )}
+      {needsRegistration && !registrationCutoffPassed(state) && (
         <button
           type="button"
           onClick={onRegister}
