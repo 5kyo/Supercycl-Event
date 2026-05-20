@@ -7,14 +7,12 @@ import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
-import { LiveSlotCounter } from '@/components/shared/LiveSlotCounter';
-import { useMockState } from '@/lib/mock-state';
+import { SlotTension } from '@/components/shared/SlotTension';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 
 export function Hub() {
-  const { state } = useMockState();
   const [open, setOpen] = useState<'usdt' | 'icx' | 'survey' | null>(null);
 
   return (
@@ -22,7 +20,7 @@ export function Hub() {
       <HubHeader />
       <ProgressTracker />
       <section className="mx-auto max-w-6xl px-6">
-        <LiveSlotCounter remaining={state.slotsRemaining} />
+        <SlotTension size="lg" />
       </section>
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-4 px-6 py-4 lg:grid-cols-2">

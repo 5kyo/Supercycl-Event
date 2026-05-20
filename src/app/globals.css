@@ -59,6 +59,7 @@
   --chart-down: #FF5938;
   --warning: #FFA726;
   --info: #29B6F6;
+  --info-tint: rgba(41,182,246,0.12);
 
   /* === Ambient Glow (§2.6) === */
   --glow-primary: rgba(0,230,118,0.26);

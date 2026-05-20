@@ -32,6 +32,7 @@ const config: Config = {
         },
         'text-primary': c('--c-text-rgb'),
         'text-secondary': 'var(--text-secondary)',
+        'text-secondary-strong': 'var(--text-secondary-strong)',
         'text-tertiary': 'var(--text-tertiary)',
         'text-inverse': 'var(--text-inverse)',
         'border-subtle': 'var(--border-subtle)',

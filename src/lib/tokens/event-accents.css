@@ -1,5 +1,13 @@
 /* Event-specific accents — used only on landing/modals/celebration moments.
-   See design spec §6 for usage rules. */
+   See design spec §6 for usage rules.
+
+   v2 update (Festival direction):
+   · Tension stage 50 (11–50 remaining) now uses hot orange instead of amber,
+     giving 4 distinct visual stages (was 3 — 100 and 50 were both amber).
+   · Added subtle pulse at the urgent stage in addition to the critical stage.
+   · Added `event-aura-*`, `event-ticker`, and `event-rollup-*` utilities used
+     by Hero, Hub, and the new NumberRoller / SlotTension components.
+*/
 
 /* Festival gradient: low-saturation Mono Green → Cyan → Magenta */
 .event-gradient {
@@ -44,13 +52,15 @@
   }
 }
 
-/* Tension state colors for slot counter */
-.event-tension-100 { color: var(--warning); }
-.event-tension-50  { color: var(--warning); }
-.event-tension-10  { color: var(--sell); animation: event-pulse 1.2s ease-in-out infinite; }
+/* Tension state colors for slot counter — 4 distinct stages.
+ * Kept as utility classes for backwards compatibility with LiveSlotCounter;
+ * the new SlotTension component reads the same stages via inline color. */
+.event-tension-100 { color: #FFA726; }                                /* amber */
+.event-tension-50  { color: #FF7A2A; animation: event-pulse 2.4s ease-in-out infinite; }  /* hot orange + subtle pulse */
+.event-tension-10  { color: var(--sell); animation: event-pulse 1.2s ease-in-out infinite; } /* red + strong pulse */
 @keyframes event-pulse {
   0%, 100% { opacity: 1; }
-  50%      { opacity: 0.55; }
+  50%      { opacity: 0.6; }
 }
 
 /* Celebration burst — used by SlotSecuredModal */
@@ -63,9 +73,44 @@
   100% { transform: scale(1);   opacity: 1; }
 }
 
+/* Decorative auras — blurred radial glows used as background lights only,
+ * never on text. Festival energy without compromising legibility. */
+.event-aura {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(40px);
+  z-index: 0;
+}
+.event-aura-accent {
+  background: radial-gradient(circle, rgba(0,230,118,0.32), transparent 65%);
+}
+.event-aura-cyan {
+  background: radial-gradient(circle, rgba(34,211,238,0.18), transparent 65%);
+}
+.event-aura-magenta {
+  background: radial-gradient(circle, rgba(217,70,239,0.14), transparent 65%);
+}
+
+/* Festival ticker tape — slow scroll, lg: only.
+ * Use with a parent element of fixed height that has `overflow: hidden`.
+ * The track must contain TWO duplicate copies of the content so it loops
+ * seamlessly when -50% translated. */
+.event-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: event-ticker 40s linear infinite;
+}
+@keyframes event-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .event-shimmer::after,
   .event-tension-10,
+  .event-tension-50,
+  .event-ticker-track,
   .event-burst {
     animation: none !important;
   }
