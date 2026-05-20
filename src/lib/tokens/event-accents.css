@@ -1,0 +1,71 @@
+/* Event-specific accents — used only on landing/modals/celebration moments.
+   See design spec §6 for usage rules. */
+
+/* Festival gradient: low-saturation Mono Green → Cyan → Magenta */
+.event-gradient {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-mono-green) 70%, transparent),
+    color-mix(in oklab, #22d3ee 60%, transparent),
+    color-mix(in oklab, #d946ef 50%, transparent)
+  );
+}
+
+/* Countdown numerals — tabular nums + subtle glow */
+.event-countdown-numerals {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 12px color-mix(in oklab, var(--color-mono-green) 40%, transparent);
+}
+
+/* Progress shimmer — slow loop, lg: only */
+@media (min-width: 1024px) {
+  .event-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .event-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, white 18%, transparent) 50%,
+      transparent 100%
+    );
+    animation: event-shimmer 3s linear infinite;
+  }
+  @keyframes event-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
+/* Tension state colors for slot counter */
+.event-tension-100 { color: var(--color-amber); }
+.event-tension-50  { color: var(--color-orange); }
+.event-tension-10  { color: var(--color-red); animation: event-pulse 1.2s ease-in-out infinite; }
+@keyframes event-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* Celebration burst — used by SlotSecuredModal */
+.event-burst {
+  animation: event-burst 800ms ease-out;
+}
+@keyframes event-burst {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-shimmer::after,
+  .event-tension-10,
+  .event-burst {
+    animation: none !important;
+  }
+}
