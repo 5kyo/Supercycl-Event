@@ -18,4 +18,7 @@ describe('validateOkxUid', () => {
   it('rejects empty input', () => {
     expect(validateOkxUid('').ok).toBe(false);
   });
+  it('trims surrounding whitespace before validating', () => {
+    expect(validateOkxUid('  123456  ').ok).toBe(true);
+  });
 });

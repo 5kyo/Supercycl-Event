@@ -17,4 +17,7 @@ describe('validateTrc20', () => {
   it('rejects address with invalid characters', () => {
     expect(validateTrc20('TPL66VK2gCXNCN7tXKZK6VeNcVtmJP5sx!@').ok).toBe(false);
   });
+  it('trims surrounding whitespace before validating', () => {
+    expect(validateTrc20('  TPL66VK2gCXNCN7tXKZK6VeNcVtmJP5sxQ  ').ok).toBe(true);
+  });
 });

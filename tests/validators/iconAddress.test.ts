@@ -19,4 +19,7 @@ describe('validateIconAddress', () => {
   it('rejects non-hex chars', () => {
     expect(validateIconAddress('hx' + 'z'.repeat(40)).ok).toBe(false);
   });
+  it('trims surrounding whitespace before validating', () => {
+    expect(validateIconAddress('  hx' + 'a'.repeat(40) + '  ').ok).toBe(true);
+  });
 });
