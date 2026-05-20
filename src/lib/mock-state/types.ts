@@ -73,6 +73,8 @@ export type Action =
   | { type: 'SET_USDT_REGISTRATION'; registration: UsdtRegistration }
   | { type: 'SET_USDT_PAYOUT_STATUS'; status: UsdtPayoutStatus; txHash?: string | null }
   | { type: 'SET_SURVEY_COMPLETED'; isTrader: boolean; at: string }
+  | { type: 'TOGGLE_SURVEY_COMPLETED' }
+  | { type: 'TOGGLE_IS_TRADER' }
   | { type: 'SET_ICX_ADDRESS'; address: string | null }
   | { type: 'SET_ICX_PAYOUT_STATUS'; status: IcxPayoutStatus; txHash?: string | null }
   | { type: 'SET_SIMULATED_DATE'; date: string }

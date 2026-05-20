@@ -73,4 +73,28 @@ describe('reducer', () => {
     const imported = { ...initialState, tradingVolume: 1234 };
     expect(reducer(initialState, { type: 'IMPORT_STATE', state: imported })).toEqual(imported);
   });
+
+  // Regression: DebugDrawer's SurveySection used to dispatch SET_SURVEY_COMPLETED
+  // for its "Completed" checkbox, which always sets the flag to true and is
+  // not reversible. That trapped users — once checked (even accidentally via
+  // the "Is trader" checkbox sharing the same action), surveyCompleted stayed
+  // true forever, hiding the "Start survey" CTA in HubCtaBar.
+  it('TOGGLE_SURVEY_COMPLETED flips surveyCompleted in both directions', () => {
+    const completed = reducer(initialState, { type: 'TOGGLE_SURVEY_COMPLETED' });
+    expect(completed.surveyCompleted).toBe(true);
+    expect(completed.surveyCompletedAt).toBe(initialState.simulatedDate);
+
+    const back = reducer(completed, { type: 'TOGGLE_SURVEY_COMPLETED' });
+    expect(back.surveyCompleted).toBe(false);
+    expect(back.surveyCompletedAt).toBeNull();
+  });
+
+  it('TOGGLE_IS_TRADER flips isTrader without affecting surveyCompleted', () => {
+    const flipped = reducer(initialState, { type: 'TOGGLE_IS_TRADER' });
+    expect(flipped.isTrader).toBe(true);
+    expect(flipped.surveyCompleted).toBe(initialState.surveyCompleted);
+
+    const back = reducer(flipped, { type: 'TOGGLE_IS_TRADER' });
+    expect(back.isTrader).toBe(false);
+  });
 });

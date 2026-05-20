@@ -53,6 +53,18 @@ export function reducer(state: MockState, action: Action): MockState {
         isTrader: action.isTrader,
       };
 
+    case 'TOGGLE_SURVEY_COMPLETED': {
+      const next = !state.surveyCompleted;
+      return {
+        ...state,
+        surveyCompleted: next,
+        surveyCompletedAt: next ? state.simulatedDate : null,
+      };
+    }
+
+    case 'TOGGLE_IS_TRADER':
+      return { ...state, isTrader: !state.isTrader };
+
     case 'SET_ICX_ADDRESS':
       return { ...state, icxAddress: action.address };
 

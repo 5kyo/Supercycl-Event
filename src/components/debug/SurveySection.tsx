@@ -12,11 +12,7 @@ export function SurveySection() {
           <input
             type="checkbox"
             checked={state.surveyCompleted}
-            onChange={() => dispatch({
-              type: 'SET_SURVEY_COMPLETED',
-              isTrader: state.isTrader,
-              at: state.simulatedDate,
-            })}
+            onChange={() => dispatch({ type: 'TOGGLE_SURVEY_COMPLETED' })}
           />
           Completed
         </label>
@@ -24,11 +20,7 @@ export function SurveySection() {
           <input
             type="checkbox"
             checked={state.isTrader}
-            onChange={() => dispatch({
-              type: 'SET_SURVEY_COMPLETED',
-              isTrader: !state.isTrader,
-              at: state.simulatedDate,
-            })}
+            onChange={() => dispatch({ type: 'TOGGLE_IS_TRADER' })}
           />
           Is trader
         </label>
