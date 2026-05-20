@@ -23,7 +23,7 @@ export function Hub() {
         <SlotTension size="lg" />
       </section>
       <MyProgressMeter />
-      <section className="mx-auto grid max-w-6xl gap-4 px-6 py-4 lg:grid-cols-2">
+      <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
         <UsdtRewardCard onRegister={() => setOpen('usdt')} />
         <IcxRewardCard onRegister={() => setOpen('icx')} />
       </section>

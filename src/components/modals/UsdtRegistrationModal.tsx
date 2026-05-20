@@ -120,15 +120,17 @@ export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        {/* Method picker — segmented control */}
-        <p className="mb-2 text-label-sm uppercase tracking-[0.22em] text-text-secondary">
+        {/* Method picker — segmented control (radio group semantics).
+            Using radiogroup/radio because the choice toggles a sibling form,
+            not a co-located tabpanel. */}
+        <p id="usdt-method-label" className="mb-2 text-label-sm uppercase tracking-[0.22em] text-text-secondary">
           Receiving method
         </p>
         <div
           className="mb-lg grid grid-cols-2 gap-sm rounded-lg border border-border-subtle p-1"
           style={{ background: 'var(--surface-2)' }}
-          role="tablist"
-          aria-label="USDT receiving method"
+          role="radiogroup"
+          aria-labelledby="usdt-method-label"
         >
           {(
             [
@@ -141,8 +143,8 @@ export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
               <button
                 key={opt.id}
                 type="button"
-                role="tab"
-                aria-selected={selected}
+                role="radio"
+                aria-checked={selected}
                 onClick={() => setMethod(opt.id)}
                 className="rounded-md py-3 text-body-md font-semibold transition-all"
                 style={{

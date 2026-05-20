@@ -25,17 +25,21 @@ function hms(now: Date, endDateStr: string) {
 
 export function CountdownTimer({ endDate }: Props) {
   const { state } = useMockState();
-  const [now, setNow] = useState(() => new Date());
+  // `null` on server + first client render so SSR markup matches; switched to
+  // a real Date in a mount effect, after which the interval keeps it fresh.
+  // Avoids the SSR-vs-client clock-skew hydration mismatch for HH:MM:SS.
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
+    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
   const days = daysBetween(state.simulatedDate, endDate);
-  const { h, m, s, ended } = hms(now, endDate);
+  const time = now ? hms(now, endDate) : null;
 
-  if (ended && days === 0) {
+  if (time?.ended && days === 0) {
     return <span className="event-countdown-numerals text-accent text-display-md">D-0</span>;
   }
   return (
@@ -51,9 +55,11 @@ export function CountdownTimer({ endDate }: Props) {
       >
         D-{days}
       </span>
-      <span className="event-countdown-numerals hidden text-body-lg text-text-tertiary lg:inline">
-        {String(h).padStart(2, '0')}:{String(m).padStart(2, '0')}:{String(s).padStart(2, '0')}
-      </span>
+      {time && (
+        <span className="event-countdown-numerals hidden text-body-lg text-text-tertiary lg:inline">
+          {String(time.h).padStart(2, '0')}:{String(time.m).padStart(2, '0')}:{String(time.s).padStart(2, '0')}
+        </span>
+      )}
     </div>
   );
 }
