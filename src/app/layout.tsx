@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter, IBM_Plex_Mono } from 'next/font/google';
+import { MockStateProvider } from '@/lib/mock-state';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,7 +23,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable}`}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <MockStateProvider>{children}</MockStateProvider>
+      </body>
     </html>
   );
 }
