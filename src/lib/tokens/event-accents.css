@@ -13,7 +13,7 @@
 
 /* Countdown numerals — tabular nums + subtle glow */
 .event-countdown-numerals {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--font-mono), 'IBM Plex Mono', ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   text-shadow: 0 0 12px color-mix(in oklab, var(--color-mono-green) 40%, transparent);
@@ -29,6 +29,7 @@
     content: '';
     position: absolute;
     inset: 0;
+    pointer-events: none;
     background: linear-gradient(
       90deg,
       transparent 0%,

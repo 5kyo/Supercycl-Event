@@ -7,6 +7,7 @@ const config: Config = {
       colors: {
         bg: 'var(--color-bg, #0a0d0f)',
         surface: 'var(--color-surface, #11161a)',
+        'surface-solid': 'var(--color-surface-solid, #14181c)',
         'mono-green': 'var(--color-mono-green, #00d68f)',
         amber: 'var(--color-amber, #fbbf24)',
         orange: 'var(--color-orange, #fb923c)',
@@ -16,8 +17,8 @@ const config: Config = {
         muted: 'var(--color-muted, #8b949e)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
     },
   },
