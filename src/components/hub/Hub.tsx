@@ -18,7 +18,7 @@ export function Hub() {
   const [open, setOpen] = useState<'usdt' | 'icx' | 'survey' | null>(null);
 
   return (
-    <main className="pb-24 lg:pb-12">
+    <main id="main-content" className="pb-24 lg:pb-12">
       <HubHeader />
       <ProgressTracker />
       <section className="mx-auto max-w-6xl px-6">

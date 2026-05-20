@@ -10,7 +10,7 @@ import { useMockState } from '@/lib/mock-state';
 export function Landing() {
   const { state } = useMockState();
   return (
-    <main>
+    <main id="main-content">
       <LandingHero />
       <section className="mx-auto max-w-6xl px-6 py-6">
         <LiveSlotCounter remaining={state.slotsRemaining} />

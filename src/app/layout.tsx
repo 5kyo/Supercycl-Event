@@ -32,6 +32,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable}`}>
       <body className="font-sans">
+        <a
+          href="#main-content"
+          className="absolute left-2 top-2 z-[100] -translate-y-20 rounded-md bg-mono-green px-3 py-2 text-bg transition focus:translate-y-0"
+        >
+          Skip to main content
+        </a>
         <MockStateProvider>
           <InconsistentStateWarning />
           <ViewportFrame>{children}</ViewportFrame>
