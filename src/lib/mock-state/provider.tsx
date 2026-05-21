@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useReducer, useRef, type ReactNode } from 'react';
 import { reducer } from './reducer';
-import { loadState, saveState } from './persistence';
+import { loadState, saveState, STORAGE_KEY } from './persistence';
 import { initialState } from './initial';
 import type { Action, MockState } from './types';
 
@@ -12,21 +12,40 @@ const MockStateCtx = createContext<Ctx | null>(null);
 export function MockStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const hydrated = useRef(false);
+  // Tracks the JSON we just wrote (or just imported) so the cross-document
+  // storage listener can skip echoes and avoid an infinite parent↔iframe loop.
+  const lastSerializedRef = useRef<string>('');
 
-  // Hydrate from localStorage once on mount (client only) — keeps SSR and first client paint
-  // in sync with initialState, then catches up to persisted state in an effect.
   useEffect(() => {
     const loaded = loadState();
+    lastSerializedRef.current = JSON.stringify(loaded);
     dispatch({ type: 'IMPORT_STATE', state: loaded });
     hydrated.current = true;
   }, []);
 
-  // Persist only AFTER hydration finishes, to avoid overwriting saved state with initialState
-  // during the brief moment between the first render and the hydration effect.
   useEffect(() => {
     if (!hydrated.current) return;
+    lastSerializedRef.current = JSON.stringify(state);
     saveState(state);
   }, [state]);
+
+  // Cross-document sync — when another same-origin document (the iframe
+  // preview, or its parent) writes the same key, mirror that state in.
+  useEffect(() => {
+    function onStorage(e: StorageEvent) {
+      if (e.key !== STORAGE_KEY || !e.newValue) return;
+      if (e.newValue === lastSerializedRef.current) return;
+      try {
+        const next = JSON.parse(e.newValue) as MockState;
+        lastSerializedRef.current = e.newValue;
+        dispatch({ type: 'IMPORT_STATE', state: next });
+      } catch {
+        // Bad JSON — ignore; next legitimate write will reconcile.
+      }
+    }
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   return <MockStateCtx.Provider value={{ state, dispatch }}>{children}</MockStateCtx.Provider>;
 }

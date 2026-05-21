@@ -1,7 +1,8 @@
 import type { MockState } from './types';
 import { initialState } from './initial';
 
-const KEY = 'supercycl-event-mock-state';
+export const STORAGE_KEY = 'supercycl-event-mock-state';
+const KEY = STORAGE_KEY;
 
 export function loadState(): MockState {
   if (typeof window === 'undefined') return initialState;

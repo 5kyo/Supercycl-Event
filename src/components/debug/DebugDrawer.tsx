@@ -13,10 +13,12 @@ import { FlagsSection } from './FlagsSection';
 import { useMockState } from '@/lib/mock-state';
 import { clearState } from '@/lib/mock-state/persistence';
 import { initialState } from '@/lib/mock-state';
+import { useIsEmbedded } from '@/lib/useIsEmbedded';
 
 export function DebugDrawer() {
   const [open, setOpen] = useState(false);
   const { state, dispatch } = useMockState();
+  const embedded = useIsEmbedded();
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -42,6 +44,9 @@ export function DebugDrawer() {
       window.alert('Invalid JSON');
     }
   }
+
+  // Inside the ViewportFrame iframe — the drawer stays in the parent only.
+  if (embedded) return null;
 
   return (
     <>
