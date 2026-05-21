@@ -22,13 +22,17 @@ function chipClass(s: StepState): string {
 export function ProgressTracker() {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
-  const step1: StepState = state.hasOkxLinked ? 'done' : 'inProgress';
-  const step2: StepState =
-    state.tradingVolume >= 500 ? 'done' :
-    state.hasOkxLinked         ? 'inProgress' : 'locked';
-  const step3: StepState =
-    state.surveyCompleted          ? 'done' :
-    state.tradingVolume >= 500     ? 'inProgress' : 'locked';
+  // Strict sequential gating — each step's "done" requires the prior step to
+  // also be done, so debug-drawer combos like (hasOkxLinked=false +
+  // tradingVolume=500) can't paint step 2 green while step 1 still shows
+  // "In progress".
+  const step1Done = state.hasOkxLinked;
+  const step2Done = step1Done && state.tradingVolume >= 500;
+  const step3Done = step2Done && state.surveyCompleted;
+
+  const step1: StepState = step1Done ? 'done' : 'inProgress';
+  const step2: StepState = step2Done ? 'done' : step1Done ? 'inProgress' : 'locked';
+  const step3: StepState = step3Done ? 'done' : step2Done ? 'inProgress' : 'locked';
 
   const rows = [
     { num: 1, label: en.steps.step1, state: step1 },
