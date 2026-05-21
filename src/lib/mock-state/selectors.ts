@@ -45,7 +45,7 @@ export function eventEnded(s: MockState): boolean {
   return s.simulatedDate > CAMPAIGN_END;
 }
 
-export type HubVariant = 'default' | 'pending' | 'completed' | 'expired';
+export type HubVariant = 'default' | 'completed' | 'expired';
 
 /** Pick which Hub layout to render based on user/event state. */
 export function hubVariant(s: MockState): HubVariant {
@@ -63,11 +63,8 @@ export function hubVariant(s: MockState): HubVariant {
     return 'completed';
   }
 
-  // Pending: $500 trade hit (qualified) but USDT not paid yet.
-  if (isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료') {
-    return 'pending';
-  }
-
+  // Qualified-but-not-paid no longer routes to a separate "pending" page —
+  // UsdtRewardCard drives the registration CTA from within the default layout.
   return 'default';
 }
 

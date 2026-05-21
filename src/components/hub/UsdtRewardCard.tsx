@@ -3,17 +3,29 @@
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import { useMockState, isQualifiedForUsdt, registrationCutoffPassed } from '@/lib/mock-state';
-import { UsdtRegistrationForm } from './UsdtRegistrationForm';
 
-export function UsdtRewardCard() {
+type Props = {
+  /** Opens the USDT payout-info registration modal. Omitted in previews. */
+  onRegisterUsdt?: () => void;
+};
+
+export function UsdtRewardCard({ onRegisterUsdt }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
-  const needsRegistration = state.usdtPayoutStatus === '수령 정보 미등록';
   const reg = state.usdtRegistration;
+  // Treat the qualified-but-still-'미달성' moment as "registration required" —
+  // SlotSecuredModal used to flip this status; now the card surfaces the
+  // transition on its own so the chip and CTA stay in sync without a popup.
+  const effectiveStatus =
+    qualified && state.usdtPayoutStatus === '미달성'
+      ? '수령 정보 미등록'
+      : state.usdtPayoutStatus;
+  const needsRegistration = effectiveStatus === '수령 정보 미등록';
 
-  const conditionLine =
-    !qualified && state.usdtPayoutStatus === '미달성'
+  const conditionLine = qualified
+    ? en.rewards.usdtConditionReady
+    : state.usdtPayoutStatus === '미달성'
       ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
       : en.rewards.usdtCondition;
 
@@ -30,7 +42,7 @@ export function UsdtRewardCard() {
             Sign in to view
           </span>
         ) : (
-          <RewardStatusLabel status={state.usdtPayoutStatus} />
+          <RewardStatusLabel status={effectiveStatus} />
         )}
       </header>
       <div className="flex flex-col gap-xs">
@@ -58,10 +70,14 @@ export function UsdtRewardCard() {
           {en.outsideWindow.registrationClosed}
         </p>
       )}
-      {needsRegistration && !registrationCutoffPassed(state) && (
-        <div className="mt-sm flex flex-col">
-          <UsdtRegistrationForm />
-        </div>
+      {needsRegistration && !registrationCutoffPassed(state) && onRegisterUsdt && (
+        <button
+          type="button"
+          onClick={onRegisterUsdt}
+          className="btn-primary-sm self-start"
+        >
+          {en.cta.registerUsdt} →
+        </button>
       )}
     </article>
   );

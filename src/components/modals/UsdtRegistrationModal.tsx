@@ -7,12 +7,9 @@ import { UsdtRegistrationForm } from '@/components/hub/UsdtRegistrationForm';
 
 /**
  * UsdtRegistrationModal — modal wrapper around the shared
- * `UsdtRegistrationForm`. The Hub default flow now embeds the form directly
- * inside `UsdtRewardCard`; this modal stays alive for `HubPending` and
- * `EventClosed`, which both prefer a focused full-screen step.
- *
- * Modal-only chrome: title + festive reward banner ("Slot #N secured · 20
- * USDT"). The form below dispatches `SET_USDT_REGISTRATION` and
+ * `UsdtRegistrationForm`. Opened from the "Register USDT info" CTA inside
+ * `UsdtRewardCard` (default Hub) and from `EventClosed` after the campaign
+ * ends. The form dispatches `SET_USDT_REGISTRATION` and
  * `SET_USDT_PAYOUT_STATUS('대기')` on submit.
  */
 export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {

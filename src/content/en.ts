@@ -24,6 +24,7 @@ export const en = {
     usdtAmount: '20 USDT',
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
+    usdtConditionReady: '$500 reached — register payout info',
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
     icxCondition: 'Complete the 13-question survey',
@@ -90,11 +91,6 @@ export const en = {
       addressLabel: 'ICON wallet address (hx…)',
       termsCheck: 'I agree to the event terms and privacy policy',
       submit: 'Register',
-    },
-    slotSecured: {
-      title: (slot: number) => `🎉 Slot #${slot} / 500 secured!`,
-      body: 'Register your USDT receiving info to claim 20 USDT.',
-      cta: 'Register USDT info',
     },
     nps: {
       title: 'One last question',

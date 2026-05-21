@@ -6,7 +6,6 @@ import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
-import { HubPending } from './HubPending';
 import { HubCompleted } from './HubCompleted';
 import { HubExpired } from './HubExpired';
 import { CampaignHero } from './CampaignHero';
@@ -61,15 +60,6 @@ export function Hub() {
     </>
   );
 
-  if (variant === 'pending') {
-    return (
-      <main className="pb-2xl">
-        <HubPending onRegisterUsdt={() => setOpen('usdt')} />
-        {modals}
-      </main>
-    );
-  }
-
   if (variant === 'completed') {
     return (
       <main className="pb-2xl">
@@ -97,7 +87,7 @@ export function Hub() {
       <ProgressTracker />
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
-        <UsdtRewardCard />
+        <UsdtRewardCard onRegisterUsdt={() => setOpen('usdt')} />
         <IcxRewardCard onStartSurvey={() => setOpen('survey')} />
       </section>
       <HubCtaBar />
