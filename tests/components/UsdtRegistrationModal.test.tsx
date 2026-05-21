@@ -113,3 +113,11 @@ describe('UsdtRegistrationModal — TRC20 warning consolidation', () => {
     expect(screen.getByText(/Wrong network = lost funds/i)).toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — exchange flow cleanup', () => {
+  it('does not render the "Exchange: OKX" subtitle', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.queryByText(/^Exchange: OKX$/)).not.toBeInTheDocument();
+  });
+});

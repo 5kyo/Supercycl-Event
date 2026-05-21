@@ -156,9 +156,6 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
         </div>
       ) : (
         <div className="flex flex-col gap-md">
-          <p className="text-label-lg text-text-secondary">
-            {en.modal.usdt.exchangeFixed}
-          </p>
           <label className="flex flex-col gap-xs">
             <span className="text-label-lg text-text-secondary">
               {en.modal.usdt.okxUidLabel}

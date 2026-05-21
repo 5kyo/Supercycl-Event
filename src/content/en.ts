@@ -87,7 +87,6 @@ export const en = {
       trc20Label: 'TRC20 USDT wallet address',
       trc20Warning: 'Wrong network = lost funds',
       networkCheck: 'I confirmed this is a TRC20 address',
-      exchangeFixed: 'Exchange: OKX',
       okxUidLabel: 'OKX UID',
       okxEmailLabel: 'OKX registered email',
       termsCheck: 'I agree to the event terms and privacy policy',
