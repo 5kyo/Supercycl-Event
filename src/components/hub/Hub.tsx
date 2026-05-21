@@ -88,7 +88,10 @@ export function Hub() {
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
         <UsdtRewardCard onRegisterUsdt={() => setOpen('usdt')} />
-        <IcxRewardCard onStartSurvey={() => setOpen('survey')} />
+        <IcxRewardCard
+          onStartSurvey={() => setOpen('survey')}
+          onRegisterIcx={() => setOpen('icx')}
+        />
       </section>
       <HubCtaBar />
     </>

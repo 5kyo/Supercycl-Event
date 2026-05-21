@@ -28,6 +28,7 @@ export const en = {
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
     icxCondition: 'Complete the 13-question survey',
+    icxConditionReady: 'Survey complete — register your ICON wallet',
   },
   steps: {
     heading: 'How to participate',

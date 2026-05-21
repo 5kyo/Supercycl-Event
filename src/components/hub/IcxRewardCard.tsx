@@ -8,23 +8,33 @@ import {
   registrationCutoffPassed,
   surveyTrackOpen,
 } from '@/lib/mock-state';
-import { IcxRegistrationForm } from './IcxRegistrationForm';
 
 type Props = {
   onStartSurvey: () => void;
+  /** Opens the ICX wallet registration modal. Omitted in previews. */
+  onRegisterIcx?: () => void;
 };
 
-export function IcxRewardCard({ onStartSurvey }: Props) {
+export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const payout = effectiveIcxPayout(state);
-  const needsRegistration = state.icxPayoutStatus === '수령 정보 미등록';
   const showSurveyCta = surveyTrackOpen(state) && !state.surveyCompleted;
+  // Mirror UsdtRewardCard: as soon as the user qualifies (survey done +
+  // trader amount known) flip the chip to "Registration required" so the
+  // card can drive the next step without an interstitial popup.
+  const qualifiedForIcx = payout.amount !== null;
+  const effectiveStatus =
+    qualifiedForIcx && state.icxPayoutStatus === '미달성'
+      ? '수령 정보 미등록'
+      : state.icxPayoutStatus;
+  const needsRegistration = effectiveStatus === '수령 정보 미등록';
 
   const amountText =
     payout.amount !== null ? en.rewards.icxAmountWithValue(payout.amount) : en.rewards.icxAmount;
-  const conditionLine =
-    payout.amount === null && state.surveyCompleted && !state.isTrader
+  const conditionLine = qualifiedForIcx
+    ? en.rewards.icxConditionReady
+    : payout.amount === null && state.surveyCompleted && !state.isTrader
       ? en.hub.icxNonTrader
       : en.rewards.icxCondition;
 
@@ -41,7 +51,7 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
             Sign in to view
           </span>
         ) : (
-          <RewardStatusLabel status={state.icxPayoutStatus} />
+          <RewardStatusLabel status={effectiveStatus} />
         )}
       </header>
       <div className="flex flex-col gap-xs">
@@ -71,10 +81,14 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           {en.cta.startSurvey}
         </button>
       )}
-      {needsRegistration && !registrationCutoffPassed(state) && (
-        <div className="mt-auto flex flex-col">
-          <IcxRegistrationForm />
-        </div>
+      {needsRegistration && !registrationCutoffPassed(state) && onRegisterIcx && (
+        <button
+          type="button"
+          onClick={onRegisterIcx}
+          className="btn-primary-sm mt-auto self-start"
+        >
+          {en.cta.registerIcx} →
+        </button>
       )}
     </article>
   );
