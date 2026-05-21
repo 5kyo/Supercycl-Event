@@ -7,6 +7,7 @@ import {
   effectiveIcxPayout,
   registrationCutoffPassed,
   surveyTrackOpen,
+  SURVEY_TRACK_START,
 } from '@/lib/mock-state';
 
 type Props = {
@@ -24,8 +25,14 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
   // trader amount known) flip the chip to "Registration required" so the
   // card can drive the next step without an interstitial popup.
   const qualifiedForIcx = payout.amount !== null;
-  const effectiveStatus =
-    qualifiedForIcx && state.icxPayoutStatus === '미달성'
+  // Three-way override on top of the backend status:
+  // 1. Survey window open + not yet completed → 'open' (Locked is misleading
+  //    when the Start survey CTA is sitting right under the chip).
+  // 2. Survey done + trader → '수령 정보 미등록' (the existing transition).
+  // 3. Otherwise fall through to the raw payout status.
+  const effectiveStatus = showSurveyCta
+    ? 'open'
+    : qualifiedForIcx && state.icxPayoutStatus === '미달성'
       ? '수령 정보 미등록'
       : state.icxPayoutStatus;
   const needsRegistration = effectiveStatus === '수령 정보 미등록';
@@ -60,6 +67,22 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
         </h3>
         <p className="text-body-md text-text-secondary">{conditionLine}</p>
       </div>
+      {!state.surveyCompleted && (
+        <div
+          className="flex flex-col gap-1.5 rounded-md text-body-sm"
+          style={{ background: 'var(--surface-2)', padding: '10px 12px' }}
+        >
+          {state.simulatedDate < SURVEY_TRACK_START && (
+            <p className="text-text-secondary">
+              {en.rewards.icxPayoutInfo.surveyOpens(SURVEY_TRACK_START)}
+            </p>
+          )}
+          <ul className="flex flex-col gap-1 text-text-tertiary">
+            <li>{en.rewards.icxPayoutInfo.traderTier}</li>
+            <li>{en.rewards.icxPayoutInfo.nonTraderTier}</li>
+          </ul>
+        </div>
+      )}
       {state.icxAddress && (
         <p className="text-body-sm text-text-tertiary">
           Wallet: {state.icxAddress.slice(0, 6)}…{state.icxAddress.slice(-4)}
