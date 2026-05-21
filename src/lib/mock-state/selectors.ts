@@ -53,7 +53,7 @@ export type HubVariant = 'default' | 'completed' | 'expired';
 
 /** Pick which Hub layout to render based on user/event state. */
 export function hubVariant(s: MockState): HubVariant {
-  // Expired: past Aug 6 cutoff with at least one unredeemed reward.
+  // Expired: past registration cutoff with at least one unredeemed reward.
   if (registrationCutoffPassed(s)) {
     const hasUnredeemedUsdt =
       isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료';
