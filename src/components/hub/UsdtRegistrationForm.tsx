@@ -205,10 +205,14 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
           {en.modal.usdt.termsCheck}{' '}
           <button
             type="button"
-            onClick={() => setShowTerms(true)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowTerms(true);
+            }}
             className="text-accent underline hover:text-accent-light"
           >
-            {en.cta.viewTerms}
+            ({en.cta.viewTerms})
           </button>
         </span>
       </label>

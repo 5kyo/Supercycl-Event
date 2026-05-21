@@ -121,3 +121,23 @@ describe('UsdtRegistrationModal — exchange flow cleanup', () => {
     expect(screen.queryByText(/^Exchange: OKX$/)).not.toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — inline View terms link', () => {
+  it('renders View terms inside the terms checkbox label', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    const termsText = screen.getByText(
+      /I agree to the event terms and privacy policy/i
+    );
+    const enclosingLabel = termsText.closest('label');
+    expect(enclosingLabel).not.toBeNull();
+    const viewTermsBtn = screen.getByRole('button', { name: /View terms/i });
+    expect(enclosingLabel!.contains(viewTermsBtn)).toBe(true);
+  });
+
+  it('renders the link with a leading "(" so it reads inline', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.getByText(/\(View terms\)/i)).toBeInTheDocument();
+  });
+});
