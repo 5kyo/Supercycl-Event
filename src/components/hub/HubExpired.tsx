@@ -8,7 +8,7 @@ import { shortDate } from '@/content/en';
 export function HubExpired() {
   const { state } = useMockState();
   const slot = state.userSlotNumber ?? Math.max(1, 500 - state.slotsRemaining);
-  const cutoffLabel = shortDate(REGISTRATION_CUTOFF); // e.g. "Jul 21"
+  const cutoffLabel = shortDate(REGISTRATION_CUTOFF);
 
   const items = [
     isQualifiedForUsdt(state) && state.usdtPayoutStatus !== '완료'
