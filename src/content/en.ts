@@ -81,7 +81,7 @@ export const en = {
       registerIcxCta: 'Register ICX wallet',
     },
     usdt: {
-      title: 'How would you like to receive 20 USDT?',
+      title: 'Receive 20 USDT',
       methodWallet: 'Receive to TRC20 wallet',
       methodExchange: 'Receive to exchange balance',
       trc20Label: 'TRC20 USDT wallet address',
