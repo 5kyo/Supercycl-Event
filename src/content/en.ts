@@ -1,4 +1,4 @@
-const shortDate = (iso: string) =>
+export const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
 export const en = {
