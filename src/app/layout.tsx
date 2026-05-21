@@ -20,10 +20,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  title: 'Supercycl Mobile Launch Festival',
+  title: 'Supercycl Mobile Launch Event',
   description: 'TRADE DIFFERENT · RIDE THE SUPERCYCL — 1 month launch campaign',
   openGraph: {
-    title: 'Supercycl Mobile Launch Festival',
+    title: 'Supercycl Mobile Launch Event',
     description: 'Trade $500 → 20 USDT · Complete survey → ICX. Limited 1-month event.',
     images: ['/og-image.png'],
   },

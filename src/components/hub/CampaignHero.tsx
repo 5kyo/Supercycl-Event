@@ -53,7 +53,7 @@ export function CampaignHero() {
       <div className="relative mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
         <div className="flex flex-col">
           <p className="upper-label" style={{ color: 'var(--accent)' }}>
-            Mobile launch festival
+            Mobile launch event
           </p>
           <h1
             className="mt-3 font-bold"
@@ -64,19 +64,30 @@ export function CampaignHero() {
               color: 'var(--text-primary)',
             }}
           >
-            Trade{' '}
-            <span style={{ color: 'var(--text-tertiary)' }}>$500</span>
-            <span className="text-text-tertiary"> → Get </span>
+            Trade <span className="text-text-primary">$500</span>
+            <span className="text-text-primary"> → Get </span>
             <span className="accent-text tabnum font-mono">20</span>
             <span className="text-accent-light" style={{ fontSize: '0.55em', marginLeft: 6 }}>
               USDT
             </span>
           </h1>
-          <p className="mt-md text-body-md text-text-secondary-strong">
-            Then answer 13 questions —{' '}
-            <span className="text-accent font-semibold">100 ICX</span> for your time.
-          </p>
-          <p className="mt-xs text-body-sm text-text-tertiary">{en.meta.tagline}</p>
+          <div className="mt-lg flex items-center gap-md">
+            <span
+              aria-hidden
+              style={{
+                width: 4,
+                height: 22,
+                borderRadius: 2,
+                background: 'var(--accent-gradient)',
+              }}
+            />
+            <p
+              className="font-mono uppercase text-text-primary"
+              style={{ fontSize: 14, letterSpacing: '0.18em' }}
+            >
+              {en.meta.tagline}
+            </p>
+          </div>
 
           {/* Mobile right-side substitute — placed in flow under the copy. */}
           <div className="mt-lg lg:hidden">
@@ -103,13 +114,29 @@ export function CampaignHero() {
           </div>
         </div>
 
-        {/* Desktop right column — D-X above either Sign in or progress chip. */}
-        <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-end lg:gap-3">
+        {/* Desktop right column — LIVE badge + "N days left" above either Sign
+            in or progress chip. The pulse on the dot signals "currently running"
+            so the days remaining no longer reads as "until the event starts". */}
+        <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-end lg:gap-1.5">
           <span
-            className="tabnum accent-text font-mono font-bold"
-            style={{ fontSize: 28, lineHeight: 1 }}
+            className="inline-flex items-center gap-1.5 font-mono uppercase text-accent"
+            style={{ fontSize: 12, letterSpacing: '0.22em' }}
           >
-            D-{days}
+            <span
+              aria-hidden
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: '50%',
+                background: 'var(--accent)',
+                boxShadow: '0 0 10px var(--accent)',
+                animation: 'event-pulse 1.6s ease-in-out infinite',
+              }}
+            />
+            LIVE
+          </span>
+          <span className="mb-3 tabnum font-mono text-body-md text-text-secondary-strong">
+            {days} {days === 1 ? 'day' : 'days'} left
           </span>
           {loggedOut ? (
             <button

@@ -54,7 +54,7 @@ export function EventClosed({ onRegisterUsdt, onRegisterIcx }: Props) {
           <span className="accent-text">a wrap.</span>
         </h1>
         <p className="mt-md text-body-md text-text-secondary-strong">
-          Mobile Launch Festival ended Jul 7, 2026. Reward registration closes{' '}
+          Mobile Launch Event ended Jul 7, 2026. Reward registration closes{' '}
           <b className="text-text-primary">Aug 6</b>.
         </p>
       </section>
