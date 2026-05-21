@@ -25,7 +25,7 @@ For each: toggle DebugDrawer values, refresh page, verify UI.
 - [ ] simulatedDate=2026-06-29, Survey CTA            → SurveyModal opens
 - [ ] Survey Completed=true, ICX Status=수령 정보 미등록 → IcxRewardCard "Registration required"
 - [ ] simulatedDate=2026-07-08                         → EventClosed page renders, no auto-modal
-- [ ] simulatedDate=2026-07-22                         → "Registration closed" enforced
+- [ ] simulatedDate=2026-07-22                         → EventClosed renders, reward card hidden
 
 ## Modals
 - [ ] Survey: navigate 13 questions, Submit shows mini-report
