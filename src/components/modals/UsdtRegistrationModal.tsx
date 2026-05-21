@@ -18,15 +18,15 @@ export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal title={en.modal.usdt.title} onClose={onClose} size="lg">
-      <p
-        className="mb-lg inline-flex items-center gap-1 rounded-full px-3 py-1 text-label-sm uppercase tracking-[0.18em] text-accent"
+      <span
+        className="mb-lg inline-flex items-center gap-xs rounded-full px-3 py-1 text-label-sm uppercase tracking-[0.18em] text-accent"
         style={{
-          background: 'rgba(0,230,118,0.12)',
+          background: 'var(--accent-tint)',
           border: '1px solid var(--accent-border-soft)',
         }}
       >
         🎉 Slot #{slotNumber} / 500 secured
-      </p>
+      </span>
 
       <UsdtRegistrationForm onSuccess={onClose} onCancel={onClose} />
     </Modal>

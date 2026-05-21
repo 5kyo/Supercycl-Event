@@ -40,7 +40,8 @@ describe('UsdtRegistrationModal — slot chip', () => {
     mockUseStateWith({ slotsRemaining: 500 });
     render(<UsdtRegistrationModal onClose={noop} />);
     expect(screen.queryByText(/Tell us where to send it/i)).not.toBeInTheDocument();
-    // The number "20" appearing solo (large amount block) should be gone.
+    // The large amount block (standalone "20" + standalone "USDT") is gone.
     expect(screen.queryByText(/^20$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^USDT$/)).not.toBeInTheDocument();
   });
 });
