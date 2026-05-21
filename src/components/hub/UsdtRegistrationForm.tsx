@@ -139,25 +139,20 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
               </span>
             )}
           </label>
-          <div
-            className="rounded-md p-3 text-body-sm"
-            style={{
-              background: 'rgba(255,167,38,0.10)',
-              color: 'var(--warning)',
-              border: '1px solid rgba(255,167,38,0.25)',
-            }}
-          >
-            {en.modal.usdt.trc20Warning}
+          <div className="flex flex-col gap-1">
+            <label className="flex items-start gap-sm text-body-md">
+              <input
+                type="checkbox"
+                checked={networkOk}
+                onChange={(e) => setNetworkOk(e.target.checked)}
+                className="mt-1 accent-accent"
+              />
+              <span>{en.modal.usdt.networkCheck}</span>
+            </label>
+            <p className="pl-7 text-body-sm" style={{ color: 'var(--warning)' }}>
+              ⚠ {en.modal.usdt.trc20Warning}
+            </p>
           </div>
-          <label className="flex items-start gap-sm text-body-md">
-            <input
-              type="checkbox"
-              checked={networkOk}
-              onChange={(e) => setNetworkOk(e.target.checked)}
-              className="mt-1 accent-accent"
-            />
-            <span>{en.modal.usdt.networkCheck}</span>
-          </label>
         </div>
       ) : (
         <div className="flex flex-col gap-md">

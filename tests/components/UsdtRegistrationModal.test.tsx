@@ -84,3 +84,32 @@ describe('UsdtRegistrationModal — default method', () => {
     expect(screen.queryByText(/TRC20 USDT wallet address/i)).not.toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — TRC20 warning consolidation', () => {
+  async function openWalletTab() {
+    const user = userEvent.setup();
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    await user.click(screen.getByRole('radio', { name: 'TRC20 wallet' }));
+    return user;
+  }
+
+  it('removes the long orange warning sentence', async () => {
+    await openWalletTab();
+    expect(
+      screen.queryByText(/Sending to a non-TRC20 network may result in loss of funds/i)
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the short network checkbox label', async () => {
+    await openWalletTab();
+    expect(
+      screen.getByText('I confirmed this is a TRC20 address')
+    ).toBeInTheDocument();
+  });
+
+  it('renders the small inline warning helper "Wrong network = lost funds"', async () => {
+    await openWalletTab();
+    expect(screen.getByText(/Wrong network = lost funds/i)).toBeInTheDocument();
+  });
+});
