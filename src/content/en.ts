@@ -101,7 +101,7 @@ export const en = {
   hub: {
     stepDone: 'Done',
     stepInProgress: 'In progress',
-    stepLocked: 'Locked',
+    stepLocked: 'Up next',
     icxNonTrader: 'Non-trader pool reward: TBD (pending operations decision)',
   },
   outsideWindow: {
