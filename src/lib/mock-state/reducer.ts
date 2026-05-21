@@ -10,9 +10,6 @@ export function reducer(state: MockState, action: Action): MockState {
     case 'SET_AUTH':
       return { ...state, authStatus: action.status };
 
-    case 'TOGGLE_KYC':
-      return { ...state, hasKyc: !state.hasKyc };
-
     case 'TOGGLE_OKX':
       return { ...state, hasOkxLinked: !state.hasOkxLinked };
 

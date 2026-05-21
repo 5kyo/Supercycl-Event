@@ -49,7 +49,8 @@ export function DebugDrawer() {
         type="button"
         aria-label="Open debug drawer"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-30 rounded-full bg-surface-solid p-3 text-mono-green ring-1 ring-mono-green/30 shadow-lg"
+        className="fixed bottom-4 right-4 z-30 rounded-full p-3 text-mono-green ring-1 ring-mono-green/30 shadow-lg"
+        style={{ background: 'var(--bg-void)' }}
       >
         🐞
       </button>
@@ -57,13 +58,25 @@ export function DebugDrawer() {
         <aside
           role="complementary"
           aria-label="Mock state toggles"
-          className="fixed bottom-0 right-0 z-50 max-h-[50vh] w-full overflow-y-auto bg-surface-solid p-5 shadow-2xl ring-1 ring-mono-green/20 lg:bottom-auto lg:right-0 lg:top-0 lg:h-screen lg:max-h-screen lg:w-[420px]"
+          className="fixed bottom-0 right-0 z-50 max-h-[60vh] w-full overflow-y-auto p-5 shadow-2xl lg:bottom-auto lg:right-0 lg:top-0 lg:h-screen lg:max-h-screen lg:w-[420px]"
+          style={{
+            background: 'var(--bg-void)',
+            borderLeft: '1px solid rgba(255,255,255,0.08)',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+          }}
         >
           <header className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold">Mock State Toggles</h2>
-            <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="text-muted hover:text-text">✕</button>
+            <h2 className="text-base font-bold">Mock State Toggles</h2>
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => setOpen(false)}
+              className="rounded-md p-2 text-muted hover:bg-white/5 hover:text-text"
+            >
+              <span className="block text-base leading-none">✕</span>
+            </button>
           </header>
-          <div className="flex flex-col gap-6 text-sm">
+          <div className="divide-y divide-white/10 text-sm [&>section]:py-4 [&>section:first-child]:pt-0">
             <AuthSection />
             <TradingSection />
             <SlotsSection />
@@ -73,24 +86,32 @@ export function DebugDrawer() {
             <TimeSection />
             <ViewportSection />
             <FlagsSection />
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  clearState();
-                  dispatch({ type: 'RESET_ALL' });
-                }}
-                className="rounded-md bg-red/15 px-3 py-2 text-red ring-1 ring-red/40"
-              >
-                Reset all
-              </button>
-              <button type="button" onClick={exportState} className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20">
-                Export
-              </button>
-              <button type="button" onClick={importState} className="rounded-md bg-bg/40 px-3 py-2 ring-1 ring-muted/20">
-                Import
-              </button>
-            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-5">
+            <button
+              type="button"
+              onClick={() => {
+                clearState();
+                dispatch({ type: 'RESET_ALL' });
+              }}
+              className="rounded-md bg-red/15 px-3 py-2 text-red ring-1 ring-red/40"
+            >
+              Reset all
+            </button>
+            <button
+              type="button"
+              onClick={exportState}
+              className="rounded-md px-3 py-2 ring-1 ring-white/15 hover:bg-white/5"
+            >
+              Export
+            </button>
+            <button
+              type="button"
+              onClick={importState}
+              className="rounded-md px-3 py-2 ring-1 ring-white/15 hover:bg-white/5"
+            >
+              Import
+            </button>
           </div>
         </aside>
       )}

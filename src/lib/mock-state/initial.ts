@@ -9,7 +9,6 @@ export const REGISTRATION_CUTOFF = '2026-08-06';
 
 export const initialState: MockState = {
   authStatus: 'logged_out',
-  hasKyc: false,
   hasOkxLinked: false,
   tradingVolume: 0,
   reachedAt: null,

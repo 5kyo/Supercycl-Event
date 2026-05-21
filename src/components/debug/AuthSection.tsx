@@ -25,10 +25,6 @@ export function AuthSection() {
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
         <label className="flex items-center gap-2">
-          <input type="checkbox" checked={state.hasKyc} onChange={() => dispatch({ type: 'TOGGLE_KYC' })} />
-          KYC done
-        </label>
-        <label className="flex items-center gap-2">
           <input type="checkbox" checked={state.hasOkxLinked} onChange={() => dispatch({ type: 'TOGGLE_OKX' })} />
           OKX linked
         </label>

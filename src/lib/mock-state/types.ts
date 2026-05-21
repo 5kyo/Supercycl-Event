@@ -36,7 +36,6 @@ export type MockState = {
   // 1. auth
   authStatus: AuthStatus;
   // 2. eligibility
-  hasKyc: boolean;
   hasOkxLinked: boolean;
   // 3. trading
   tradingVolume: number;          // 0..2000
@@ -66,7 +65,6 @@ export type MockState = {
 
 export type Action =
   | { type: 'SET_AUTH'; status: AuthStatus }
-  | { type: 'TOGGLE_KYC' }
   | { type: 'TOGGLE_OKX' }
   | { type: 'SET_TRADING_VOLUME'; value: number }
   | { type: 'SET_SLOTS_REMAINING'; value: number }
