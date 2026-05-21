@@ -135,9 +135,15 @@ describe('UsdtRegistrationModal — inline View terms link', () => {
     expect(enclosingLabel!.contains(viewTermsBtn)).toBe(true);
   });
 
-  it('renders the link with a leading "(" so it reads inline', () => {
+  it('wraps the View terms button in plain-text parentheses', () => {
     mockUseStateWith();
     render(<UsdtRegistrationModal onClose={noop} />);
-    expect(screen.getByText(/\(View terms\)/i)).toBeInTheDocument();
+    const viewTermsBtn = screen.getByRole('button', { name: /View terms/i });
+    // The parens sit as text-node siblings inside the same <span>, so the
+    // parent span's combined textContent ends with "(View terms)".
+    const parentSpan = viewTermsBtn.parentElement;
+    expect(parentSpan?.textContent).toMatch(/\(\s*View terms\s*\)/);
+    // Sanity: the button text itself is just "View terms" (no parens).
+    expect(viewTermsBtn.textContent?.trim()).toBe('View terms');
   });
 });

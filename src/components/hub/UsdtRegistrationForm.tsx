@@ -202,7 +202,7 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
           className="mt-1 accent-accent"
         />
         <span>
-          {en.modal.usdt.termsCheck}{' '}
+          {en.modal.usdt.termsCheck} (
           <button
             type="button"
             onClick={(e) => {
@@ -212,8 +212,9 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
             }}
             className="text-accent underline hover:text-accent-light"
           >
-            ({en.cta.viewTerms})
+            {en.cta.viewTerms}
           </button>
+          )
         </span>
       </label>
       {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
