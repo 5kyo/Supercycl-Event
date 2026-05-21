@@ -6,6 +6,7 @@ import { useMockState, effectiveIcxPayout, registrationCutoffPassed } from '@/li
 
 export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
   const { state } = useMockState();
+  const loggedOut = state.authStatus === 'logged_out';
   const payout = effectiveIcxPayout(state);
   const needsRegistration = state.icxPayoutStatus === '수령 정보 미등록';
 
@@ -13,7 +14,14 @@ export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
       <header className="flex items-baseline justify-between gap-md">
         <h3 className="text-title-md">{en.rewards.icxCardTitle}</h3>
-        <RewardStatusLabel status={state.icxPayoutStatus} />
+        {loggedOut ? (
+          <span className="text-label-md inline-flex items-center gap-1.5 text-text-tertiary">
+            <span aria-hidden>🔒</span>
+            Sign in to view
+          </span>
+        ) : (
+          <RewardStatusLabel status={state.icxPayoutStatus} />
+        )}
       </header>
       {payout.amount !== null && (
         <p className="text-body-md text-text-secondary">

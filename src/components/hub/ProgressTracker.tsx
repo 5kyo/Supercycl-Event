@@ -21,6 +21,7 @@ function chipClass(s: StepState): string {
 
 export function ProgressTracker() {
   const { state } = useMockState();
+  const loggedOut = state.authStatus === 'logged_out';
   const step1: StepState = state.hasOkxLinked ? 'done' : 'inProgress';
   const step2: StepState =
     state.tradingVolume >= 500 ? 'done' :
@@ -40,6 +41,7 @@ export function ProgressTracker() {
       <ol className="flex flex-col gap-sm">
         {rows.map(r => {
           const b = badge(r.state);
+          const cls = loggedOut ? 'step-chip opacity-50' : chipClass(r.state);
           return (
             <li
               key={r.num}
@@ -47,10 +49,17 @@ export function ProgressTracker() {
               style={{ padding: '14px 18px' }}
             >
               <span className="flex items-center gap-md">
-                <span className={chipClass(r.state)} aria-hidden>{r.num}</span>
+                <span className={cls} aria-hidden>{r.num}</span>
                 <span className="text-body-lg">{r.label}</span>
               </span>
-              <span className={`text-label-lg ${b.cls}`}>{b.text}</span>
+              {loggedOut ? (
+                <span className="text-label-lg inline-flex items-center gap-1.5 text-text-tertiary">
+                  <span aria-hidden>🔒</span>
+                  Sign in to view
+                </span>
+              ) : (
+                <span className={`text-label-lg ${b.cls}`}>{b.text}</span>
+              )}
             </li>
           );
         })}

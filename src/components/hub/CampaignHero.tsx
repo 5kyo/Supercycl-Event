@@ -85,7 +85,15 @@ export function CampaignHero() {
                 type="button"
                 onClick={signIn}
                 className="btn-primary"
-                style={{ height: 40, padding: '0 18px', fontSize: 14, alignSelf: 'flex-start' }}
+                style={{
+                  height: 48,
+                  padding: '0 22px',
+                  fontSize: 15,
+                  alignSelf: 'flex-start',
+                  boxShadow:
+                    '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
+                  animation: 'event-pulse 2.4s ease-in-out infinite',
+                }}
               >
                 Sign in
               </button>
@@ -108,7 +116,14 @@ export function CampaignHero() {
               type="button"
               onClick={signIn}
               className="btn-primary"
-              style={{ height: 40, padding: '0 18px', fontSize: 14 }}
+              style={{
+                height: 48,
+                padding: '0 22px',
+                fontSize: 15,
+                boxShadow:
+                  '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
+                animation: 'event-pulse 2.4s ease-in-out infinite',
+              }}
             >
               Sign in
             </button>

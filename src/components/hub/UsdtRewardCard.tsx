@@ -6,6 +6,7 @@ import { useMockState, isQualifiedForUsdt, registrationCutoffPassed } from '@/li
 
 export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
   const { state } = useMockState();
+  const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
   const needsRegistration = state.usdtPayoutStatus === '수령 정보 미등록';
   const reg = state.usdtRegistration;
@@ -14,7 +15,14 @@ export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
       <header className="flex items-baseline justify-between gap-md">
         <h3 className="text-title-md">{en.rewards.usdtCardTitle}</h3>
-        <RewardStatusLabel status={state.usdtPayoutStatus} />
+        {loggedOut ? (
+          <span className="text-label-md inline-flex items-center gap-1.5 text-text-tertiary">
+            <span aria-hidden>🔒</span>
+            Sign in to view
+          </span>
+        ) : (
+          <RewardStatusLabel status={state.usdtPayoutStatus} />
+        )}
       </header>
       {!qualified && state.usdtPayoutStatus === '미달성' && (
         <p className="text-body-md text-text-secondary">
