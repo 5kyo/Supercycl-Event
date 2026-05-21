@@ -4,8 +4,8 @@ import { useMockState } from '@/lib/mock-state';
 
 /**
  * V2 Desktop top bar — only visible on lg:+. Logo dot + festival label on
- * left, date + locale + Sign-in on right. Sign-in flips auth state (the
- * same hook the mobile JoinCta uses).
+ * left, date + Sign-in on right. Sign-in flips auth state via the shared
+ * mock-state hook.
  */
 export function DesktopTopBar() {
   const { dispatch } = useMockState();
@@ -36,13 +36,6 @@ export function DesktopTopBar() {
         >
           JUN 08 — JUL 07 · 2026
         </span>
-        <button
-          type="button"
-          className="btn-secondary"
-          style={{ height: 40, padding: '0 18px', fontSize: 13 }}
-        >
-          한국어
-        </button>
         <button
           type="button"
           onClick={() => dispatch({ type: 'SET_AUTH', status: 'logged_in' })}

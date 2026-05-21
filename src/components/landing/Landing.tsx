@@ -4,7 +4,6 @@ import { DesktopTopBar } from './DesktopTopBar';
 import { LandingHero } from './LandingHero';
 import { RewardSummaryCard } from './RewardSummaryCard';
 import { ThreeStepGuide } from './ThreeStepGuide';
-import { JoinCta } from './JoinCta';
 
 export function Landing() {
   return (
@@ -13,7 +12,6 @@ export function Landing() {
       <LandingHero />
       <RewardSummaryCard />
       <ThreeStepGuide />
-      <JoinCta />
     </main>
   );
 }
