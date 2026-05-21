@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useMockState, bannerType, eventEnded } from '@/lib/mock-state';
 import { TopBanner } from '@/components/banners/TopBanner';
 import { Hub } from '@/components/hub/Hub';
-import { ModalRoot } from '@/components/modals/ModalRoot';
 import { EventClosed } from '@/components/EventClosed';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
@@ -35,7 +34,6 @@ export default function Page() {
           <Hub />
         )}
       </div>
-      <ModalRoot />
     </>
   );
 }

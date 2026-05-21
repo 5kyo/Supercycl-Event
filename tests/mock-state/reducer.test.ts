@@ -60,7 +60,7 @@ describe('reducer', () => {
   });
 
   it('RESET_DISMISSED clears all flags', () => {
-    const dirty = { ...initialState, dismissedFlags: { welcomeCard: true, npsModal: true } };
+    const dirty = { ...initialState, dismissedFlags: { welcomeCard: true, surveyCompleteSeen: true } };
     expect(reducer(dirty, { type: 'RESET_DISMISSED' }).dismissedFlags).toEqual({});
   });
 

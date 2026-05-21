@@ -26,7 +26,6 @@ export type DebugViewport = 'auto' | 'mobile-390' | 'tablet-768' | 'desktop-1280
 
 export type DismissedFlags = {
   welcomeCard?: boolean;
-  npsModal?: boolean;
   surveyCompleteSeen?: boolean;
 };
 

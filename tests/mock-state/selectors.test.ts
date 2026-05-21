@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   isQualifiedForUsdt,
   daysUntilEnd,
+  daysUntilCutoff,
   bannerType,
   surveyTrackOpen,
   tradingTrackOpen,
@@ -46,9 +47,16 @@ describe('selectors', () => {
     expect(tradingTrackOpen({ ...initialState, simulatedDate: '2026-06-29' })).toBe(false);
   });
 
-  it('registrationCutoffPassed after 2026-08-06', () => {
-    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-08-06' })).toBe(false);
-    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-08-07' })).toBe(true);
+  it('registrationCutoffPassed after 2026-07-21', () => {
+    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-07-21' })).toBe(false);
+    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-07-22' })).toBe(true);
+  });
+
+  it('daysUntilCutoff counts days to 2026-07-21', () => {
+    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-08' })).toBe(13);
+    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-14' })).toBe(7);
+    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-21' })).toBe(0);
+    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-22' })).toBe(-1);
   });
 
   it('effectiveIcxPayout: 100 for trader, null for non-trader (Open Issue F-5)', () => {

@@ -25,6 +25,10 @@ export function daysUntilEnd(s: MockState): number {
   return diffDays(CAMPAIGN_END, s.simulatedDate);
 }
 
+export function daysUntilCutoff(s: MockState): number {
+  return diffDays(REGISTRATION_CUTOFF, s.simulatedDate);
+}
+
 export function inCampaignWindow(s: MockState): boolean {
   return s.simulatedDate >= CAMPAIGN_START && s.simulatedDate <= CAMPAIGN_END;
 }
@@ -49,7 +53,7 @@ export type HubVariant = 'default' | 'completed' | 'expired';
 
 /** Pick which Hub layout to render based on user/event state. */
 export function hubVariant(s: MockState): HubVariant {
-  // Expired: past Aug 6 cutoff with at least one unredeemed reward.
+  // Expired: past registration cutoff with at least one unredeemed reward.
   if (registrationCutoffPassed(s)) {
     const hasUnredeemedUsdt =
       isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료';

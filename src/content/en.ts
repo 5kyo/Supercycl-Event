@@ -1,4 +1,4 @@
-const shortDate = (iso: string) =>
+export const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
 export const en = {
@@ -99,12 +99,26 @@ export const en = {
       termsCheck: 'I agree to the event terms and privacy policy',
       submit: 'Register',
     },
-    nps: {
-      title: 'One last question',
-      body: 'How likely are you to recommend Supercycl to a friend?',
-      registerReminder: 'Don’t forget to register your reward info before the cutoff.',
-    },
     terms: { title: 'Event terms & privacy', close: 'Close' },
+  },
+  eventClosed: {
+    eyebrow: 'SUPERCYCL MOBILE LAUNCH FESTIVAL',
+    titleLine1: 'Thanks for',
+    titleLine2: 'riding with us.',
+    subtitle: '2026.06.08 ─ 07.07 · Ended',
+    rewardLabel: 'YOUR REWARD IS WAITING',
+    countdownExpires: (d: number, cutoff: string) =>
+      `D-${Math.max(0, d)} until rewards expire · ${cutoff}`,
+    registerCta: 'Register wallet',
+    recap: {
+      traderCount: '527',
+      traderLabel: 'traders',
+      surveyCount: '738',
+      surveyLabel: 'surveys',
+      volumeAmount: '$1.2M',
+      volumeLabel: 'volume',
+    },
+    openApp: 'Open Supercycl app',
   },
   hub: {
     stepDone: 'Done',
