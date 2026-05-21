@@ -93,11 +93,13 @@ export function CampaignHero() {
               color: 'var(--text-primary)',
             }}
           >
-            Trade <span className="text-text-primary">$500</span>
-            <span className="text-text-primary"> → Get </span>
-            <span className="accent-text tabnum font-mono">20</span>
-            <span className="text-accent-light" style={{ fontSize: '0.55em', marginLeft: 6 }}>
-              USDT
+            <span style={{ display: 'block' }}>Trade $500</span>
+            <span style={{ display: 'block' }}>
+              → Get{' '}
+              <span className="accent-text tabnum font-mono">20</span>
+              <span className="text-accent-light" style={{ fontSize: '0.55em', marginLeft: 6 }}>
+                USDT
+              </span>
             </span>
           </h1>
           <div className="mt-lg flex items-center gap-md">
@@ -112,7 +114,7 @@ export function CampaignHero() {
             />
             <p
               className="font-mono uppercase text-text-primary"
-              style={{ fontSize: 14, letterSpacing: '0.18em' }}
+              style={{ fontSize: 13, letterSpacing: '0.12em' }}
             >
               {en.meta.tagline}
             </p>

@@ -59,7 +59,7 @@ export function ProgressTracker() {
               {loggedOut ? (
                 <span className="text-label-lg inline-flex items-center gap-1.5 text-text-tertiary">
                   <span aria-hidden>🔒</span>
-                  Sign in to view
+                  <span className="hidden sm:inline">Sign in to view</span>
                 </span>
               ) : (
                 <span className={`text-label-lg ${b.cls}`}>{b.text}</span>

@@ -5,7 +5,7 @@ import { TopBanner } from '@/components/banners/TopBanner';
 describe('TopBanner', () => {
   it('renders campaign-running variant', () => {
     render(<TopBanner variant="campaign-running" />);
-    expect(screen.getByText(/Supercycl Mobile Launch Event is live/)).toBeInTheDocument();
+    expect(screen.getByText(/Mobile Launch Event is live/)).toBeInTheDocument();
   });
   it('renders slots-100 variant', () => {
     render(<TopBanner variant="slots-100" />);

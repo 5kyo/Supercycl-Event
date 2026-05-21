@@ -1,3 +1,6 @@
+const shortDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
 export const en = {
   meta: {
     title: 'Supercycl Mobile Launch Event',
@@ -52,7 +55,8 @@ export const en = {
     capFull: '$500 reached — slot capacity full. Thank you.',
   },
   banner: {
-    campaignRunning: (start: string, end: string) => `Supercycl Mobile Launch Event is live (${start} – ${end})`,
+    campaignRunning: (start: string, end: string) =>
+      `Mobile Launch Event is live · ${shortDate(start)} – ${shortDate(end)}`,
     slots100: '100 slots left! Start trading now',
     slots50: '50 slots left! Don’t miss out',
     slots10: '10 slots left! Final call',
