@@ -28,3 +28,19 @@ describe('UsdtRegistrationModal — title', () => {
     ).toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — slot chip', () => {
+  it('renders the slot chip "Slot #1 / 500 secured"', () => {
+    mockUseStateWith({ slotsRemaining: 500 });
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.getByText(/Slot #1 \/ 500 secured/i)).toBeInTheDocument();
+  });
+
+  it('does not render the old subtitle or large "20 USDT" amount', () => {
+    mockUseStateWith({ slotsRemaining: 500 });
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.queryByText(/Tell us where to send it/i)).not.toBeInTheDocument();
+    // The number "20" appearing solo (large amount block) should be gone.
+    expect(screen.queryByText(/^20$/)).not.toBeInTheDocument();
+  });
+});
