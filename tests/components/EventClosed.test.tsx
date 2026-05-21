@@ -27,6 +27,9 @@ describe('EventClosed', () => {
     render(<EventClosed onRegisterUsdt={noop} onRegisterIcx={noop} />);
     expect(screen.getByText(/Thanks for/i)).toBeInTheDocument();
     expect(screen.getByText(/riding with us/i)).toBeInTheDocument();
+    expect(screen.getByText('527')).toBeInTheDocument();
+    expect(screen.getByText('738')).toBeInTheDocument();
+    expect(screen.getByText('$1.2M')).toBeInTheDocument();
     expect(screen.getByText(/Open Supercycl app/i)).toBeInTheDocument();
   });
 

@@ -116,21 +116,27 @@ export function EventClosed({ onRegisterUsdt, onRegisterIcx }: Props) {
       >
         <div className="flex items-center justify-around text-center">
           <div>
-            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>527</div>
+            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>
+              {en.eventClosed.recap.traderCount}
+            </div>
             <p className="upper-label text-text-tertiary mt-xs" style={{ fontSize: 10 }}>
-              {en.eventClosed.recap.traders}
+              {en.eventClosed.recap.traderLabel}
             </p>
           </div>
           <div>
-            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>738</div>
+            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>
+              {en.eventClosed.recap.surveyCount}
+            </div>
             <p className="upper-label text-text-tertiary mt-xs" style={{ fontSize: 10 }}>
-              {en.eventClosed.recap.surveys}
+              {en.eventClosed.recap.surveyLabel}
             </p>
           </div>
           <div>
-            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>$1.2M</div>
+            <div className="tabnum font-bold" style={{ fontSize: 18, lineHeight: 1 }}>
+              {en.eventClosed.recap.volumeAmount}
+            </div>
             <p className="upper-label text-text-tertiary mt-xs" style={{ fontSize: 10 }}>
-              {en.eventClosed.recap.volume}
+              {en.eventClosed.recap.volumeLabel}
             </p>
           </div>
         </div>
