@@ -36,3 +36,17 @@ export function useMockState() {
   if (!ctx) throw new Error('useMockState must be used within MockStateProvider');
   return ctx;
 }
+
+/**
+ * FrozenStateScope — overrides the mock-state context with `initialState` for
+ * its subtree. Used to render the logged-out Hub preview so debug-drawer
+ * toggles (trading volume, OKX linked, survey completed) don't leak into the
+ * dimmed snapshot. The dispatch is a no-op since the preview is non-interactive.
+ */
+export function FrozenStateScope({ children }: { children: ReactNode }) {
+  return (
+    <MockStateCtx.Provider value={{ state: initialState, dispatch: () => {} }}>
+      {children}
+    </MockStateCtx.Provider>
+  );
+}

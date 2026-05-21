@@ -15,7 +15,7 @@ import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
-import { useMockState, hubVariant } from '@/lib/mock-state';
+import { useMockState, hubVariant, FrozenStateScope } from '@/lib/mock-state';
 
 type Open = 'usdt' | 'icx' | 'survey' | 'surveyComplete' | null;
 
@@ -112,6 +112,8 @@ export function Hub() {
     // Logged-out preview shows only the flow + rewards so the user can grasp
     // what they unlock. HubHeader/SlotTension/MyProgressMeter/HubCtaBar are
     // redundant or empty pre-auth and would clutter the canvas.
+    // FrozenStateScope freezes the preview to initialState so debug-drawer
+    // toggles (volume, OKX, survey) don't bleed into the dimmed snapshot.
     return (
       <main className="pb-12">
         <CampaignHero />
@@ -120,11 +122,13 @@ export function Hub() {
           className="pointer-events-none select-none"
           style={{ opacity: 0.42, filter: 'saturate(0.85)' }}
         >
-          <ProgressTracker />
-          <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
-            <UsdtRewardCard onRegister={() => setOpen('usdt')} />
-            <IcxRewardCard onRegister={() => setOpen('icx')} />
-          </section>
+          <FrozenStateScope>
+            <ProgressTracker />
+            <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
+              <UsdtRewardCard onRegister={() => setOpen('usdt')} />
+              <IcxRewardCard onRegister={() => setOpen('icx')} />
+            </section>
+          </FrozenStateScope>
         </div>
         {modals}
       </main>
