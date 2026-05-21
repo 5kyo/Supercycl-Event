@@ -20,11 +20,18 @@ export function MockStateProvider({ children }: { children: ReactNode }) {
     const loaded = loadState();
     lastSerializedRef.current = JSON.stringify(loaded);
     dispatch({ type: 'IMPORT_STATE', state: loaded });
-    hydrated.current = true;
+    // hydrated flips inside the save effect below, after the IMPORT_STATE
+    // dispatch has actually flowed into a render. Flipping it here would let
+    // the save effect fire once with the stale initialState and clobber
+    // localStorage — which then bounces back into the iframe via the
+    // storage listener and makes the simulated viewport revert.
   }, []);
 
   useEffect(() => {
-    if (!hydrated.current) return;
+    if (!hydrated.current) {
+      hydrated.current = true;
+      return;
+    }
     lastSerializedRef.current = JSON.stringify(state);
     saveState(state);
   }, [state]);
