@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useMockState, bannerType, eventEnded } from '@/lib/mock-state';
 import { TopBanner } from '@/components/banners/TopBanner';
-import { Landing } from '@/components/landing/Landing';
 import { Hub } from '@/components/hub/Hub';
 import { ModalRoot } from '@/components/modals/ModalRoot';
 import { EventClosed } from '@/components/EventClosed';
@@ -32,8 +31,6 @@ export default function Page() {
               <IcxRegistrationModal onClose={() => setClosedOpen(null)} />
             )}
           </>
-        ) : state.authStatus === 'logged_out' ? (
-          <Landing />
         ) : (
           <Hub />
         )}

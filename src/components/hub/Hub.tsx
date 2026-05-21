@@ -10,6 +10,8 @@ import { HubCtaBar } from './HubCtaBar';
 import { HubPending } from './HubPending';
 import { HubCompleted } from './HubCompleted';
 import { HubExpired } from './HubExpired';
+import { CampaignHero } from './CampaignHero';
+import { LoginCta } from './LoginCta';
 import { SlotTension } from '@/components/shared/SlotTension';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
@@ -22,7 +24,10 @@ type Open = 'usdt' | 'icx' | 'survey' | 'surveyComplete' | null;
 export function Hub() {
   const { state, dispatch } = useMockState();
   const [open, setOpen] = useState<Open>(null);
-  const variant = hubVariant(state);
+  const loggedOut = state.authStatus === 'logged_out';
+  // logged-out users always see the default Hub body (as a dimmed preview),
+  // regardless of any progress flags toggled via the debug drawer.
+  const variant = loggedOut ? 'default' : hubVariant(state);
 
   useEffect(() => {
     if (
@@ -86,9 +91,12 @@ export function Hub() {
     );
   }
 
-  // Default: trade-track active, building progress toward $500
-  return (
-    <main className="pb-24 lg:pb-12">
+  // Default: trade-track active, building progress toward $500.
+  // For logged-out users, the same body renders behind a dim layer with a
+  // CampaignHero on top and a single login CTA (inline on mobile, floating on
+  // desktop).
+  const body = (
+    <>
       <HubHeader />
       <ProgressTracker />
       <section className="mx-auto max-w-6xl px-6">
@@ -100,6 +108,31 @@ export function Hub() {
         <IcxRewardCard onRegister={() => setOpen('icx')} />
       </section>
       <HubCtaBar onStartSurvey={() => setOpen('survey')} />
+    </>
+  );
+
+  if (loggedOut) {
+    return (
+      <main className="pb-24 lg:pb-12">
+        <CampaignHero />
+        <div className="relative">
+          <div
+            aria-hidden
+            className="pointer-events-none select-none"
+            style={{ opacity: 0.42, filter: 'saturate(0.85)' }}
+          >
+            {body}
+          </div>
+          <LoginCta variant="floating" />
+        </div>
+        {modals}
+      </main>
+    );
+  }
+
+  return (
+    <main className="pb-24 lg:pb-12">
+      {body}
       {modals}
     </main>
   );
