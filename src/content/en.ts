@@ -27,8 +27,13 @@ export const en = {
     usdtConditionReady: '$500 reached — register payout info',
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
-    icxCondition: 'Complete the 13-question survey',
+    icxCondition: 'Complete the 12-question survey',
     icxConditionReady: 'Survey complete — register your ICON wallet',
+    icxPayoutInfo: {
+      surveyOpens: (start: string) => `Survey opens ${shortDate(start)}`,
+      traderTier: 'Traders ($500+): 100 ICX',
+      nonTraderTier: 'Non-traders: share of the remaining pool',
+    },
   },
   steps: {
     heading: 'How to participate',
@@ -49,6 +54,7 @@ export const en = {
   },
   status: {
     locked: 'Locked',
+    open: 'Open',
     notRegistered: 'Registration required',
     pending: 'Pending payout',
     review: 'Under review (max 7 days)',
@@ -66,7 +72,7 @@ export const en = {
   },
   modal: {
     survey: {
-      title: 'Profile & Earn — 13 questions',
+      title: 'Profile & Earn — 12 questions',
       submit: 'Submit',
       next: 'Next',
       previous: 'Back',
