@@ -45,3 +45,23 @@ describe('UsdtRegistrationModal — slot chip', () => {
     expect(screen.queryByText(/^USDT$/)).not.toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — method tab labels', () => {
+  it('renders short tab labels "TRC20 wallet" and "OKX exchange"', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.getByRole('radio', { name: 'TRC20 wallet' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'OKX exchange' })).toBeInTheDocument();
+  });
+
+  it('does not render the old long tab labels', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(
+      screen.queryByRole('radio', { name: /Receive to TRC20 wallet/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('radio', { name: /Receive to exchange balance/i })
+    ).not.toBeInTheDocument();
+  });
+});

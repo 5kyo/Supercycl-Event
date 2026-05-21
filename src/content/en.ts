@@ -82,8 +82,8 @@ export const en = {
     },
     usdt: {
       title: 'Receive 20 USDT',
-      methodWallet: 'Receive to TRC20 wallet',
-      methodExchange: 'Receive to exchange balance',
+      methodWallet: 'TRC20 wallet',
+      methodExchange: 'OKX exchange',
       trc20Label: 'TRC20 USDT wallet address',
       trc20Warning: 'Sending to a non-TRC20 network may result in loss of funds. Double-check the network.',
       networkCheck: 'I have confirmed the network',
