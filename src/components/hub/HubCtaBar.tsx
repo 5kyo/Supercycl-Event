@@ -13,7 +13,6 @@ import { useMockState, tradingTrackOpen } from '@/lib/mock-state';
 export function HubCtaBar() {
   const { state } = useMockState();
   const showTrade = tradingTrackOpen(state) && state.tradingVolume < 500;
-  const remaining = Math.max(0, 500 - state.tradingVolume);
 
   if (!showTrade) return null;
 
@@ -28,18 +27,10 @@ export function HubCtaBar() {
       <div className="mx-auto flex max-w-6xl flex-col gap-md lg:flex-row">
         <a
           href="https://supercycl-mobile.vercel.app"
-          className="btn-primary flex-1 text-center"
+          className="btn-primary flex-1 text-center text-body-lg font-semibold"
           style={{ minHeight: 56 }}
         >
-          <span className="flex flex-col items-center" style={{ lineHeight: 1.1 }}>
-            <span className="text-body-lg font-semibold">{en.cta.tradeNow} →</span>
-            <span
-              className="font-mono opacity-75"
-              style={{ fontSize: 11, marginTop: 3, letterSpacing: '0.02em' }}
-            >
-              ${remaining} to 20 USDT
-            </span>
-          </span>
+          {en.cta.tradeNow} →
         </a>
       </div>
     </section>
