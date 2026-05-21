@@ -84,19 +84,16 @@ export function CampaignHero() {
           <h1
             className="mt-3 font-bold lg:mt-0"
             style={{
-              fontSize: 'clamp(24px, 5vw, 40px)',
-              lineHeight: 1.1,
+              fontSize: 'clamp(28px, 5vw, 44px)',
+              lineHeight: 1.05,
               letterSpacing: '-0.025em',
               color: 'var(--text-primary)',
             }}
           >
-            <span style={{ display: 'block' }}>Trade $500 →</span>
-            <span style={{ display: 'block' }}>
-              Get{' '}
-              <span className="accent-text tabnum font-mono">20</span>
-              <span className="text-accent-light" style={{ fontSize: '0.55em', marginLeft: 6 }}>
-                USDT
-              </span>
+            Trade $500 → Get{' '}
+            <span className="accent-text tabnum font-mono">20</span>
+            <span className="text-accent-light" style={{ fontSize: '0.55em', marginLeft: 6 }}>
+              USDT
             </span>
           </h1>
 
