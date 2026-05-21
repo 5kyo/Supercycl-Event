@@ -55,6 +55,35 @@ export function CampaignHero() {
           <p className="upper-label" style={{ color: 'var(--accent)' }}>
             Mobile launch event
           </p>
+          {/* Mobile-only status strip — desktop carries the same info in the
+              right column. Keeps LIVE + days-left visible at narrow widths
+              so phone users see "currently running, N days remaining". */}
+          <div className="mt-2 flex items-center gap-2 lg:hidden">
+            <span
+              className="inline-flex items-center gap-1.5 font-mono uppercase text-accent"
+              style={{ fontSize: 11, letterSpacing: '0.22em' }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: 'var(--accent)',
+                  boxShadow: '0 0 8px var(--accent)',
+                  animation: 'event-pulse 1.6s ease-in-out infinite',
+                }}
+              />
+              LIVE
+            </span>
+            <span aria-hidden style={{ color: 'var(--text-tertiary)' }}>·</span>
+            <span
+              className="tabnum font-mono text-text-secondary-strong"
+              style={{ fontSize: 13 }}
+            >
+              {days} {days === 1 ? 'day' : 'days'} left
+            </span>
+          </div>
           <h1
             className="mt-3 font-bold"
             style={{

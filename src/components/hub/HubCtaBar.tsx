@@ -20,7 +20,10 @@ export function HubCtaBar() {
   return (
     <section
       className="sticky bottom-0 z-10 px-6 py-md backdrop-blur-card lg:static lg:p-6"
-      style={{ background: 'rgba(5, 5, 7, 0.85)' }}
+      style={{
+        background: 'rgba(5, 5, 7, 0.85)',
+        paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+      }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-md lg:flex-row">
         <a
