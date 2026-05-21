@@ -99,7 +99,6 @@ export const en = {
     terms: { title: 'Event terms & privacy', close: 'Close' },
   },
   hub: {
-    welcomeCard: 'Welcome! Connect your exchange or start the survey to participate.',
     stepDone: 'Done',
     stepInProgress: 'In progress',
     stepLocked: 'Locked',
