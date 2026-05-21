@@ -8,13 +8,13 @@ import {
   registrationCutoffPassed,
   surveyTrackOpen,
 } from '@/lib/mock-state';
+import { IcxRegistrationForm } from './IcxRegistrationForm';
 
 type Props = {
-  onRegister: () => void;
   onStartSurvey: () => void;
 };
 
-export function IcxRewardCard({ onRegister, onStartSurvey }: Props) {
+export function IcxRewardCard({ onStartSurvey }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const payout = effectiveIcxPayout(state);
@@ -64,9 +64,9 @@ export function IcxRewardCard({ onRegister, onStartSurvey }: Props) {
         </button>
       )}
       {needsRegistration && !registrationCutoffPassed(state) && (
-        <button type="button" onClick={onRegister} className="btn-primary-sm self-start">
-          {en.cta.registerIcx}
-        </button>
+        <div className="mt-sm flex flex-col">
+          <IcxRegistrationForm />
+        </div>
       )}
     </article>
   );

@@ -101,11 +101,8 @@ export function Hub() {
       </section>
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
-        <UsdtRewardCard onRegister={() => setOpen('usdt')} />
-        <IcxRewardCard
-          onRegister={() => setOpen('icx')}
-          onStartSurvey={() => setOpen('survey')}
-        />
+        <UsdtRewardCard />
+        <IcxRewardCard onStartSurvey={() => setOpen('survey')} />
       </section>
       <HubCtaBar />
     </>
@@ -128,11 +125,8 @@ export function Hub() {
           <FrozenStateScope>
             <ProgressTracker />
             <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
-              <UsdtRewardCard onRegister={() => setOpen('usdt')} />
-              <IcxRewardCard
-                onRegister={() => setOpen('icx')}
-                onStartSurvey={() => setOpen('survey')}
-              />
+              <UsdtRewardCard />
+              <IcxRewardCard onStartSurvey={() => setOpen('survey')} />
             </section>
           </FrozenStateScope>
         </div>

@@ -3,8 +3,9 @@
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import { useMockState, isQualifiedForUsdt, registrationCutoffPassed } from '@/lib/mock-state';
+import { UsdtRegistrationForm } from './UsdtRegistrationForm';
 
-export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
+export function UsdtRewardCard() {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
@@ -49,9 +50,9 @@ export function UsdtRewardCard({ onRegister }: { onRegister: () => void }) {
         </p>
       )}
       {needsRegistration && !registrationCutoffPassed(state) && (
-        <button type="button" onClick={onRegister} className="btn-primary-sm self-start">
-          {en.cta.registerUsdt}
-        </button>
+        <div className="mt-sm flex flex-col">
+          <UsdtRegistrationForm />
+        </div>
       )}
     </article>
   );
