@@ -27,8 +27,7 @@ export function HubCtaBar() {
       <div className="mx-auto flex max-w-6xl flex-col gap-md lg:flex-row">
         <a
           href="https://supercycl-mobile.vercel.app"
-          className="btn-primary flex-1 text-center text-body-lg font-semibold"
-          style={{ minHeight: 56 }}
+          className="btn-primary flex-1 text-center"
         >
           {en.cta.tradeNow} →
         </a>
