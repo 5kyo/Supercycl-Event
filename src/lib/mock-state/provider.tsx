@@ -11,7 +11,6 @@ const MockStateCtx = createContext<Ctx | null>(null);
 
 export function MockStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const hydrated = useRef(false);
   // Tracks the JSON we just wrote (or just imported) so the cross-document
   // storage listener can skip echoes and avoid an infinite parent↔iframe loop.
   const lastSerializedRef = useRef<string>('');
@@ -20,18 +19,17 @@ export function MockStateProvider({ children }: { children: ReactNode }) {
     const loaded = loadState();
     lastSerializedRef.current = JSON.stringify(loaded);
     dispatch({ type: 'IMPORT_STATE', state: loaded });
-    // hydrated flips inside the save effect below, after the IMPORT_STATE
-    // dispatch has actually flowed into a render. Flipping it here would let
-    // the save effect fire once with the stale initialState and clobber
-    // localStorage — which then bounces back into the iframe via the
-    // storage listener and makes the simulated viewport revert.
   }, []);
 
+  // Persist on every state change AFTER hydration. Gate by reference equality
+  // with `initialState`: that ref is only the active state before the first
+  // IMPORT_STATE has flowed through (any dispatch produces a new object).
+  // Using ref equality — not a mutable `hydrated` flag — keeps this correct
+  // under React.StrictMode's double-invoke of effects in dev, which would
+  // otherwise let the second pass save stale initialState into localStorage
+  // and bounce the iframe's viewport selection back to 'auto'.
   useEffect(() => {
-    if (!hydrated.current) {
-      hydrated.current = true;
-      return;
-    }
+    if (state === initialState) return;
     lastSerializedRef.current = JSON.stringify(state);
     saveState(state);
   }, [state]);
