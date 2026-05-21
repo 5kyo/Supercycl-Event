@@ -54,17 +54,17 @@ export function CampaignHero() {
           <button
             type="button"
             onClick={signIn}
-            className="btn-primary mt-lg w-full lg:hidden"
-            style={{ height: 52, fontSize: 15 }}
+            className="btn-primary mt-lg lg:hidden"
+            style={{ height: 40, padding: '0 18px', fontSize: 14, alignSelf: 'flex-start' }}
           >
-            Sign in with OKX to start
+            Sign in
           </button>
         </div>
 
         {/* Desktop right column — compact D-X above the sign-in button. */}
-        <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-stretch lg:gap-3">
+        <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-end lg:gap-3">
           <span
-            className="tabnum accent-text self-end font-mono font-bold"
+            className="tabnum accent-text font-mono font-bold"
             style={{ fontSize: 28, lineHeight: 1 }}
           >
             D-{days}
@@ -73,9 +73,9 @@ export function CampaignHero() {
             type="button"
             onClick={signIn}
             className="btn-primary"
-            style={{ height: 52, padding: '0 26px', fontSize: 15 }}
+            style={{ height: 40, padding: '0 18px', fontSize: 14 }}
           >
-            Sign in with OKX to start
+            Sign in
           </button>
         </div>
       </div>

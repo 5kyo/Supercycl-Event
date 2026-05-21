@@ -110,15 +110,22 @@ export function Hub() {
   );
 
   if (loggedOut) {
+    // Logged-out preview shows only the flow + rewards so the user can grasp
+    // what they unlock. HubHeader/SlotTension/MyProgressMeter/HubCtaBar are
+    // redundant or empty pre-auth and would clutter the canvas.
     return (
-      <main className="pb-24 lg:pb-12">
+      <main className="pb-12">
         <CampaignHero />
         <div
           aria-hidden
           className="pointer-events-none select-none"
           style={{ opacity: 0.42, filter: 'saturate(0.85)' }}
         >
-          {body}
+          <ProgressTracker />
+          <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
+            <UsdtRewardCard onRegister={() => setOpen('usdt')} />
+            <IcxRewardCard onRegister={() => setOpen('icx')} />
+          </section>
         </div>
         {modals}
       </main>
