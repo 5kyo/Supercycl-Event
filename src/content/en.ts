@@ -14,7 +14,6 @@ export const en = {
     startSurvey: 'Start survey',
     registerUsdt: 'Register USDT info',
     registerIcx: 'Register ICX wallet',
-    viewTerms: 'View terms',
     goToMain: 'Open Supercycl app',
   },
   rewards: {
@@ -90,16 +89,13 @@ export const en = {
       networkCheck: 'I confirmed this is a TRC20 address',
       okxUidLabel: 'OKX UID',
       okxEmailLabel: 'OKX registered email',
-      termsCheck: 'I agree to the event terms and privacy policy',
       submit: 'Register',
     },
     icx: {
       title: 'Register your ICX wallet',
       addressLabel: 'ICON wallet address (hx…)',
-      termsCheck: 'I agree to the event terms and privacy policy',
       submit: 'Register',
     },
-    terms: { title: 'Event terms & privacy', close: 'Close' },
   },
   eventClosed: {
     eyebrow: 'SUPERCYCL MOBILE LAUNCH FESTIVAL',

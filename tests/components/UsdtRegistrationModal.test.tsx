@@ -122,28 +122,13 @@ describe('UsdtRegistrationModal — exchange flow cleanup', () => {
   });
 });
 
-describe('UsdtRegistrationModal — inline View terms link', () => {
-  it('renders View terms inside the terms checkbox label', () => {
+describe('UsdtRegistrationModal — terms checkbox removed (per spec §0.0)', () => {
+  it('does not render the terms agreement checkbox or View terms link', () => {
     mockUseStateWith();
     render(<UsdtRegistrationModal onClose={noop} />);
-    const termsText = screen.getByText(
-      /I agree to the event terms and privacy policy/i
-    );
-    const enclosingLabel = termsText.closest('label');
-    expect(enclosingLabel).not.toBeNull();
-    const viewTermsBtn = screen.getByRole('button', { name: /View terms/i });
-    expect(enclosingLabel!.contains(viewTermsBtn)).toBe(true);
-  });
-
-  it('wraps the View terms button in plain-text parentheses', () => {
-    mockUseStateWith();
-    render(<UsdtRegistrationModal onClose={noop} />);
-    const viewTermsBtn = screen.getByRole('button', { name: /View terms/i });
-    // The parens sit as text-node siblings inside the same <span>, so the
-    // parent span's combined textContent ends with "(View terms)".
-    const parentSpan = viewTermsBtn.parentElement;
-    expect(parentSpan?.textContent).toMatch(/\(\s*View terms\s*\)/);
-    // Sanity: the button text itself is just "View terms" (no parens).
-    expect(viewTermsBtn.textContent?.trim()).toBe('View terms');
+    expect(
+      screen.queryByText(/I agree to the event terms and privacy policy/i)
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /View terms/i })).not.toBeInTheDocument();
   });
 });

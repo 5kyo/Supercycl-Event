@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { en } from '@/content/en';
 import { useMockState } from '@/lib/mock-state';
-import { validateIconAddress, validateTermsAgreement } from '@/lib/validators';
-import { TermsViewerModal } from '@/components/modals/TermsViewerModal';
+import { validateIconAddress } from '@/lib/validators';
 
 type Props = {
   /** Called after a successful submit. Modal passes onClose; card omits. */
@@ -17,7 +16,7 @@ type Props = {
  * IcxRegistrationForm — shared form body for ICX payout-address registration.
  *
  * Renders the ICON address input, the helper expander, the terms checkbox,
- * and Submit. Dispatches `SET_ICX_ADDRESS` + `SET_ICX_PAYOUT_STATUS('대기')`
+ * and Submit. Dispatches `SET_ICX_ADDRESS` + `SET_ICX_PAYOUT_STATUS('PENDING_PAYOUT')`
  * on success — the same contract the modal used to own.
  *
  * Used inline inside `IcxRewardCard` and inside `IcxRegistrationModal`.
@@ -25,26 +24,18 @@ type Props = {
 export function IcxRegistrationForm({ onSuccess, onCancel }: Props) {
   const { dispatch } = useMockState();
   const [addr, setAddr] = useState('');
-  const [termsOk, setTermsOk] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showTerms, setShowTerms] = useState(false);
 
   function submit() {
     const errs: Record<string, string> = {};
     const a = validateIconAddress(addr);
     if (!a.ok) errs.addr = a.message;
-    const t = validateTermsAgreement({
-      terms: termsOk,
-      network: false,
-      requireNetwork: false,
-    });
-    if (!t.ok) errs.terms = t.message;
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
     }
     dispatch({ type: 'SET_ICX_ADDRESS', address: addr.trim() });
-    dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: '대기' });
+    dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: 'PENDING_PAYOUT' });
     onSuccess?.();
   }
 
@@ -100,29 +91,6 @@ export function IcxRegistrationForm({ onSuccess, onCancel }: Props) {
         </ul>
       </details>
 
-      <label
-        className="mt-lg flex cursor-pointer items-start gap-sm rounded-md text-body-md"
-        style={{ padding: 12, background: 'var(--surface-2)' }}
-      >
-        <input
-          type="checkbox"
-          checked={termsOk}
-          onChange={(e) => setTermsOk(e.target.checked)}
-          className="mt-1 accent-accent"
-        />
-        <span>
-          {en.modal.icx.termsCheck}{' '}
-          <button
-            type="button"
-            onClick={() => setShowTerms(true)}
-            className="text-accent underline hover:text-accent-light"
-          >
-            {en.cta.viewTerms}
-          </button>
-        </span>
-      </label>
-      {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
-
       <div className="mt-lg flex gap-md">
         {onCancel && (
           <button type="button" onClick={onCancel} className="btn-secondary-sm flex-1">
@@ -138,7 +106,6 @@ export function IcxRegistrationForm({ onSuccess, onCancel }: Props) {
           {en.modal.icx.submit}
         </button>
       </div>
-      {showTerms && <TermsViewerModal onClose={() => setShowTerms(false)} />}
     </>
   );
 }

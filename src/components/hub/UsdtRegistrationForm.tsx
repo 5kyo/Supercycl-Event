@@ -3,13 +3,7 @@
 import { useState } from 'react';
 import { en } from '@/content/en';
 import { useMockState } from '@/lib/mock-state';
-import {
-  validateTrc20,
-  validateOkxUid,
-  validateEmail,
-  validateTermsAgreement,
-} from '@/lib/validators';
-import { TermsViewerModal } from '@/components/modals/TermsViewerModal';
+import { validateTrc20, validateOkxUid, validateEmail } from '@/lib/validators';
 
 type Props = {
   /** Called after a successful submit. Modal passes onClose; card omits. */
@@ -23,7 +17,7 @@ type Props = {
  *
  * Renders the receiving method picker (Wallet/Exchange), the matching fields,
  * network/terms checkboxes, validation errors, and a Submit button. Dispatches
- * `SET_USDT_REGISTRATION` and `SET_USDT_PAYOUT_STATUS('대기')` on success — the
+ * `SET_USDT_REGISTRATION` and `SET_USDT_PAYOUT_STATUS('PENDING_PAYOUT')` on success — the
  * same contract the modal used to own.
  *
  * Used inline inside `UsdtRewardCard` (no Cancel) and inside
@@ -36,21 +30,13 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
   const [okxUid, setOkxUid] = useState('');
   const [email, setEmail] = useState('');
   const [networkOk, setNetworkOk] = useState(false);
-  const [termsOk, setTermsOk] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showTerms, setShowTerms] = useState(false);
 
   function submit() {
     const errs: Record<string, string> = {};
-    const requireNetwork = method === 'wallet';
-    const terms = validateTermsAgreement({
-      terms: termsOk,
-      network: networkOk,
-      requireNetwork,
-    });
-    if (!terms.ok) errs.terms = terms.message;
 
     if (method === 'wallet') {
+      if (!networkOk) errs.network = 'You must confirm the network warning to continue';
       const v = validateTrc20(trc20);
       if (!v.ok) errs.trc20 = v.message;
     } else {
@@ -70,7 +56,7 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
           ? { status: 'wallet', trc20Address: trc20.trim() }
           : { status: 'exchange', okxUid: okxUid.trim(), email: email.trim() },
     });
-    dispatch({ type: 'SET_USDT_PAYOUT_STATUS', status: '대기' });
+    dispatch({ type: 'SET_USDT_PAYOUT_STATUS', status: 'PENDING_PAYOUT' });
     onSuccess?.();
   }
 
@@ -194,30 +180,7 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
         </div>
       )}
 
-      <label className="mt-lg flex items-start gap-sm text-body-md">
-        <input
-          type="checkbox"
-          checked={termsOk}
-          onChange={(e) => setTermsOk(e.target.checked)}
-          className="mt-1 accent-accent"
-        />
-        <span>
-          {en.modal.usdt.termsCheck} (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowTerms(true);
-            }}
-            className="text-accent underline hover:text-accent-light"
-          >
-            {en.cta.viewTerms}
-          </button>
-          )
-        </span>
-      </label>
-      {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
+      {errors.network && <p className="mt-lg text-body-sm text-sell">{errors.network}</p>}
 
       <div className="mt-lg flex gap-md">
         {onCancel && (
@@ -234,7 +197,6 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
           {en.modal.usdt.submit}
         </button>
       </div>
-      {showTerms && <TermsViewerModal onClose={() => setShowTerms(false)} />}
     </>
   );
 }
