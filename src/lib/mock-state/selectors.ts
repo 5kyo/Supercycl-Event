@@ -25,6 +25,10 @@ export function daysUntilEnd(s: MockState): number {
   return diffDays(CAMPAIGN_END, s.simulatedDate);
 }
 
+export function daysUntilCutoff(s: MockState): number {
+  return diffDays(REGISTRATION_CUTOFF, s.simulatedDate);
+}
+
 export function inCampaignWindow(s: MockState): boolean {
   return s.simulatedDate >= CAMPAIGN_START && s.simulatedDate <= CAMPAIGN_END;
 }
