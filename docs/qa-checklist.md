@@ -24,8 +24,8 @@ For each: toggle DebugDrawer values, refresh page, verify UI.
 - [ ] simulatedDate=2026-06-15, surveyTrackOpen=false  → "Survey opens June 29" disabled
 - [ ] simulatedDate=2026-06-29, Survey CTA            → SurveyModal opens
 - [ ] Survey Completed=true, ICX Status=수령 정보 미등록 → IcxRewardCard "Registration required"
-- [ ] simulatedDate=2026-07-07                         → NpsModal appears
-- [ ] simulatedDate=2026-08-07                         → "Registration closed" enforced
+- [ ] simulatedDate=2026-07-08                         → EventClosed page renders, no auto-modal
+- [ ] simulatedDate=2026-07-22                         → "Registration closed" enforced
 
 ## Modals
 - [ ] Survey: navigate 13 questions, Submit shows mini-report
@@ -35,7 +35,6 @@ For each: toggle DebugDrawer values, refresh page, verify UI.
 - [ ] USDT/wallet: network warning checkbox required
 - [ ] ICX: invalid ICON address → error inline
 - [ ] Terms viewer modal opens from each registration modal and closes independently
-- [ ] NPS: 0–10 scale interaction
 - [ ] Escape closes the active modal, focus returns to invoker
 - [ ] Tab cycles within modal only
 
@@ -50,7 +49,7 @@ For each: toggle DebugDrawer values, refresh page, verify UI.
 - [ ] ⌘+\ (Mac) or Ctrl+\ (Linux/Windows) toggles drawer
 - [ ] Mobile: bottom sheet · Desktop: right drawer
 - [ ] Every section's toggles update the corresponding UI live
-- [ ] Quick-jump dates work for all 7 presets (D-day, Mid, End-trade, Start-survey, D-3, End, 30d-cutoff)
+- [ ] Quick-jump dates work for all 7 presets (D-day, Mid, End-trade, Start-survey, D-3, End, 14d-cutoff)
 - [ ] Viewport buttons (auto/mobile-390/tablet-768/desktop-1280) frame the page at the chosen width
 - [ ] Export copies JSON to clipboard
 - [ ] Import accepts pasted JSON
