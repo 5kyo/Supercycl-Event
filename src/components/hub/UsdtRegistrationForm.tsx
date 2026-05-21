@@ -149,7 +149,7 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
               />
               <span>{en.modal.usdt.networkCheck}</span>
             </label>
-            <p className="pl-7 text-body-sm" style={{ color: 'var(--warning)' }}>
+            <p className="pl-6 text-body-sm text-warning">
               ⚠ {en.modal.usdt.trc20Warning}
             </p>
           </div>
