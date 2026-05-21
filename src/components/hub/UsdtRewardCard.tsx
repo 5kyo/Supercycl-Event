@@ -74,7 +74,7 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
         <button
           type="button"
           onClick={onRegisterUsdt}
-          className="btn-primary-sm self-start"
+          className="btn-primary-sm mt-auto self-start"
         >
           {en.cta.registerUsdt} →
         </button>

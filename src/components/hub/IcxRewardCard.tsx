@@ -67,12 +67,12 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
         </p>
       )}
       {showSurveyCta && (
-        <button type="button" onClick={onStartSurvey} className="btn-primary-sm self-start">
+        <button type="button" onClick={onStartSurvey} className="btn-primary-sm mt-auto self-start">
           {en.cta.startSurvey}
         </button>
       )}
       {needsRegistration && !registrationCutoffPassed(state) && (
-        <div className="mt-sm flex flex-col">
+        <div className="mt-auto flex flex-col">
           <IcxRegistrationForm />
         </div>
       )}
