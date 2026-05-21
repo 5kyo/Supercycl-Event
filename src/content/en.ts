@@ -101,6 +101,22 @@ export const en = {
     },
     terms: { title: 'Event terms & privacy', close: 'Close' },
   },
+  eventClosed: {
+    eyebrow: 'SUPERCYCL MOBILE LAUNCH FESTIVAL',
+    titleLine1: 'Thanks for',
+    titleLine2: 'riding with us.',
+    subtitle: '2026.06.08 ─ 07.07 · Ended',
+    rewardLabel: 'YOUR REWARD IS WAITING',
+    countdownExpires: (d: number, cutoff: string) =>
+      `D-${Math.max(0, d)} until rewards expire · ${cutoff}`,
+    registerCta: 'Register wallet',
+    recap: {
+      traders: 'traders',
+      surveys: 'surveys',
+      volume: 'volume',
+    },
+    openApp: 'Open Supercycl app',
+  },
   hub: {
     stepDone: 'Done',
     stepInProgress: 'In progress',
