@@ -18,45 +18,15 @@ export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal title={en.modal.usdt.title} onClose={onClose} size="lg">
-      <div
-        className="relative mb-lg overflow-hidden rounded-lg"
+      <span
+        className="mb-lg inline-flex items-center gap-xs rounded-full px-3 py-1 text-label-sm uppercase tracking-[0.18em] text-accent"
         style={{
-          padding: '20px 18px',
-          background:
-            'linear-gradient(135deg, rgba(0,230,118,0.18), rgba(0,230,118,0.04))',
+          background: 'var(--accent-tint)',
           border: '1px solid var(--accent-border-soft)',
         }}
       >
-        <div
-          aria-hidden
-          className="event-aura event-aura-accent"
-          style={{ top: -30, right: -30, width: 140, height: 140 }}
-        />
-        <div className="relative flex items-center justify-between gap-md">
-          <div>
-            <p className="text-label-sm uppercase tracking-[0.18em] text-accent">
-              🎉 Slot #{slotNumber} / 500 secured
-            </p>
-            <p className="mt-1 text-body-md text-text-primary">
-              Tell us where to send it.
-            </p>
-          </div>
-          <div className="text-right">
-            <div
-              className="font-bold text-accent"
-              style={{
-                fontSize: 36,
-                lineHeight: 1,
-                fontVariantNumeric: 'tabular-nums',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              20
-            </div>
-            <div className="mt-1 text-label-sm text-accent-light">USDT</div>
-          </div>
-        </div>
-      </div>
+        🎉 Slot #{slotNumber} / 500 secured
+      </span>
 
       <UsdtRegistrationForm onSuccess={onClose} onCancel={onClose} />
     </Modal>

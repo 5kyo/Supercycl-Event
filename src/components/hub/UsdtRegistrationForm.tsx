@@ -31,7 +31,7 @@ type Props = {
  */
 export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
   const { dispatch } = useMockState();
-  const [method, setMethod] = useState<'wallet' | 'exchange'>('wallet');
+  const [method, setMethod] = useState<'wallet' | 'exchange'>('exchange');
   const [trc20, setTrc20] = useState('');
   const [okxUid, setOkxUid] = useState('');
   const [email, setEmail] = useState('');
@@ -139,31 +139,23 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
               </span>
             )}
           </label>
-          <div
-            className="rounded-md p-3 text-body-sm"
-            style={{
-              background: 'rgba(255,167,38,0.10)',
-              color: 'var(--warning)',
-              border: '1px solid rgba(255,167,38,0.25)',
-            }}
-          >
-            {en.modal.usdt.trc20Warning}
+          <div className="flex flex-col gap-1">
+            <label className="flex items-start gap-sm text-body-md">
+              <input
+                type="checkbox"
+                checked={networkOk}
+                onChange={(e) => setNetworkOk(e.target.checked)}
+                className="mt-1 accent-accent"
+              />
+              <span>{en.modal.usdt.networkCheck}</span>
+            </label>
+            <p className="pl-6 text-body-sm text-warning">
+              ⚠ {en.modal.usdt.trc20Warning}
+            </p>
           </div>
-          <label className="flex items-start gap-sm text-body-md">
-            <input
-              type="checkbox"
-              checked={networkOk}
-              onChange={(e) => setNetworkOk(e.target.checked)}
-              className="mt-1 accent-accent"
-            />
-            <span>{en.modal.usdt.networkCheck}</span>
-          </label>
         </div>
       ) : (
         <div className="flex flex-col gap-md">
-          <p className="text-label-lg text-text-secondary">
-            {en.modal.usdt.exchangeFixed}
-          </p>
           <label className="flex flex-col gap-xs">
             <span className="text-label-lg text-text-secondary">
               {en.modal.usdt.okxUidLabel}
@@ -210,14 +202,19 @@ export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
           className="mt-1 accent-accent"
         />
         <span>
-          {en.modal.usdt.termsCheck}{' '}
+          {en.modal.usdt.termsCheck} (
           <button
             type="button"
-            onClick={() => setShowTerms(true)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowTerms(true);
+            }}
             className="text-accent underline hover:text-accent-light"
           >
             {en.cta.viewTerms}
           </button>
+          )
         </span>
       </label>
       {errors.terms && <p className="text-body-sm text-sell">{errors.terms}</p>}
