@@ -4,15 +4,43 @@ import { en } from '@/content/en';
 import { useMockState, daysUntilEnd } from '@/lib/mock-state';
 
 /**
- * CampaignHero — compact campaign intro shown only to logged-out users.
- * Replaces the full-canvas LandingHero. The hero block carries the only login
- * CTA: inline under the copy on mobile, in the right column next to a small
- * D-X label on desktop.
+ * CampaignHero — compact campaign intro for both auth states.
+ *
+ * Logged-out: D-X + Sign in button (right column on desktop, inline on mobile).
+ * Logged-in: D-X + the user's $X / $500 progress chip with a thin progress bar
+ * (replaces Sign in). The same hero block carries campaign context across the
+ * whole flow.
  */
 export function CampaignHero() {
   const { state, dispatch } = useMockState();
   const days = daysUntilEnd(state);
+  const loggedOut = state.authStatus === 'logged_out';
   const signIn = () => dispatch({ type: 'SET_AUTH', status: 'logged_in' });
+  const pct = Math.max(0, Math.min(100, (state.tradingVolume / 500) * 100));
+
+  const progressChip = (
+    <div className="flex flex-col gap-1" style={{ minWidth: 180 }}>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="upper-label text-text-tertiary">My volume</span>
+        <span className="tabnum font-mono text-body-sm text-text-secondary-strong">
+          ${state.tradingVolume} <span className="text-text-tertiary">/ $500</span>
+        </span>
+      </div>
+      <div
+        className="h-1 w-full overflow-hidden rounded-full"
+        style={{ background: 'var(--surface-track)' }}
+      >
+        <div
+          style={{
+            height: '100%',
+            width: `${pct}%`,
+            background: 'var(--accent-gradient)',
+            transition: 'width 800ms cubic-bezier(0.22, 1, 0.36, 1)',
+          }}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <section className="relative overflow-hidden px-6 py-8 lg:px-16 lg:py-12">
@@ -50,18 +78,24 @@ export function CampaignHero() {
           </p>
           <p className="mt-xs text-body-sm text-text-tertiary">{en.meta.tagline}</p>
 
-          {/* Mobile inline CTA — primary entry point on small screens. */}
-          <button
-            type="button"
-            onClick={signIn}
-            className="btn-primary mt-lg lg:hidden"
-            style={{ height: 40, padding: '0 18px', fontSize: 14, alignSelf: 'flex-start' }}
-          >
-            Sign in
-          </button>
+          {/* Mobile right-side substitute — placed in flow under the copy. */}
+          <div className="mt-lg lg:hidden">
+            {loggedOut ? (
+              <button
+                type="button"
+                onClick={signIn}
+                className="btn-primary"
+                style={{ height: 40, padding: '0 18px', fontSize: 14, alignSelf: 'flex-start' }}
+              >
+                Sign in
+              </button>
+            ) : (
+              progressChip
+            )}
+          </div>
         </div>
 
-        {/* Desktop right column — compact D-X above the sign-in button. */}
+        {/* Desktop right column — D-X above either Sign in or progress chip. */}
         <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-end lg:gap-3">
           <span
             className="tabnum accent-text font-mono font-bold"
@@ -69,14 +103,18 @@ export function CampaignHero() {
           >
             D-{days}
           </span>
-          <button
-            type="button"
-            onClick={signIn}
-            className="btn-primary"
-            style={{ height: 40, padding: '0 18px', fontSize: 14 }}
-          >
-            Sign in
-          </button>
+          {loggedOut ? (
+            <button
+              type="button"
+              onClick={signIn}
+              className="btn-primary"
+              style={{ height: 40, padding: '0 18px', fontSize: 14 }}
+            >
+              Sign in
+            </button>
+          ) : (
+            progressChip
+          )}
         </div>
       </div>
     </section>

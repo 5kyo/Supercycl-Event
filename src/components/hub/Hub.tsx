@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { HubHeader } from './HubHeader';
 import { ProgressTracker } from './ProgressTracker';
 import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
@@ -91,14 +90,14 @@ export function Hub() {
   }
 
   // Default: trade-track active, building progress toward $500.
-  // For logged-out users, the same body renders behind a dim layer; the login
-  // CTA lives inside CampaignHero (no separate floating button).
+  // CampaignHero carries the D-X label and progress chip; HubHeader is gone.
+  // SlotTension shrinks to a compact size — the big "500/500" block carried
+  // little signal next to MyProgressMeter.
   const body = (
     <>
-      <HubHeader />
       <ProgressTracker />
-      <section className="mx-auto max-w-6xl px-6">
-        <SlotTension size="lg" />
+      <section className="mx-auto max-w-6xl px-6 py-md">
+        <SlotTension size="sm" />
       </section>
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
@@ -134,6 +133,7 @@ export function Hub() {
 
   return (
     <main className="pb-24 lg:pb-12">
+      <CampaignHero />
       {body}
       {modals}
     </main>
