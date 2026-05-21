@@ -11,7 +11,6 @@ import { HubPending } from './HubPending';
 import { HubCompleted } from './HubCompleted';
 import { HubExpired } from './HubExpired';
 import { CampaignHero } from './CampaignHero';
-import { LoginCta } from './LoginCta';
 import { SlotTension } from '@/components/shared/SlotTension';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
@@ -92,9 +91,8 @@ export function Hub() {
   }
 
   // Default: trade-track active, building progress toward $500.
-  // For logged-out users, the same body renders behind a dim layer with a
-  // CampaignHero on top and a single login CTA (inline on mobile, floating on
-  // desktop).
+  // For logged-out users, the same body renders behind a dim layer; the login
+  // CTA lives inside CampaignHero (no separate floating button).
   const body = (
     <>
       <HubHeader />
@@ -115,15 +113,12 @@ export function Hub() {
     return (
       <main className="pb-24 lg:pb-12">
         <CampaignHero />
-        <div className="relative">
-          <div
-            aria-hidden
-            className="pointer-events-none select-none"
-            style={{ opacity: 0.42, filter: 'saturate(0.85)' }}
-          >
-            {body}
-          </div>
-          <LoginCta variant="floating" />
+        <div
+          aria-hidden
+          className="pointer-events-none select-none"
+          style={{ opacity: 0.42, filter: 'saturate(0.85)' }}
+        >
+          {body}
         </div>
         {modals}
       </main>

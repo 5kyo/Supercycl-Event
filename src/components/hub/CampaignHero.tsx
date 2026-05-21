@@ -2,17 +2,17 @@
 
 import { en } from '@/content/en';
 import { useMockState, daysUntilEnd } from '@/lib/mock-state';
-import { LoginCta } from './LoginCta';
 
 /**
  * CampaignHero — compact campaign intro shown only to logged-out users.
- * Replaces the full-canvas LandingHero. Slots/D-X live in the dimmed Hub body
- * below (HubHeader · SlotTension), so this hero stays minimal: festival label,
- * core promise, ICX subline, and a D-X chip on desktop.
+ * Replaces the full-canvas LandingHero. The hero block carries the only login
+ * CTA: inline under the copy on mobile, in the right column next to a small
+ * D-X label on desktop.
  */
 export function CampaignHero() {
-  const { state } = useMockState();
+  const { state, dispatch } = useMockState();
   const days = daysUntilEnd(state);
+  const signIn = () => dispatch({ type: 'SET_AUTH', status: 'logged_in' });
 
   return (
     <section className="relative overflow-hidden px-6 py-8 lg:px-16 lg:py-12">
@@ -50,27 +50,33 @@ export function CampaignHero() {
           </p>
           <p className="mt-xs text-body-sm text-text-tertiary">{en.meta.tagline}</p>
 
-          {/* Mobile-only inline login CTA — primary entry point on small screens. */}
-          <div className="mt-lg lg:hidden">
-            <LoginCta variant="inline" />
-          </div>
+          {/* Mobile inline CTA — primary entry point on small screens. */}
+          <button
+            type="button"
+            onClick={signIn}
+            className="btn-primary mt-lg w-full lg:hidden"
+            style={{ height: 52, fontSize: 15 }}
+          >
+            Sign in with OKX to start
+          </button>
         </div>
 
-        {/* Desktop D-X chip — small, lives next to the copy. */}
-        <div className="hidden lg:flex lg:flex-col lg:items-end lg:gap-2">
-          <span className="upper-label text-text-tertiary">Ends in</span>
+        {/* Desktop right column — compact D-X above the sign-in button. */}
+        <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-stretch lg:gap-3">
           <span
-            className="tabnum accent-text font-mono font-bold"
-            style={{ fontSize: 44, lineHeight: 1 }}
+            className="tabnum accent-text self-end font-mono font-bold"
+            style={{ fontSize: 28, lineHeight: 1 }}
           >
             D-{days}
           </span>
-          <span
-            className="font-mono text-text-tertiary"
-            style={{ fontSize: 11, letterSpacing: '0.1em' }}
+          <button
+            type="button"
+            onClick={signIn}
+            className="btn-primary"
+            style={{ height: 52, padding: '0 26px', fontSize: 15 }}
           >
-            JUL 07 · 23:59 KST
-          </span>
+            Sign in with OKX to start
+          </button>
         </div>
       </div>
     </section>
