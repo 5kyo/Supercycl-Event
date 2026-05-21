@@ -10,7 +10,6 @@ import { HubPending } from './HubPending';
 import { HubCompleted } from './HubCompleted';
 import { HubExpired } from './HubExpired';
 import { CampaignHero } from './CampaignHero';
-import { SlotTension } from '@/components/shared/SlotTension';
 import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
 import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 import { SurveyModal } from '@/components/modals/SurveyModal';
@@ -90,15 +89,12 @@ export function Hub() {
   }
 
   // Default: trade-track active, building progress toward $500.
-  // CampaignHero carries the D-X label and progress chip; HubHeader is gone.
-  // SlotTension shrinks to a compact size — the big "500/500" block carried
-  // little signal next to MyProgressMeter.
+  // CampaignHero carries the LIVE strip; MyProgressMeter carries the slots
+  // remaining line, so a separate SlotTension section is redundant on this
+  // surface.
   const body = (
     <>
       <ProgressTracker />
-      <section className="mx-auto max-w-6xl px-6 py-md">
-        <SlotTension size="sm" />
-      </section>
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
         <UsdtRewardCard />

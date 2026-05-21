@@ -30,9 +30,9 @@ export const en = {
   },
   steps: {
     heading: 'How to participate',
-    step1: 'Sign up for Supercycl + connect OKX',
-    step2: 'Trade $500 on Supercycl → 20 USDT',
-    step3: 'Complete the 13-question survey → ICX',
+    step1: 'Sign up + connect OKX',
+    step2: 'Trade $500 → 20 USDT',
+    step3: 'Complete survey → ICX',
   },
   slot: {
     label: 'Trading slots remaining',

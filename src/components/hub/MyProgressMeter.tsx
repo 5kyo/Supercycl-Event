@@ -2,7 +2,7 @@
 
 import { en } from '@/content/en';
 import { ProgressBar } from '@/components/shared/ProgressBar';
-import { useMockState, daysUntilEnd } from '@/lib/mock-state';
+import { useMockState } from '@/lib/mock-state';
 
 /**
  * MyProgressMeter — Festival direction.
@@ -18,7 +18,6 @@ import { useMockState, daysUntilEnd } from '@/lib/mock-state';
 export function MyProgressMeter() {
   const { state } = useMockState();
   const remaining = Math.max(0, 500 - state.tradingVolume);
-  const days = daysUntilEnd(state);
   const pct = Math.min(100, Math.round((state.tradingVolume / 500) * 100));
   const halfReached = state.tradingVolume >= 250;
 
@@ -36,14 +35,9 @@ export function MyProgressMeter() {
         />
 
         <div className="relative flex flex-col gap-md">
-          <div className="flex items-baseline justify-between">
-            <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
-              Cumulative volume
-            </p>
-            <p className="text-label-sm text-text-tertiary">
-              {en.progress.daysLeft(days)}
-            </p>
-          </div>
+          <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
+            Cumulative volume
+          </p>
 
           {/* Big stat — primary anchor */}
           <div className="flex items-baseline gap-2">
@@ -92,9 +86,7 @@ export function MyProgressMeter() {
           {/* Milestone scale */}
           <div className="flex justify-between font-mono text-body-sm text-text-tertiary">
             <span>$0</span>
-            <span className={halfReached ? 'text-accent' : ''}>
-              $250 · MILESTONE
-            </span>
+            <span className={halfReached ? 'text-accent' : ''}>$250</span>
             <span>$500</span>
           </div>
         </div>
