@@ -1,12 +1,14 @@
 'use client';
 
 import { HubHeader } from './HubHeader';
-import { useMockState, isQualifiedForUsdt } from '@/lib/mock-state';
+import { useMockState, isQualifiedForUsdt, REGISTRATION_CUTOFF } from '@/lib/mock-state';
+import { shortDate } from '@/content/en';
 
-/** V2 Hub — Expired (past Aug 6 cutoff with un-registered rewards). */
+/** V2 Hub — Expired (past registration cutoff with un-registered rewards). */
 export function HubExpired() {
   const { state } = useMockState();
   const slot = state.userSlotNumber ?? Math.max(1, 500 - state.slotsRemaining);
+  const cutoffLabel = shortDate(REGISTRATION_CUTOFF); // e.g. "Jul 21"
 
   const items = [
     isQualifiedForUsdt(state) && state.usdtPayoutStatus !== '완료'
@@ -14,7 +16,7 @@ export function HubExpired() {
           label: 'USDT · Trade reward',
           amount: '20',
           unit: 'USDT',
-          note: `Slot #${slot} secured · Aug 6 cutoff missed`,
+          note: `Slot #${slot} secured · ${cutoffLabel} cutoff missed`,
         }
       : null,
     state.surveyCompleted && state.icxPayoutStatus !== '완료'
@@ -22,7 +24,7 @@ export function HubExpired() {
           label: 'ICX · Survey reward',
           amount: '100',
           unit: 'ICX',
-          note: 'Survey completed · Aug 6 cutoff missed',
+          note: `Survey completed · ${cutoffLabel} cutoff missed`,
         }
       : null,
   ].filter(Boolean) as { label: string; amount: string; unit: string; note: string }[];
@@ -31,7 +33,7 @@ export function HubExpired() {
     <>
       <HubHeader />
       <section className="mx-auto max-w-6xl px-6 py-md">
-        <p className="upper-label text-text-tertiary">EXPIRED · AUG 6</p>
+        <p className="upper-label text-text-tertiary">EXPIRED · {cutoffLabel.toUpperCase()}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-md">
@@ -44,7 +46,7 @@ export function HubExpired() {
           <span className="text-text-tertiary">has closed.</span>
         </h1>
         <p className="mt-md text-body-md text-text-secondary">
-          Your reward expired because no receiving info was registered before Aug 6, 2026.
+          Your reward expired because no receiving info was registered before {cutoffLabel}, 2026.
         </p>
       </section>
 
