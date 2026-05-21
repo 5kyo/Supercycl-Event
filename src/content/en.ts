@@ -27,8 +27,8 @@ export const en = {
   },
   steps: {
     heading: 'How to participate',
-    step1: 'Sign up + connect exchange',
-    step2: 'Trade $500 → 20 USDT',
+    step1: 'Sign up for Supercycl + connect OKX',
+    step2: 'Trade $500 on Supercycl → 20 USDT',
     step3: 'Complete the 13-question survey → ICX',
   },
   slot: {
@@ -91,10 +91,6 @@ export const en = {
       title: (slot: number) => `🎉 Slot #${slot} / 500 secured!`,
       body: 'Register your USDT receiving info to claim 20 USDT.',
       cta: 'Register USDT info',
-    },
-    milestone: {
-      title: 'Half way there!',
-      body: 'Trade $250 more to lock in 20 USDT.',
     },
     nps: {
       title: 'One last question',

@@ -3,7 +3,6 @@
 import { useMockState } from '@/lib/mock-state';
 import { pickAutoModal, dismissKeyFor } from '@/lib/modalPriority';
 import { SlotSecuredModal } from './SlotSecuredModal';
-import { MilestoneCardModal } from './MilestoneCardModal';
 import { NpsModal } from './NpsModal';
 
 export function ModalRoot() {
@@ -14,8 +13,7 @@ export function ModalRoot() {
   const close = () => dispatch({ type: 'DISMISS', key: dismissKeyFor(id) });
 
   switch (id) {
-    case 'slotSecured':      return <SlotSecuredModal onClose={close} />;
-    case 'halfwayMilestone': return <MilestoneCardModal onClose={close} />;
-    case 'nps':              return <NpsModal onClose={close} />;
+    case 'slotSecured': return <SlotSecuredModal onClose={close} />;
+    case 'nps':         return <NpsModal onClose={close} />;
   }
 }
