@@ -99,11 +99,6 @@ export const en = {
       termsCheck: 'I agree to the event terms and privacy policy',
       submit: 'Register',
     },
-    nps: {
-      title: 'One last question',
-      body: 'How likely are you to recommend Supercycl to a friend?',
-      registerReminder: 'Don’t forget to register your reward info before the cutoff.',
-    },
     terms: { title: 'Event terms & privacy', close: 'Close' },
   },
   hub: {
