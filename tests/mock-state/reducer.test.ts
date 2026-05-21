@@ -78,7 +78,7 @@ describe('reducer', () => {
   // for its "Completed" checkbox, which always sets the flag to true and is
   // not reversible. That trapped users — once checked (even accidentally via
   // the "Is trader" checkbox sharing the same action), surveyCompleted stayed
-  // true forever, hiding the "Start survey" CTA in HubCtaBar.
+  // true forever, hiding the "Start survey" CTA in IcxRewardCard.
   it('TOGGLE_SURVEY_COMPLETED flips surveyCompleted in both directions', () => {
     const completed = reducer(initialState, { type: 'TOGGLE_SURVEY_COMPLETED' });
     expect(completed.surveyCompleted).toBe(true);

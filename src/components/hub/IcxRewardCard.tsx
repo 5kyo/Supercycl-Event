@@ -2,13 +2,24 @@
 
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
-import { useMockState, effectiveIcxPayout, registrationCutoffPassed } from '@/lib/mock-state';
+import {
+  useMockState,
+  effectiveIcxPayout,
+  registrationCutoffPassed,
+  surveyTrackOpen,
+} from '@/lib/mock-state';
 
-export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
+type Props = {
+  onRegister: () => void;
+  onStartSurvey: () => void;
+};
+
+export function IcxRewardCard({ onRegister, onStartSurvey }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const payout = effectiveIcxPayout(state);
   const needsRegistration = state.icxPayoutStatus === '수령 정보 미등록';
+  const showSurveyCta = surveyTrackOpen(state) && !state.surveyCompleted;
 
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
@@ -46,6 +57,11 @@ export function IcxRewardCard({ onRegister }: { onRegister: () => void }) {
         >
           {en.outsideWindow.registrationClosed}
         </p>
+      )}
+      {showSurveyCta && (
+        <button type="button" onClick={onStartSurvey} className="btn-primary-sm self-start">
+          {en.cta.startSurvey}
+        </button>
       )}
       {needsRegistration && !registrationCutoffPassed(state) && (
         <button type="button" onClick={onRegister} className="btn-primary-sm self-start">
