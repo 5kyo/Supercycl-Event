@@ -14,18 +14,18 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
   const reg = state.usdtRegistration;
-  // Treat the qualified-but-still-'미달성' moment as "registration required" —
+  // Treat the qualified-but-still-'NOT_REACHED' moment as "registration required" —
   // SlotSecuredModal used to flip this status; now the card surfaces the
   // transition on its own so the chip and CTA stay in sync without a popup.
   const effectiveStatus =
-    qualified && state.usdtPayoutStatus === '미달성'
-      ? '수령 정보 미등록'
+    qualified && state.usdtPayoutStatus === 'NOT_REACHED'
+      ? 'AWAITING_REGISTRATION'
       : state.usdtPayoutStatus;
-  const needsRegistration = effectiveStatus === '수령 정보 미등록';
+  const needsRegistration = effectiveStatus === 'AWAITING_REGISTRATION';
 
   const conditionLine = qualified
     ? en.rewards.usdtConditionReady
-    : state.usdtPayoutStatus === '미달성'
+    : state.usdtPayoutStatus === 'NOT_REACHED'
       ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
       : en.rewards.usdtCondition;
 
@@ -59,7 +59,7 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
       {reg.status === 'exchange' && (
         <p className="text-body-sm text-text-tertiary">OKX UID: {reg.okxUid}</p>
       )}
-      {state.usdtPayoutStatus === '완료' && state.usdtTxHash && (
+      {state.usdtPayoutStatus === 'PAID' && state.usdtTxHash && (
         <p className="text-body-sm text-text-tertiary">TX: {state.usdtTxHash.slice(0, 10)}…</p>
       )}
       {needsRegistration && registrationCutoffPassed(state) && (

@@ -11,14 +11,14 @@ export function HubCompleted() {
     {
       kind: 'USDT' as const,
       amount: '20',
-      date: state.usdtPayoutStatus === '완료' ? 'Paid' : 'Pending',
+      date: state.usdtPayoutStatus === 'PAID' ? 'Paid' : 'Pending',
       tx: state.usdtTxHash,
       tint: 'rgba(0,230,118,0.06)',
     },
     {
       kind: 'ICX' as const,
       amount: '100',
-      date: state.icxPayoutStatus === '완료' ? 'Paid' : 'Pending',
+      date: state.icxPayoutStatus === 'PAID' ? 'Paid' : 'Pending',
       tx: state.icxTxHash,
       tint: 'rgba(34,211,238,0.06)',
     },

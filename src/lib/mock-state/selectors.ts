@@ -56,14 +56,14 @@ export function hubVariant(s: MockState): HubVariant {
   // Expired: past registration cutoff with at least one unredeemed reward.
   if (registrationCutoffPassed(s)) {
     const hasUnredeemedUsdt =
-      isQualifiedForUsdt(s) && s.usdtPayoutStatus !== '완료';
+      isQualifiedForUsdt(s) && s.usdtPayoutStatus !== 'PAID';
     const hasUnredeemedIcx =
-      s.surveyCompleted && s.icxPayoutStatus !== '완료';
+      s.surveyCompleted && s.icxPayoutStatus !== 'PAID';
     if (hasUnredeemedUsdt || hasUnredeemedIcx) return 'expired';
   }
 
   // Completed: both rewards paid.
-  if (s.usdtPayoutStatus === '완료' && s.icxPayoutStatus === '완료') {
+  if (s.usdtPayoutStatus === 'PAID' && s.icxPayoutStatus === 'PAID') {
     return 'completed';
   }
 

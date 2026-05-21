@@ -5,22 +5,24 @@ export type UsdtRegistration =
   | { status: 'wallet'; trc20Address: string }
   | { status: 'exchange'; okxUid: string; email: string };
 
+// Payout status — EN enum keys per spec §8.2. Mapped to localized UX labels
+// in RewardStatusLabel.tsx.
 export type UsdtPayoutStatus =
-  | '미달성'
-  | '수령 정보 미등록'
-  | '대기'
-  | '보류'
-  | '완료'
-  | '만료'
-  | '슬롯_마감_후_도달';
+  | 'NOT_REACHED'
+  | 'AWAITING_REGISTRATION'
+  | 'PENDING_PAYOUT'
+  | 'ON_HOLD'
+  | 'PAID'
+  | 'EXPIRED'
+  | 'CAP_FULL';
 
 export type IcxPayoutStatus =
-  | '미달성'
-  | '수령 정보 미등록'
-  | '대기'
-  | '보류'
-  | '완료'
-  | '만료';
+  | 'NOT_REACHED'
+  | 'AWAITING_REGISTRATION'
+  | 'PENDING_PAYOUT'
+  | 'ON_HOLD'
+  | 'PAID'
+  | 'EXPIRED';
 
 export type DebugViewport = 'auto' | 'mobile-390' | 'tablet-768' | 'desktop-1280';
 

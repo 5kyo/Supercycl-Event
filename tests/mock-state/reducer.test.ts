@@ -30,7 +30,7 @@ describe('reducer', () => {
     const completed = {
       ...initialState,
       usdtRegistration: { status: 'wallet' as const, trc20Address: 'T' + 'a'.repeat(33) },
-      usdtPayoutStatus: '완료' as const,
+      usdtPayoutStatus: 'PAID' as const,
     };
     const s = reducer(completed, {
       type: 'SET_USDT_REGISTRATION',
@@ -39,19 +39,41 @@ describe('reducer', () => {
     expect(s.usdtRegistration).toEqual(completed.usdtRegistration);
   });
 
-  it('guard: USDT payout cannot go to 완료 without registration', () => {
-    const s = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: '완료' });
+  it('guard: USDT payout cannot go to PAID without registration', () => {
+    const s = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID' });
     expect(s.usdtPayoutStatus).toBe(initialState.usdtPayoutStatus);
   });
 
-  it('SET_USDT_PAYOUT_STATUS 완료 stores tx hash when registered', () => {
+  it('SET_USDT_PAYOUT_STATUS PAID stores tx hash when registered', () => {
     const registered = {
       ...initialState,
       usdtRegistration: { status: 'wallet' as const, trc20Address: 'T' + 'a'.repeat(33) },
     };
-    const s = reducer(registered, { type: 'SET_USDT_PAYOUT_STATUS', status: '완료', txHash: '0xabc' });
-    expect(s.usdtPayoutStatus).toBe('완료');
+    const s = reducer(registered, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
+    expect(s.usdtPayoutStatus).toBe('PAID');
     expect(s.usdtTxHash).toBe('0xabc');
+  });
+
+  it('guard: ICX address cannot change after payout complete (spec §4.2)', () => {
+    const completed = {
+      ...initialState,
+      icxAddress: 'hx' + 'a'.repeat(40),
+      icxPayoutStatus: 'PAID' as const,
+    };
+    const s = reducer(completed, { type: 'SET_ICX_ADDRESS', address: 'hx' + 'b'.repeat(40) });
+    expect(s.icxAddress).toBe(completed.icxAddress);
+  });
+
+  it('guard: ICX payout cannot go to PAID without an address', () => {
+    const s = reducer(initialState, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID' });
+    expect(s.icxPayoutStatus).toBe(initialState.icxPayoutStatus);
+  });
+
+  it('SET_ICX_PAYOUT_STATUS PAID stores tx hash when address is registered', () => {
+    const registered = { ...initialState, icxAddress: 'hx' + 'a'.repeat(40) };
+    const s = reducer(registered, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID', txHash: '0xicxtx' });
+    expect(s.icxPayoutStatus).toBe('PAID');
+    expect(s.icxTxHash).toBe('0xicxtx');
   });
 
   it('DISMISS flips the named flag', () => {

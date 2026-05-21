@@ -6,10 +6,10 @@ import type { MockState } from '@/lib/mock-state';
 
 function inconsistencies(s: MockState): string[] {
   const out: string[] = [];
-  if (s.usdtPayoutStatus === '완료' && s.usdtRegistration.status === 'none') {
+  if (s.usdtPayoutStatus === 'PAID' && s.usdtRegistration.status === 'none') {
     out.push('USDT marked Paid but no registration recorded');
   }
-  if (s.icxPayoutStatus === '완료' && !s.icxAddress) {
+  if (s.icxPayoutStatus === 'PAID' && !s.icxAddress) {
     out.push('ICX marked Paid but no address recorded');
   }
   if (s.userSlotNumber && s.tradingVolume < 500) {

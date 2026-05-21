@@ -10,7 +10,7 @@ import { UsdtRegistrationForm } from '@/components/hub/UsdtRegistrationForm';
  * `UsdtRegistrationForm`. Opened from the "Register USDT info" CTA inside
  * `UsdtRewardCard` (default Hub) and from `EventClosed` after the campaign
  * ends. The form dispatches `SET_USDT_REGISTRATION` and
- * `SET_USDT_PAYOUT_STATUS('대기')` on submit.
+ * `SET_USDT_PAYOUT_STATUS('PENDING_PAYOUT')` on submit.
  */
 export function UsdtRegistrationModal({ onClose }: { onClose: () => void }) {
   const { state } = useMockState();

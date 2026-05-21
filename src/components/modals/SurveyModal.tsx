@@ -35,7 +35,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         isTrader: state.tradingVolume > 0,
         at: state.simulatedDate,
       });
-      dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: '수령 정보 미등록' });
+      dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: 'AWAITING_REGISTRATION' });
       // Close SurveyModal — Hub detects surveyCompleted and opens SurveyCompleteModal.
       onClose();
     } else {

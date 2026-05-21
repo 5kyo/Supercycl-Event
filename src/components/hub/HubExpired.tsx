@@ -11,7 +11,7 @@ export function HubExpired() {
   const cutoffLabel = shortDate(REGISTRATION_CUTOFF);
 
   const items = [
-    isQualifiedForUsdt(state) && state.usdtPayoutStatus !== '완료'
+    isQualifiedForUsdt(state) && state.usdtPayoutStatus !== 'PAID'
       ? {
           label: 'USDT · Trade reward',
           amount: '20',
@@ -19,7 +19,7 @@ export function HubExpired() {
           note: `Slot #${slot} secured · ${cutoffLabel} cutoff missed`,
         }
       : null,
-    state.surveyCompleted && state.icxPayoutStatus !== '완료'
+    state.surveyCompleted && state.icxPayoutStatus !== 'PAID'
       ? {
           label: 'ICX · Survey reward',
           amount: '100',

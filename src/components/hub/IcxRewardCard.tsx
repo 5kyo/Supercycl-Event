@@ -28,14 +28,14 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
   // Three-way override on top of the backend status:
   // 1. Survey window open + not yet completed → 'open' (Locked is misleading
   //    when the Start survey CTA is sitting right under the chip).
-  // 2. Survey done + trader → '수령 정보 미등록' (the existing transition).
+  // 2. Survey done + trader → 'AWAITING_REGISTRATION' (the existing transition).
   // 3. Otherwise fall through to the raw payout status.
   const effectiveStatus = showSurveyCta
     ? 'open'
-    : qualifiedForIcx && state.icxPayoutStatus === '미달성'
-      ? '수령 정보 미등록'
+    : qualifiedForIcx && state.icxPayoutStatus === 'NOT_REACHED'
+      ? 'AWAITING_REGISTRATION'
       : state.icxPayoutStatus;
-  const needsRegistration = effectiveStatus === '수령 정보 미등록';
+  const needsRegistration = effectiveStatus === 'AWAITING_REGISTRATION';
 
   const amountText =
     payout.amount !== null ? en.rewards.icxAmountWithValue(payout.amount) : en.rewards.icxAmount;
@@ -88,7 +88,7 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
           Wallet: {state.icxAddress.slice(0, 6)}…{state.icxAddress.slice(-4)}
         </p>
       )}
-      {state.icxPayoutStatus === '완료' && state.icxTxHash && (
+      {state.icxPayoutStatus === 'PAID' && state.icxTxHash && (
         <p className="text-body-sm text-text-tertiary">TX: {state.icxTxHash.slice(0, 10)}…</p>
       )}
       {needsRegistration && registrationCutoffPassed(state) && (

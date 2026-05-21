@@ -11,7 +11,7 @@ import { IcxRegistrationForm } from '@/components/hub/IcxRegistrationForm';
  * `SurveyCompleteModal → register ICX` jump and `EventClosed`.
  *
  * Modal-only chrome: title + reward banner ("✓ Survey complete · 100 ICX").
- * The form dispatches `SET_ICX_ADDRESS` + `SET_ICX_PAYOUT_STATUS('대기')`.
+ * The form dispatches `SET_ICX_ADDRESS` + `SET_ICX_PAYOUT_STATUS('PENDING_PAYOUT')`.
  */
 export function IcxRegistrationModal({ onClose }: { onClose: () => void }) {
   return (

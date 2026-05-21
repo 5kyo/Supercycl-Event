@@ -3,7 +3,7 @@
 import { useMockState } from '@/lib/mock-state';
 import type { UsdtPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: UsdtPayoutStatus[] = ['미달성', '수령 정보 미등록', '대기', '보류', '완료', '만료', '슬롯_마감_후_도달'];
+const STATUSES: UsdtPayoutStatus[] = ['NOT_REACHED', 'AWAITING_REGISTRATION', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'EXPIRED', 'CAP_FULL'];
 
 export function UsdtSection() {
   const { state, dispatch } = useMockState();
@@ -20,7 +20,7 @@ export function UsdtSection() {
         Status:
         <select
           value={state.usdtPayoutStatus}
-          onChange={e => dispatch({ type: 'SET_USDT_PAYOUT_STATUS', status: e.target.value as UsdtPayoutStatus, txHash: e.target.value === '완료' ? '0xMOCKtxhash' : null })}
+          onChange={e => dispatch({ type: 'SET_USDT_PAYOUT_STATUS', status: e.target.value as UsdtPayoutStatus, txHash: e.target.value === 'PAID' ? '0xMOCKtxhash' : null })}
           className="rounded-md bg-bg/40 px-2 py-1"
         >
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}

@@ -28,13 +28,13 @@ export function reducer(state: MockState, action: Action): MockState {
 
     case 'SET_USDT_REGISTRATION': {
       // Guard: cannot change after payout complete (spec §5.7)
-      if (state.usdtPayoutStatus === '완료') return state;
+      if (state.usdtPayoutStatus === 'PAID') return state;
       return { ...state, usdtRegistration: action.registration };
     }
 
     case 'SET_USDT_PAYOUT_STATUS': {
-      // Guard: cannot transition to 완료 without registration
-      if (action.status === '완료' && state.usdtRegistration.status === 'none') return state;
+      // Guard: cannot transition to PAID without registration
+      if (action.status === 'PAID' && state.usdtRegistration.status === 'none') return state;
       return {
         ...state,
         usdtPayoutStatus: action.status,
@@ -63,14 +63,19 @@ export function reducer(state: MockState, action: Action): MockState {
       return { ...state, isTrader: !state.isTrader };
 
     case 'SET_ICX_ADDRESS':
+      // Guard: cannot change after payout complete (spec §4.2 — mirrors USDT)
+      if (state.icxPayoutStatus === 'PAID') return state;
       return { ...state, icxAddress: action.address };
 
-    case 'SET_ICX_PAYOUT_STATUS':
+    case 'SET_ICX_PAYOUT_STATUS': {
+      // Guard: cannot transition to PAID without an ICON address
+      if (action.status === 'PAID' && !state.icxAddress) return state;
       return {
         ...state,
         icxPayoutStatus: action.status,
         icxTxHash: action.txHash ?? state.icxTxHash,
       };
+    }
 
     case 'SET_SIMULATED_DATE':
       return { ...state, simulatedDate: action.date };

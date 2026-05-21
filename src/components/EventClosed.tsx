@@ -26,13 +26,13 @@ export function EventClosed({ onRegisterUsdt, onRegisterIcx }: Props) {
     state.authStatus === 'logged_in' &&
     isQualifiedForUsdt(state) &&
     state.usdtRegistration.status === 'none' &&
-    state.usdtPayoutStatus !== '완료';
+    state.usdtPayoutStatus !== 'PAID';
 
   const needsIcx =
     state.authStatus === 'logged_in' &&
     state.surveyCompleted &&
     !state.icxAddress &&
-    state.icxPayoutStatus !== '완료';
+    state.icxPayoutStatus !== 'PAID';
 
   const showCard =
     !registrationCutoffPassed(state) && (needsUsdt || needsIcx);

@@ -3,7 +3,7 @@
 import { useMockState } from '@/lib/mock-state';
 import type { IcxPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: IcxPayoutStatus[] = ['미달성', '수령 정보 미등록', '대기', '보류', '완료', '만료'];
+const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_REGISTRATION', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'EXPIRED'];
 
 export function IcxSection() {
   const { state, dispatch } = useMockState();
@@ -19,7 +19,7 @@ export function IcxSection() {
         Status:
         <select
           value={state.icxPayoutStatus}
-          onChange={e => dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: e.target.value as IcxPayoutStatus, txHash: e.target.value === '완료' ? '0xMOCKicxtx' : null })}
+          onChange={e => dispatch({ type: 'SET_ICX_PAYOUT_STATUS', status: e.target.value as IcxPayoutStatus, txHash: e.target.value === 'PAID' ? '0xMOCKicxtx' : null })}
           className="rounded-md bg-bg/40 px-2 py-1"
         >
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}

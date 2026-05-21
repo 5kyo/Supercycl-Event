@@ -63,7 +63,7 @@ describe('EventClosed', () => {
       tradingVolume: 500,
       hasOkxLinked: true,
       usdtRegistration: { status: 'none' },
-      usdtPayoutStatus: '수령 정보 미등록',
+      usdtPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={noop} onRegisterIcx={noop} />);
     expect(screen.getByText(/YOUR REWARD IS WAITING/i)).toBeInTheDocument();
@@ -80,7 +80,7 @@ describe('EventClosed', () => {
       tradingVolume: 500,
       hasOkxLinked: true,
       usdtRegistration: { status: 'none' },
-      usdtPayoutStatus: '수령 정보 미등록',
+      usdtPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={onRegisterUsdt} onRegisterIcx={noop} />);
     screen.getByRole('button', { name: /Register wallet/i }).click();
@@ -95,7 +95,7 @@ describe('EventClosed', () => {
       surveyCompleted: true,
       isTrader: true,
       icxAddress: null,
-      icxPayoutStatus: '수령 정보 미등록',
+      icxPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={noop} onRegisterIcx={onRegisterIcx} />);
     expect(screen.getByText(/YOUR REWARD IS WAITING/i)).toBeInTheDocument();
@@ -112,11 +112,11 @@ describe('EventClosed', () => {
       tradingVolume: 500,
       hasOkxLinked: true,
       usdtRegistration: { status: 'none' },
-      usdtPayoutStatus: '수령 정보 미등록',
+      usdtPayoutStatus: 'AWAITING_REGISTRATION',
       surveyCompleted: true,
       isTrader: true,
       icxAddress: null,
-      icxPayoutStatus: '수령 정보 미등록',
+      icxPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={onRegisterUsdt} onRegisterIcx={vi.fn()} />);
     expect(screen.getByText(/20 USDT/i)).toBeInTheDocument();
@@ -132,7 +132,7 @@ describe('EventClosed', () => {
       tradingVolume: 500,
       hasOkxLinked: true,
       usdtRegistration: { status: 'none' },
-      usdtPayoutStatus: '수령 정보 미등록',
+      usdtPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={noop} onRegisterIcx={noop} />);
     expect(screen.queryByText(/YOUR REWARD IS WAITING/i)).not.toBeInTheDocument();
@@ -145,7 +145,7 @@ describe('EventClosed', () => {
       tradingVolume: 500,
       hasOkxLinked: true,
       usdtRegistration: { status: 'none' },
-      usdtPayoutStatus: '수령 정보 미등록',
+      usdtPayoutStatus: 'AWAITING_REGISTRATION',
     });
     render(<EventClosed onRegisterUsdt={noop} onRegisterIcx={noop} />);
     expect(screen.getByText(/D-0/i)).toBeInTheDocument();
