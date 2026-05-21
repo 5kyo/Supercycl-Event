@@ -21,12 +21,22 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
   const needsRegistration = state.icxPayoutStatus === '수령 정보 미등록';
   const showSurveyCta = surveyTrackOpen(state) && !state.surveyCompleted;
 
+  const amountText =
+    payout.amount !== null ? en.rewards.icxAmountWithValue(payout.amount) : en.rewards.icxAmount;
+  const conditionLine =
+    payout.amount === null && state.surveyCompleted && !state.isTrader
+      ? en.hub.icxNonTrader
+      : en.rewards.icxCondition;
+
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
-      <header className="flex items-baseline justify-between gap-md">
-        <h3 className="text-title-md">{en.rewards.icxCardTitle}</h3>
+      <header className="flex items-center justify-between gap-md">
+        <span className="upper-label inline-flex items-center gap-1.5" style={{ color: 'var(--accent)' }}>
+          <span aria-hidden>✦</span>
+          {en.rewards.eyebrow}
+        </span>
         {loggedOut ? (
-          <span className="text-label-md inline-flex items-center gap-1.5 text-text-tertiary">
+          <span className="chip chip-muted">
             <span aria-hidden>🔒</span>
             Sign in to view
           </span>
@@ -34,14 +44,12 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           <RewardStatusLabel status={state.icxPayoutStatus} />
         )}
       </header>
-      {payout.amount !== null && (
-        <p className="text-body-md text-text-secondary">
-          Reward: <span className="text-accent font-semibold">{payout.amount} ICX</span>
-        </p>
-      )}
-      {payout.amount === null && state.surveyCompleted && !state.isTrader && (
-        <p className="text-body-md italic text-text-tertiary">{en.hub.icxNonTrader}</p>
-      )}
+      <div className="flex flex-col gap-xs">
+        <h3 className="accent-text" style={{ font: 'var(--font-display-lg)' }}>
+          {amountText}
+        </h3>
+        <p className="text-body-md text-text-secondary">{conditionLine}</p>
+      </div>
       {state.icxAddress && (
         <p className="text-body-sm text-text-tertiary">
           Wallet: {state.icxAddress.slice(0, 6)}…{state.icxAddress.slice(-4)}

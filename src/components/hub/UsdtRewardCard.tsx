@@ -12,12 +12,20 @@ export function UsdtRewardCard() {
   const needsRegistration = state.usdtPayoutStatus === '수령 정보 미등록';
   const reg = state.usdtRegistration;
 
+  const conditionLine =
+    !qualified && state.usdtPayoutStatus === '미달성'
+      ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
+      : en.rewards.usdtCondition;
+
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
-      <header className="flex items-baseline justify-between gap-md">
-        <h3 className="text-title-md">{en.rewards.usdtCardTitle}</h3>
+      <header className="flex items-center justify-between gap-md">
+        <span className="upper-label inline-flex items-center gap-1.5" style={{ color: 'var(--accent)' }}>
+          <span aria-hidden>✦</span>
+          {en.rewards.eyebrow}
+        </span>
         {loggedOut ? (
-          <span className="text-label-md inline-flex items-center gap-1.5 text-text-tertiary">
+          <span className="chip chip-muted">
             <span aria-hidden>🔒</span>
             Sign in to view
           </span>
@@ -25,11 +33,12 @@ export function UsdtRewardCard() {
           <RewardStatusLabel status={state.usdtPayoutStatus} />
         )}
       </header>
-      {!qualified && state.usdtPayoutStatus === '미달성' && (
-        <p className="text-body-md text-text-secondary">
-          Trade ${Math.max(0, 500 - state.tradingVolume)} more to unlock.
-        </p>
-      )}
+      <div className="flex flex-col gap-xs">
+        <h3 className="accent-text" style={{ font: 'var(--font-display-lg)' }}>
+          {en.rewards.usdtAmount}
+        </h3>
+        <p className="text-body-md text-text-secondary">{conditionLine}</p>
+      </div>
       {reg.status === 'wallet' && (
         <p className="text-body-sm text-text-tertiary">
           Wallet: {reg.trc20Address.slice(0, 4)}…{reg.trc20Address.slice(-4)}
