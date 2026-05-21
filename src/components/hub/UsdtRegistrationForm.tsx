@@ -31,7 +31,7 @@ type Props = {
  */
 export function UsdtRegistrationForm({ onSuccess, onCancel }: Props) {
   const { dispatch } = useMockState();
-  const [method, setMethod] = useState<'wallet' | 'exchange'>('wallet');
+  const [method, setMethod] = useState<'wallet' | 'exchange'>('exchange');
   const [trc20, setTrc20] = useState('');
   const [okxUid, setOkxUid] = useState('');
   const [email, setEmail] = useState('');

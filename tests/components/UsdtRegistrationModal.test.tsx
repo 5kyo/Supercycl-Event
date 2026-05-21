@@ -65,3 +65,22 @@ describe('UsdtRegistrationModal — method tab labels', () => {
     ).not.toBeInTheDocument();
   });
 });
+
+describe('UsdtRegistrationModal — default method', () => {
+  it('selects "OKX exchange" by default on open', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    const exchangeTab = screen.getByRole('radio', { name: 'OKX exchange' });
+    const walletTab = screen.getByRole('radio', { name: 'TRC20 wallet' });
+    expect(exchangeTab).toHaveAttribute('aria-checked', 'true');
+    expect(walletTab).toHaveAttribute('aria-checked', 'false');
+  });
+
+  it('shows OKX UID + email fields on initial open (exchange flow visible)', () => {
+    mockUseStateWith();
+    render(<UsdtRegistrationModal onClose={noop} />);
+    expect(screen.getByText('OKX UID')).toBeInTheDocument();
+    expect(screen.getByText('OKX registered email')).toBeInTheDocument();
+    expect(screen.queryByText(/TRC20 USDT wallet address/i)).not.toBeInTheDocument();
+  });
+});
