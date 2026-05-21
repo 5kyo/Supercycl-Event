@@ -6,6 +6,7 @@ export const en = {
     title: 'Supercycl Mobile Launch Event',
     tagline: 'TRADE DIFFERENT · RIDE THE SUPERCYCL',
     period: 'Jun 8 – Jul 7, 2026 · 1 MONTH',
+    eventLabel: 'Mobile launch event',
   },
   cta: {
     joinNow: 'Join now',

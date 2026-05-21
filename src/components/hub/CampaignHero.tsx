@@ -1,5 +1,6 @@
 'use client';
 
+import { en } from '@/content/en';
 import { useMockState, daysUntilEnd } from '@/lib/mock-state';
 
 /**
@@ -51,11 +52,16 @@ export function CampaignHero() {
 
       <div className="relative mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
         <div className="flex flex-col">
+          <p
+            className="uppercase text-text-tertiary"
+            style={{ fontSize: 11, letterSpacing: '0.22em' }}
+          >
+            {en.meta.eventLabel}
+          </p>
           {/* Mobile-only status strip — desktop carries the same info in the
               right column. Keeps LIVE + days-left visible at narrow widths
-              so phone users see "currently running, N days remaining".
-              The TopBanner already names the event, so no eyebrow here. */}
-          <div className="flex items-center gap-2 lg:hidden">
+              so phone users see "currently running, N days remaining". */}
+          <div className="mt-1 flex items-center gap-2 lg:hidden">
             <span
               className="inline-flex items-center gap-1.5 font-mono uppercase text-accent"
               style={{ fontSize: 11, letterSpacing: '0.22em' }}
@@ -82,7 +88,7 @@ export function CampaignHero() {
             </span>
           </div>
           <h1
-            className="mt-3 font-bold lg:mt-0"
+            className="mt-3 font-bold lg:mt-2"
             style={{
               fontSize: 'clamp(28px, 5vw, 44px)',
               lineHeight: 1.05,
