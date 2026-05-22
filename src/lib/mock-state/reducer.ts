@@ -19,13 +19,6 @@ export function reducer(state: MockState, action: Action): MockState {
     case 'SET_SLOTS_REMAINING':
       return { ...state, slotsRemaining: clamp(action.value, 0, 500) };
 
-    case 'CLAIM_SLOT':
-      return {
-        ...state,
-        userSlotNumber: action.slotNumber,
-        reachedAt: action.reachedAt,
-      };
-
     case 'SET_USDT_REGISTRATION': {
       // Guard: cannot change after payout complete (spec §5.7)
       if (state.usdtPayoutStatus === 'PAID') return state;

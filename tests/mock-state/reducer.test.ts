@@ -20,12 +20,6 @@ describe('reducer', () => {
     expect(reducer(initialState, { type: 'SET_SLOTS_REMAINING', value: 9999 }).slotsRemaining).toBe(500);
   });
 
-  it('CLAIM_SLOT sets userSlotNumber and reachedAt', () => {
-    const s = reducer(initialState, { type: 'CLAIM_SLOT', slotNumber: 237, reachedAt: '2026-06-15' });
-    expect(s.userSlotNumber).toBe(237);
-    expect(s.reachedAt).toBe('2026-06-15');
-  });
-
   it('guard: USDT registration cannot change after payout complete', () => {
     const completed = {
       ...initialState,

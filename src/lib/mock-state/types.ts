@@ -38,10 +38,8 @@ export type MockState = {
   hasOkxLinked: boolean;
   // 3. trading
   tradingVolume: number;          // 0..2000
-  reachedAt: string | null;
-  // 4. slots (global + user)
+  // 4. slots
   slotsRemaining: number;          // 0..500
-  userSlotNumber: number | null;
   // 5. USDT
   usdtRegistration: UsdtRegistration;
   usdtPayoutStatus: UsdtPayoutStatus;
@@ -67,7 +65,6 @@ export type Action =
   | { type: 'TOGGLE_OKX' }
   | { type: 'SET_TRADING_VOLUME'; value: number }
   | { type: 'SET_SLOTS_REMAINING'; value: number }
-  | { type: 'CLAIM_SLOT'; slotNumber: number; reachedAt: string }
   | { type: 'SET_USDT_REGISTRATION'; registration: UsdtRegistration }
   | { type: 'SET_USDT_PAYOUT_STATUS'; status: UsdtPayoutStatus; txHash?: string | null }
   | { type: 'SET_SURVEY_COMPLETED'; isTrader: boolean; at: string }

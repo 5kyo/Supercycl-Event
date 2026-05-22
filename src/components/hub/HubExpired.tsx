@@ -7,7 +7,7 @@ import { shortDate } from '@/content/en';
 /** V2 Hub — Expired (past registration cutoff with un-registered rewards). */
 export function HubExpired() {
   const { state } = useMockState();
-  const slot = state.userSlotNumber ?? Math.max(1, 500 - state.slotsRemaining);
+  const slot = Math.max(1, 500 - state.slotsRemaining);
   const cutoffLabel = shortDate(REGISTRATION_CUTOFF);
 
   const items = [

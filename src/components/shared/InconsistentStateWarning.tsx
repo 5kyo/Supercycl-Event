@@ -12,9 +12,6 @@ function inconsistencies(s: MockState): string[] {
   if (s.icxPayoutStatus === 'PAID' && !s.icxAddress) {
     out.push('ICX marked Paid but no address recorded');
   }
-  if (s.userSlotNumber && s.tradingVolume < 500) {
-    out.push('Slot claimed but trading volume < $500');
-  }
   return out;
 }
 
