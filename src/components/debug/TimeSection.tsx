@@ -4,7 +4,6 @@ import { useMockState } from '@/lib/mock-state';
 
 const JUMPS: { label: string; date: string }[] = [
   { label: 'D-day',         date: '2026-06-08' },
-  { label: 'Mid',           date: '2026-06-25' },
   { label: 'End-trade',     date: '2026-06-28' },
   { label: 'Start-survey',  date: '2026-06-29' },
   { label: 'D-3',           date: '2026-07-04' },

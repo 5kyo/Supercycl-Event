@@ -49,7 +49,7 @@ For each: toggle DebugDrawer values, refresh page, verify UI.
 - [ ] ⌘+\ (Mac) or Ctrl+\ (Linux/Windows) toggles drawer
 - [ ] Mobile: bottom sheet · Desktop: right drawer
 - [ ] Every section's toggles update the corresponding UI live
-- [ ] Quick-jump dates work for all 7 presets (D-day, Mid, End-trade, Start-survey, D-3, End, 14d-cutoff)
+- [ ] Quick-jump dates work for all 6 presets (D-day, End-trade, Start-survey, D-3, End, 14d-cutoff)
 - [ ] Viewport buttons (auto/mobile-390/tablet-768/desktop-1280) frame the page at the chosen width
 - [ ] Export copies JSON to clipboard
 - [ ] Import accepts pasted JSON
