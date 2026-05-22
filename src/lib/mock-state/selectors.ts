@@ -74,12 +74,20 @@ export function hubVariant(s: MockState): HubVariant {
 
 export function bannerType(s: MockState): BannerType {
   if (!inCampaignWindow(s)) return null;
+  // Slots exhausted: the trade reward is no longer reachable. The reward card
+  // surfaces its own "Closed" treatment, so the top banner steps aside.
+  if (s.slotsRemaining === 0) return null;
   const d = daysUntilEnd(s);
   if (d <= 3 && d >= 0) return 'd-3';
   if (s.slotsRemaining <= 10) return 'slots-10';
   if (s.slotsRemaining <= 50) return 'slots-50';
   if (s.slotsRemaining <= 100) return 'slots-100';
   return 'campaign-running';
+}
+
+/** Trade reward is unreachable: slot capacity exhausted OR trade track date past. */
+export function tradeRewardClosed(s: MockState): boolean {
+  return s.slotsRemaining === 0 || s.simulatedDate > TRADE_TRACK_END;
 }
 
 export type IcxPayout = { amount: number | null; reason?: string };

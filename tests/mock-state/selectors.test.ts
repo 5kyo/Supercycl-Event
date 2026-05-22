@@ -8,6 +8,7 @@ import {
   tradingTrackOpen,
   registrationCutoffPassed,
   effectiveIcxPayout,
+  tradeRewardClosed,
 } from '@/lib/mock-state/selectors';
 import { initialState } from '@/lib/mock-state/initial';
 
@@ -31,6 +32,19 @@ describe('selectors', () => {
     expect(bannerType({ ...base, slotsRemaining: 50 })).toBe('slots-50');
     expect(bannerType({ ...base, slotsRemaining: 10 })).toBe('slots-10');
     expect(bannerType({ ...base, simulatedDate: '2026-07-04', slotsRemaining: 100 })).toBe('d-3');
+  });
+
+  it('bannerType returns null when slotsRemaining is 0 (overrides d-3 and slots-10)', () => {
+    const base = { ...initialState, simulatedDate: '2026-06-15', slotsRemaining: 0 };
+    expect(bannerType(base)).toBe(null);
+    expect(bannerType({ ...base, simulatedDate: '2026-07-04' })).toBe(null);
+  });
+
+  it('tradeRewardClosed: true when slots exhausted or past trade-track end', () => {
+    expect(tradeRewardClosed({ ...initialState, slotsRemaining: 0 })).toBe(true);
+    expect(tradeRewardClosed({ ...initialState, simulatedDate: '2026-06-29', slotsRemaining: 500 })).toBe(true);
+    expect(tradeRewardClosed({ ...initialState, simulatedDate: '2026-06-28', slotsRemaining: 500 })).toBe(false);
+    expect(tradeRewardClosed({ ...initialState, simulatedDate: '2026-06-08', slotsRemaining: 500 })).toBe(false);
   });
 
   it('surveyTrackOpen window 2026-06-29..2026-07-05', () => {

@@ -25,6 +25,7 @@ export const en = {
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
     usdtConditionReady: '$500 reached — register payout info',
+    usdtClosed: 'Trade window closed — reward no longer available',
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
     icxCondition: 'Complete the 12-question survey',
