@@ -1,7 +1,7 @@
 'use client';
 
-import { en } from '@/content/en';
-import { useMockState } from '@/lib/mock-state';
+import { en, shortDate } from '@/content/en';
+import { useMockState, surveyTrackOpen, SURVEY_TRACK_START } from '@/lib/mock-state';
 
 type StepState = 'done' | 'inProgress' | 'locked';
 
@@ -29,15 +29,24 @@ export function ProgressTracker() {
   const step1Done = state.hasOkxLinked;
   const step2Done = step1Done && state.tradingVolume >= 500;
   const step3Done = step2Done && state.surveyCompleted;
+  // Step 3 mirrors the Bonus ICX card: stays locked until the survey window
+  // opens, so the two surfaces never disagree about whether the survey is
+  // actionable. When step 2 is done but the window hasn't opened, the chip
+  // surfaces the open date instead of the generic "Up next" copy.
+  const surveyOpen = surveyTrackOpen(state);
 
   const step1: StepState = step1Done ? 'done' : 'inProgress';
   const step2: StepState = step2Done ? 'done' : step1Done ? 'inProgress' : 'locked';
-  const step3: StepState = step3Done ? 'done' : step2Done ? 'inProgress' : 'locked';
+  const step3: StepState =
+    step3Done ? 'done' : step2Done && surveyOpen ? 'inProgress' : 'locked';
 
-  const rows = [
+  const step3BadgeOverride =
+    step3 === 'locked' && step2Done ? `Opens ${shortDate(SURVEY_TRACK_START)}` : undefined;
+
+  const rows: Array<{ num: number; label: string; state: StepState; badgeOverride?: string }> = [
     { num: 1, label: en.steps.step1, state: step1 },
     { num: 2, label: en.steps.step2, state: step2 },
-    { num: 3, label: en.steps.step3, state: step3 },
+    { num: 3, label: en.steps.step3, state: step3, badgeOverride: step3BadgeOverride },
   ];
   return (
     <section className="mx-auto max-w-6xl px-6 py-md">
@@ -62,7 +71,7 @@ export function ProgressTracker() {
                   <span className="hidden sm:inline">Sign in to view</span>
                 </span>
               ) : (
-                <span className={`text-label-lg ${b.cls}`}>{b.text}</span>
+                <span className={`text-label-lg ${b.cls}`}>{r.badgeOverride ?? b.text}</span>
               )}
             </li>
           );
