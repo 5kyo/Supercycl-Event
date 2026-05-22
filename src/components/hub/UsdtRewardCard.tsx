@@ -19,18 +19,20 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
   const reg = state.usdtRegistration;
-  // Trade reward is closed when the user never qualified AND the path is shut:
-  // slots exhausted or trade-track date passed. Already-qualified users and
-  // any non-NOT_REACHED payout state keep their normal flow.
+  // Trade reward is closed when the slot path is shut (slots exhausted or
+  // trade-track date passed) AND the user has not yet moved past NOT_REACHED.
+  // Any non-NOT_REACHED payout state means the user already cleared the gate
+  // (proxy for the removed userSlotNumber) and keeps their normal flow.
   const closed =
-    !qualified &&
     state.usdtPayoutStatus === 'NOT_REACHED' &&
     tradeRewardClosed(state);
   // Treat the qualified-but-still-'NOT_REACHED' moment as "registration required" —
   // SlotSecuredModal used to flip this status; now the card surfaces the
   // transition on its own so the chip and CTA stay in sync without a popup.
+  // Gate on !closed so volume≥$500 with 0 slots stays in the closed visual
+  // instead of promoting to AWAITING_REGISTRATION and rendering the CTA.
   const effectiveStatus =
-    qualified && state.usdtPayoutStatus === 'NOT_REACHED'
+    qualified && state.usdtPayoutStatus === 'NOT_REACHED' && !closed
       ? 'AWAITING_REGISTRATION'
       : state.usdtPayoutStatus;
   const needsRegistration = effectiveStatus === 'AWAITING_REGISTRATION';
