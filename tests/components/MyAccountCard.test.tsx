@@ -23,7 +23,7 @@ describe('MyAccountCard', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('shows the address + a "connect OKX" hint when OKX is not linked', () => {
+  it('shows the address + a Not connected chip in the UID slot when OKX is not linked', () => {
     mockUseStateWith({
       authStatus: 'logged_in',
       accountAddress: mockState.MOCK_ACCOUNT_ADDRESS,
@@ -33,7 +33,9 @@ describe('MyAccountCard', () => {
     render(<MyAccountCard />);
     expect(screen.getByText('My account')).toBeInTheDocument();
     expect(screen.getByText(mockState.MOCK_ACCOUNT_ADDRESS)).toBeInTheDocument();
-    expect(screen.getByText('Connect OKX in Step 1')).toBeInTheDocument();
+    expect(screen.getByText('Not connected')).toBeInTheDocument();
+    // Hint text removed — chip stands on its own
+    expect(screen.queryByText(/Connect in Step 1/)).not.toBeInTheDocument();
   });
 
   it('shows the full address + full UID when both are present', () => {

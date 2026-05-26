@@ -383,8 +383,12 @@
 │  ✦ MY ACCOUNT                         │
 │  Supercycl address  hx1234…5678       │
 │  OKX UID            1234567890        │
+│   (OKX 미연동 시: [Not connected] chip)  │
 ├──────────────────────────────────────┤
 │  🎯 ProgressTracker (3단계)            │
+│    1. Sign up + connect OKX            │
+│       (OKX 미연동 시 라벨 아래             │
+│        "OKX not connected" 서브라인 노출) │
 │  ✅ STEP 1: Sign up + connect OKX [DONE]│
 │  ⏳ STEP 2: Trade $500 → 20 USDT       │
 │  ⬜ STEP 3: Complete survey → ICX      │
@@ -437,7 +441,7 @@
 
 1. **단일 URL 진입점** — 로그인 여부에 따라 콘텐츠만 분기 (공개 랜딩 ↔ 이벤트 허브)
 2. **3섹션 구조** (로그인) — 진척도 / 슬롯 / 보상
-3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시 UID 자리에 "Connect OKX in Step 1" 힌트 표시.
+3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시: My account UID 자리에 `Not connected` chip, ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
 4. **실시간 슬롯** — 5분 갱신, 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통)
 5. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
 6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)

@@ -55,15 +55,23 @@ export function ProgressTracker() {
         {rows.map(r => {
           const b = badge(r.state);
           const cls = loggedOut ? 'step-chip opacity-50' : chipClass(r.state);
+          const showOkxNotConnected = !loggedOut && r.num === 1 && !state.hasOkxLinked;
           return (
             <li
               key={r.num}
               className="card flex items-center justify-between"
               style={{ padding: '14px 18px' }}
             >
-              <span className="flex items-center gap-md">
+              <span className="flex items-start gap-md">
                 <span className={cls} aria-hidden>{r.num}</span>
-                <span className="text-body-lg">{r.label}</span>
+                <span className="flex flex-col">
+                  <span className="text-body-lg">{r.label}</span>
+                  {showOkxNotConnected && (
+                    <span className="text-body-sm text-text-tertiary">
+                      {en.steps.step1OkxNotConnected}
+                    </span>
+                  )}
+                </span>
               </span>
               {loggedOut ? (
                 <span className="text-label-lg inline-flex items-center gap-1.5 text-text-tertiary">

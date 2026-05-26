@@ -39,6 +39,7 @@ export const en = {
   steps: {
     heading: 'How to participate',
     step1: 'Sign up + connect OKX',
+    step1OkxNotConnected: 'OKX not connected',
     step2: 'Trade $500 → 20 USDT',
     step3: 'Complete survey → ICX',
   },
@@ -107,7 +108,7 @@ export const en = {
     heading: 'My account',
     addressLabel: 'Supercycl account address',
     uidLabel: 'OKX UID',
-    uidNotLinked: 'Connect OKX in Step 1',
+    okxNotConnected: 'Not connected',
   },
   outsideWindow: {
     surveyClosed: 'Survey opens June 29',

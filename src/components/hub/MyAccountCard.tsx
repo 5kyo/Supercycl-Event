@@ -31,10 +31,17 @@ export function MyAccountCard() {
             {state.accountAddress ?? '—'}
           </dd>
           <dt className="text-body-sm text-text-tertiary">{en.account.uidLabel}</dt>
-          <dd
-            className={`font-mono text-body-sm ${state.hasOkxLinked && state.okxUid ? 'text-text-primary' : 'text-text-tertiary italic'}`}
-          >
-            {state.hasOkxLinked && state.okxUid ? state.okxUid : en.account.uidNotLinked}
+          <dd className="text-body-sm">
+            {state.hasOkxLinked && state.okxUid ? (
+              <span className="font-mono text-text-primary">{state.okxUid}</span>
+            ) : (
+              <span
+                className="inline-flex items-center rounded-full border border-amber/40 bg-amber/15 px-2 py-0.5 text-label-sm text-amber"
+                data-testid="okx-not-connected"
+              >
+                {en.account.okxNotConnected}
+              </span>
+            )}
           </dd>
         </dl>
       </article>
