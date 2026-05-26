@@ -7,15 +7,12 @@ import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
 import { HubCompleted } from './HubCompleted';
-import { HubExpired } from './HubExpired';
 import { CampaignHero } from './CampaignHero';
-import { UsdtRegistrationModal } from '@/components/modals/UsdtRegistrationModal';
-import { IcxRegistrationModal } from '@/components/modals/IcxRegistrationModal';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
 import { useMockState, hubVariant, FrozenStateScope } from '@/lib/mock-state';
 
-type Open = 'usdt' | 'icx' | 'survey' | 'surveyComplete' | null;
+type Open = 'survey' | 'surveyComplete' | null;
 
 export function Hub() {
   const { state, dispatch } = useMockState();
@@ -41,21 +38,11 @@ export function Hub() {
     setOpen(null);
   }
 
-  function registerIcxFromSurveyComplete() {
-    dispatch({ type: 'DISMISS', key: 'surveyCompleteSeen' });
-    setOpen('icx');
-  }
-
   const modals = (
     <>
-      {open === 'usdt' && <UsdtRegistrationModal onClose={() => setOpen(null)} />}
-      {open === 'icx' && <IcxRegistrationModal onClose={() => setOpen(null)} />}
       {open === 'survey' && <SurveyModal onClose={() => setOpen(null)} />}
       {open === 'surveyComplete' && (
-        <SurveyCompleteModal
-          onClose={closeSurveyComplete}
-          onRegisterIcx={registerIcxFromSurveyComplete}
-        />
+        <SurveyCompleteModal onClose={closeSurveyComplete} />
       )}
     </>
   );
@@ -64,15 +51,6 @@ export function Hub() {
     return (
       <main className="pb-2xl">
         <HubCompleted />
-        {modals}
-      </main>
-    );
-  }
-
-  if (variant === 'expired') {
-    return (
-      <main className="pb-2xl">
-        <HubExpired />
         {modals}
       </main>
     );
@@ -87,11 +65,8 @@ export function Hub() {
       <ProgressTracker />
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">
-        <UsdtRewardCard onRegisterUsdt={() => setOpen('usdt')} />
-        <IcxRewardCard
-          onStartSurvey={() => setOpen('survey')}
-          onRegisterIcx={() => setOpen('icx')}
-        />
+        <UsdtRewardCard />
+        <IcxRewardCard onStartSurvey={() => setOpen('survey')} />
       </section>
       <HubCtaBar />
     </>

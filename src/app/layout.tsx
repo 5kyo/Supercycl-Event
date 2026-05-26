@@ -3,7 +3,6 @@ import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { MockStateProvider } from '@/lib/mock-state';
 import { DebugDrawer } from '@/components/debug/DebugDrawer';
 import { ViewportFrame } from '@/components/ViewportFrame';
-import { InconsistentStateWarning } from '@/components/shared/InconsistentStateWarning';
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -40,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <MockStateProvider>
-          <InconsistentStateWarning />
           <ViewportFrame>{children}</ViewportFrame>
           <DebugDrawer />
         </MockStateProvider>

@@ -1,51 +1,15 @@
 'use client';
 
-import {
-  useMockState,
-  isQualifiedForUsdt,
-  daysUntilCutoff,
-  registrationCutoffPassed,
-  effectiveIcxPayout,
-  REGISTRATION_CUTOFF,
-} from '@/lib/mock-state';
-import { en, shortDate } from '@/content/en';
-
-type Props = { onRegisterUsdt: () => void; onRegisterIcx: () => void };
+import { en } from '@/content/en';
 
 /**
  * Post-campaign goodbye page. Renders a minimal "thanks for riding with us"
- * hero for every visitor, plus a conditional reward card that only appears
- * while a logged-in user still has an unredeemed reward inside the 14-day
- * registration window.
+ * hero + recap + open-app CTA for every visitor. With in-product address
+ * registration removed, there is no longer a per-user "claim your reward"
+ * card — outstanding payouts are pushed by the operator via OKX Internal
+ * Transfer to the linked UID without any further user action.
  */
-export function EventClosed({ onRegisterUsdt, onRegisterIcx }: Props) {
-  const { state } = useMockState();
-  const cutoffLabel = shortDate(REGISTRATION_CUTOFF);
-
-  const needsUsdt =
-    state.authStatus === 'logged_in' &&
-    isQualifiedForUsdt(state) &&
-    state.usdtRegistration.status === 'none' &&
-    state.usdtPayoutStatus !== 'PAID';
-
-  const needsIcx =
-    state.authStatus === 'logged_in' &&
-    state.surveyCompleted &&
-    !state.icxAddress &&
-    state.icxPayoutStatus !== 'PAID';
-
-  const showCard =
-    !registrationCutoffPassed(state) && (needsUsdt || needsIcx);
-
-  // USDT takes priority when both need registration.
-  const cardKind: 'usdt' | 'icx' | null = needsUsdt ? 'usdt' : needsIcx ? 'icx' : null;
-  const days = daysUntilCutoff(state);
-
-  const icxAmount = effectiveIcxPayout(state).amount;
-  const cardAmount =
-    cardKind === 'usdt' ? '20 USDT' : icxAmount != null ? `${icxAmount} ICX` : 'Bonus ICX';
-  const onCardClick = cardKind === 'usdt' ? onRegisterUsdt : onRegisterIcx;
-
+export function EventClosed() {
   return (
     <main className="relative" style={{ paddingBottom: 32 }}>
       <div
@@ -73,42 +37,6 @@ export function EventClosed({ onRegisterUsdt, onRegisterIcx }: Props) {
           {en.eventClosed.subtitle}
         </p>
       </section>
-
-      {showCard && cardKind && (
-        <section className="relative mx-auto max-w-6xl px-6 py-md">
-          <div
-            className="card-elevated relative overflow-hidden text-center"
-            style={{
-              padding: 20,
-              background: 'linear-gradient(135deg, rgba(255,167,38,0.10), transparent)',
-              border: '1px solid var(--warning-border)',
-            }}
-          >
-            <p className="upper-label text-warning" style={{ fontSize: 11 }}>
-              {en.eventClosed.rewardLabel}
-            </p>
-            <p
-              className="mt-sm font-bold"
-              style={{ fontSize: 26, lineHeight: 1, letterSpacing: '-0.02em' }}
-            >
-              {cardAmount}
-            </p>
-            <p
-              className="mt-sm text-body-sm"
-              style={{ color: 'rgba(255,167,38,0.85)' }}
-            >
-              {en.eventClosed.countdownExpires(days, cutoffLabel)}
-            </p>
-            <button
-              type="button"
-              onClick={onCardClick}
-              className="btn-primary-sm mt-md"
-            >
-              {en.eventClosed.registerCta} →
-            </button>
-          </div>
-        </section>
-      )}
 
       <section
         className="relative mx-auto max-w-6xl px-6 py-md"

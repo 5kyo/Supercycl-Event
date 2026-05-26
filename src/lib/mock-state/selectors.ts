@@ -2,7 +2,6 @@ import type { MockState } from './types';
 import {
   CAMPAIGN_END,
   CAMPAIGN_START,
-  REGISTRATION_CUTOFF,
   SURVEY_TRACK_END,
   SURVEY_TRACK_START,
   TRADE_TRACK_END,
@@ -25,10 +24,6 @@ export function daysUntilEnd(s: MockState): number {
   return diffDays(CAMPAIGN_END, s.simulatedDate);
 }
 
-export function daysUntilCutoff(s: MockState): number {
-  return diffDays(REGISTRATION_CUTOFF, s.simulatedDate);
-}
-
 export function inCampaignWindow(s: MockState): boolean {
   return s.simulatedDate >= CAMPAIGN_START && s.simulatedDate <= CAMPAIGN_END;
 }
@@ -41,34 +36,17 @@ export function surveyTrackOpen(s: MockState): boolean {
   return s.simulatedDate >= SURVEY_TRACK_START && s.simulatedDate <= SURVEY_TRACK_END;
 }
 
-export function registrationCutoffPassed(s: MockState): boolean {
-  return s.simulatedDate > REGISTRATION_CUTOFF;
-}
-
 export function eventEnded(s: MockState): boolean {
   return s.simulatedDate > CAMPAIGN_END;
 }
 
-export type HubVariant = 'default' | 'completed' | 'expired';
+export type HubVariant = 'default' | 'completed';
 
 /** Pick which Hub layout to render based on user/event state. */
 export function hubVariant(s: MockState): HubVariant {
-  // Expired: past registration cutoff with at least one unredeemed reward.
-  if (registrationCutoffPassed(s)) {
-    const hasUnredeemedUsdt =
-      isQualifiedForUsdt(s) && s.usdtPayoutStatus !== 'PAID';
-    const hasUnredeemedIcx =
-      s.surveyCompleted && s.icxPayoutStatus !== 'PAID';
-    if (hasUnredeemedUsdt || hasUnredeemedIcx) return 'expired';
-  }
-
-  // Completed: both rewards paid.
   if (s.usdtPayoutStatus === 'PAID' && s.icxPayoutStatus === 'PAID') {
     return 'completed';
   }
-
-  // Qualified-but-not-paid no longer routes to a separate "pending" page —
-  // UsdtRewardCard drives the registration CTA from within the default layout.
   return 'default';
 }
 
@@ -106,4 +84,12 @@ export function slotTension(s: MockState): SlotTension {
   if (s.slotsRemaining <= 50) return 'tension-50';
   if (s.slotsRemaining <= 100) return 'tension-100';
   return 'none';
+}
+
+/** Mask a UID like `1234567890` → `12******90` for in-product display. */
+export function maskOkxUid(uid: string): string {
+  if (uid.length <= 4) return '*'.repeat(uid.length);
+  const head = uid.slice(0, 2);
+  const tail = uid.slice(-2);
+  return `${head}${'*'.repeat(Math.max(2, uid.length - 4))}${tail}`;
 }

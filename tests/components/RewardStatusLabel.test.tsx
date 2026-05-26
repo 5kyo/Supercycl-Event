@@ -7,9 +7,9 @@ describe('RewardStatusLabel', () => {
     render(<RewardStatusLabel status="NOT_REACHED" />);
     expect(screen.getByText('Locked')).toBeInTheDocument();
   });
-  it('renders amber chip for AWAITING_REGISTRATION', () => {
-    render(<RewardStatusLabel status="AWAITING_REGISTRATION" />);
-    const chip = screen.getByText('Registration required');
+  it('renders amber chip for AWAITING_PAYOUT', () => {
+    render(<RewardStatusLabel status="AWAITING_PAYOUT" />);
+    const chip = screen.getByText('Awaiting payout');
     expect(chip).toBeInTheDocument();
     expect(chip.className).toMatch(/amber|yellow/);
   });

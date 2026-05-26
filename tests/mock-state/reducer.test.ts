@@ -1,11 +1,21 @@
 import { describe, it, expect } from 'vitest';
 import { reducer } from '@/lib/mock-state/reducer';
-import { initialState } from '@/lib/mock-state/initial';
+import { initialState, MOCK_OKX_UID } from '@/lib/mock-state/initial';
 
 describe('reducer', () => {
   it('SET_AUTH transitions logged_out -> logged_in', () => {
     const s = reducer(initialState, { type: 'SET_AUTH', status: 'logged_in' });
     expect(s.authStatus).toBe('logged_in');
+  });
+
+  it('TOGGLE_OKX populates okxUid when linking, clears it when unlinking', () => {
+    const linked = reducer(initialState, { type: 'TOGGLE_OKX' });
+    expect(linked.hasOkxLinked).toBe(true);
+    expect(linked.okxUid).toBe(MOCK_OKX_UID);
+
+    const unlinked = reducer(linked, { type: 'TOGGLE_OKX' });
+    expect(unlinked.hasOkxLinked).toBe(false);
+    expect(unlinked.okxUid).toBeNull();
   });
 
   it('SET_TRADING_VOLUME clamps to [0, 2000]', () => {
@@ -20,52 +30,14 @@ describe('reducer', () => {
     expect(reducer(initialState, { type: 'SET_SLOTS_REMAINING', value: 9999 }).slotsRemaining).toBe(500);
   });
 
-  it('guard: USDT registration cannot change after payout complete', () => {
-    const completed = {
-      ...initialState,
-      usdtRegistration: { status: 'wallet' as const, trc20Address: 'T' + 'a'.repeat(33) },
-      usdtPayoutStatus: 'PAID' as const,
-    };
-    const s = reducer(completed, {
-      type: 'SET_USDT_REGISTRATION',
-      registration: { status: 'exchange', okxUid: '123456', email: 'a@b.co' },
-    });
-    expect(s.usdtRegistration).toEqual(completed.usdtRegistration);
-  });
-
-  it('guard: USDT payout cannot go to PAID without registration', () => {
-    const s = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID' });
-    expect(s.usdtPayoutStatus).toBe(initialState.usdtPayoutStatus);
-  });
-
-  it('SET_USDT_PAYOUT_STATUS PAID stores tx hash when registered', () => {
-    const registered = {
-      ...initialState,
-      usdtRegistration: { status: 'wallet' as const, trc20Address: 'T' + 'a'.repeat(33) },
-    };
-    const s = reducer(registered, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
+  it('SET_USDT_PAYOUT_STATUS PAID stores tx hash with no prerequisite registration', () => {
+    const s = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
     expect(s.usdtPayoutStatus).toBe('PAID');
     expect(s.usdtTxHash).toBe('0xabc');
   });
 
-  it('guard: ICX address cannot change after payout complete (spec §4.2)', () => {
-    const completed = {
-      ...initialState,
-      icxAddress: 'hx' + 'a'.repeat(40),
-      icxPayoutStatus: 'PAID' as const,
-    };
-    const s = reducer(completed, { type: 'SET_ICX_ADDRESS', address: 'hx' + 'b'.repeat(40) });
-    expect(s.icxAddress).toBe(completed.icxAddress);
-  });
-
-  it('guard: ICX payout cannot go to PAID without an address', () => {
-    const s = reducer(initialState, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID' });
-    expect(s.icxPayoutStatus).toBe(initialState.icxPayoutStatus);
-  });
-
-  it('SET_ICX_PAYOUT_STATUS PAID stores tx hash when address is registered', () => {
-    const registered = { ...initialState, icxAddress: 'hx' + 'a'.repeat(40) };
-    const s = reducer(registered, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID', txHash: '0xicxtx' });
+  it('SET_ICX_PAYOUT_STATUS PAID stores tx hash with no prerequisite registration', () => {
+    const s = reducer(initialState, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID', txHash: '0xicxtx' });
     expect(s.icxPayoutStatus).toBe('PAID');
     expect(s.icxTxHash).toBe('0xicxtx');
   });

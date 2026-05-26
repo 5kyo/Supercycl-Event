@@ -5,37 +5,29 @@ import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import {
   useMockState,
   isQualifiedForUsdt,
-  registrationCutoffPassed,
+  maskOkxUid,
   tradeRewardClosed,
 } from '@/lib/mock-state';
 
-type Props = {
-  /** Opens the USDT payout-info registration modal. Omitted in previews. */
-  onRegisterUsdt?: () => void;
-};
-
-export function UsdtRewardCard({ onRegisterUsdt }: Props) {
+export function UsdtRewardCard() {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
-  const reg = state.usdtRegistration;
   // Trade reward is closed when the slot path is shut (slots exhausted or
   // trade-track date passed) AND the user has not yet moved past NOT_REACHED.
   // Any non-NOT_REACHED payout state means the user already cleared the gate
-  // (proxy for the removed userSlotNumber) and keeps their normal flow.
+  // and keeps their normal flow.
   const closed =
     state.usdtPayoutStatus === 'NOT_REACHED' &&
     tradeRewardClosed(state);
-  // Treat the qualified-but-still-'NOT_REACHED' moment as "registration required" —
-  // SlotSecuredModal used to flip this status; now the card surfaces the
-  // transition on its own so the chip and CTA stay in sync without a popup.
-  // Gate on !closed so volume≥$500 with 0 slots stays in the closed visual
-  // instead of promoting to AWAITING_REGISTRATION and rendering the CTA.
+  // Treat the qualified-but-still-'NOT_REACHED' moment as "awaiting payout" —
+  // the operator pushes the USDT via OKX Internal Transfer, no user action
+  // required. Gate on !closed so volume≥$500 with 0 slots stays in the closed
+  // visual instead of flipping the chip to AWAITING_PAYOUT.
   const effectiveStatus =
     qualified && state.usdtPayoutStatus === 'NOT_REACHED' && !closed
-      ? 'AWAITING_REGISTRATION'
+      ? 'AWAITING_PAYOUT'
       : state.usdtPayoutStatus;
-  const needsRegistration = effectiveStatus === 'AWAITING_REGISTRATION';
 
   const conditionLine = closed
     ? en.rewards.usdtClosed
@@ -44,6 +36,13 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
       : state.usdtPayoutStatus === 'NOT_REACHED'
         ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
         : en.rewards.usdtCondition;
+
+  const showPayoutChannel =
+    !closed &&
+    !loggedOut &&
+    state.okxUid !== null &&
+    effectiveStatus !== 'NOT_REACHED' &&
+    state.usdtPayoutStatus !== 'PAID';
 
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
@@ -82,33 +81,13 @@ export function UsdtRewardCard({ onRegisterUsdt }: Props) {
         )}
         <p className="text-body-md text-text-secondary">{conditionLine}</p>
       </div>
-      {!closed && reg.status === 'wallet' && (
+      {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
-          Wallet: {reg.trc20Address.slice(0, 4)}…{reg.trc20Address.slice(-4)}
+          {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}
         </p>
-      )}
-      {!closed && reg.status === 'exchange' && (
-        <p className="text-body-sm text-text-tertiary">OKX UID: {reg.okxUid}</p>
       )}
       {state.usdtPayoutStatus === 'PAID' && state.usdtTxHash && (
         <p className="text-body-sm text-text-tertiary">TX: {state.usdtTxHash.slice(0, 10)}…</p>
-      )}
-      {needsRegistration && registrationCutoffPassed(state) && (
-        <p
-          className="rounded-md text-body-sm italic text-text-tertiary"
-          style={{ background: 'var(--surface-2)', padding: '10px 12px' }}
-        >
-          {en.outsideWindow.registrationClosed}
-        </p>
-      )}
-      {needsRegistration && !registrationCutoffPassed(state) && onRegisterUsdt && (
-        <button
-          type="button"
-          onClick={onRegisterUsdt}
-          className="btn-primary-sm mt-auto self-start"
-        >
-          {en.cta.registerUsdt} →
-        </button>
       )}
     </article>
   );

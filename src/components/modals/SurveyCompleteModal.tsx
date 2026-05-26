@@ -2,19 +2,18 @@
 
 import { Modal } from './Modal';
 import { en } from '@/content/en';
-import { useMockState } from '@/lib/mock-state';
+import { useMockState, maskOkxUid } from '@/lib/mock-state';
 
 /**
  * V2 Survey complete — mini-report.
- * Shown after the 13Q survey is submitted: time spent, profile summary,
- * peer-benchmark line, then primary CTA to register the ICX wallet.
+ * Shown after the 12Q survey is submitted: time spent, profile summary,
+ * peer-benchmark line. No CTA — ICX is auto-sent to the linked OKX UID.
  */
 type Props = {
   onClose: () => void;
-  onRegisterIcx: () => void;
   /** Optional: time spent on the survey in seconds. Falls back to a sample. */
   timeSpentSec?: number;
-  /** Optional: number of answers recorded. Falls back to 13/13. */
+  /** Optional: number of answers recorded. Falls back to 12/12. */
   answeredCount?: number;
 };
 
@@ -26,18 +25,18 @@ function formatMinSec(sec: number): string {
 
 export function SurveyCompleteModal({
   onClose,
-  onRegisterIcx,
   timeSpentSec = 443,
-  answeredCount = 13,
+  answeredCount = 12,
 }: Props) {
   const { state } = useMockState();
   const isTrader = state.isTrader;
   const avgPerQ = Math.round(timeSpentSec / Math.max(1, answeredCount));
+  const maskedUid = state.okxUid ? maskOkxUid(state.okxUid) : null;
 
   return (
     <Modal title={en.modal.survey.completeTitle} onClose={onClose} size="lg">
       <span className="chip chip-accent" style={{ marginBottom: 12 }}>
-        ✓ {answeredCount} / 13 complete
+        ✓ {answeredCount} / 12 complete
       </span>
       <h2
         className="mt-md font-bold"
@@ -50,7 +49,9 @@ export function SurveyCompleteModal({
         <span className="accent-text">100 ICX</span> incoming.
       </h2>
       <p className="mt-md text-body-md text-text-secondary">
-        We&apos;ll send it within 7 business days after you register your ICON wallet.
+        {maskedUid
+          ? `We'll send it to your linked OKX UID (${maskedUid}) via Internal Transfer within 7 business days.`
+          : "We'll send it to your linked OKX UID via Internal Transfer within 7 business days."}
       </p>
 
       {/* Mini report */}
@@ -109,15 +110,15 @@ export function SurveyCompleteModal({
         </p>
       </div>
 
-      {/* Sticky CTA */}
+      {/* Done CTA */}
       <div className="mt-2xl">
         <button
           type="button"
-          onClick={onRegisterIcx}
+          onClick={onClose}
           className="btn-primary w-full"
           style={{ height: 56 }}
         >
-          {en.modal.survey.registerIcxCta} →
+          {en.modal.survey.doneCta}
         </button>
       </div>
     </Modal>

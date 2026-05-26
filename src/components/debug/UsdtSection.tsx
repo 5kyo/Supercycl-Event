@@ -3,19 +3,13 @@
 import { useMockState } from '@/lib/mock-state';
 import type { UsdtPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: UsdtPayoutStatus[] = ['NOT_REACHED', 'AWAITING_REGISTRATION', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'EXPIRED', 'CAP_FULL'];
+const STATUSES: UsdtPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'CAP_FULL'];
 
 export function UsdtSection() {
   const { state, dispatch } = useMockState();
   return (
     <section>
       <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-muted">USDT</h3>
-      <p className="mb-1 text-xs">Registration: {state.usdtRegistration.status}</p>
-      <div className="mb-2 flex flex-wrap gap-2">
-        <button type="button" onClick={() => dispatch({ type: 'SET_USDT_REGISTRATION', registration: { status: 'none' } })} className="rounded-md bg-bg/40 px-2 py-1 text-xs">None</button>
-        <button type="button" onClick={() => dispatch({ type: 'SET_USDT_REGISTRATION', registration: { status: 'wallet', trc20Address: 'T' + 'a'.repeat(33) } })} className="rounded-md bg-bg/40 px-2 py-1 text-xs">Wallet (sample)</button>
-        <button type="button" onClick={() => dispatch({ type: 'SET_USDT_REGISTRATION', registration: { status: 'exchange', okxUid: '12345678', email: 'test@okx.com' } })} className="rounded-md bg-bg/40 px-2 py-1 text-xs">Exchange (sample)</button>
-      </div>
       <label className="flex items-center gap-2 text-xs">
         Status:
         <select

@@ -3,18 +3,13 @@
 import { useMockState } from '@/lib/mock-state';
 import type { IcxPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_REGISTRATION', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'EXPIRED'];
+const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID'];
 
 export function IcxSection() {
   const { state, dispatch } = useMockState();
   return (
     <section>
       <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-muted">ICX</h3>
-      <p className="mb-1 text-xs">Address: {state.icxAddress ?? '—'}</p>
-      <div className="mb-2 flex flex-wrap gap-2">
-        <button type="button" onClick={() => dispatch({ type: 'SET_ICX_ADDRESS', address: null })} className="rounded-md bg-bg/40 px-2 py-1 text-xs">Clear</button>
-        <button type="button" onClick={() => dispatch({ type: 'SET_ICX_ADDRESS', address: 'hx' + 'a'.repeat(40) })} className="rounded-md bg-bg/40 px-2 py-1 text-xs">Sample</button>
-      </div>
       <label className="flex items-center gap-2 text-xs">
         Status:
         <select

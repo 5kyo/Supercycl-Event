@@ -5,37 +5,33 @@ import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import {
   useMockState,
   effectiveIcxPayout,
-  registrationCutoffPassed,
+  maskOkxUid,
   surveyTrackOpen,
   SURVEY_TRACK_START,
 } from '@/lib/mock-state';
 
 type Props = {
   onStartSurvey: () => void;
-  /** Opens the ICX wallet registration modal. Omitted in previews. */
-  onRegisterIcx?: () => void;
 };
 
-export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
+export function IcxRewardCard({ onStartSurvey }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const payout = effectiveIcxPayout(state);
   const showSurveyCta = surveyTrackOpen(state) && !state.surveyCompleted;
   // Mirror UsdtRewardCard: as soon as the user qualifies (survey done +
-  // trader amount known) flip the chip to "Registration required" so the
-  // card can drive the next step without an interstitial popup.
+  // trader amount known) flip the chip to "Awaiting payout".
   const qualifiedForIcx = payout.amount !== null;
   // Three-way override on top of the backend status:
   // 1. Survey window open + not yet completed → 'open' (Locked is misleading
   //    when the Start survey CTA is sitting right under the chip).
-  // 2. Survey done + trader → 'AWAITING_REGISTRATION' (the existing transition).
+  // 2. Survey done + trader → 'AWAITING_PAYOUT' (operator handles the rest).
   // 3. Otherwise fall through to the raw payout status.
   const effectiveStatus = showSurveyCta
     ? 'open'
     : qualifiedForIcx && state.icxPayoutStatus === 'NOT_REACHED'
-      ? 'AWAITING_REGISTRATION'
+      ? 'AWAITING_PAYOUT'
       : state.icxPayoutStatus;
-  const needsRegistration = effectiveStatus === 'AWAITING_REGISTRATION';
 
   const amountText =
     payout.amount !== null ? en.rewards.icxAmountWithValue(payout.amount) : en.rewards.icxAmount;
@@ -44,6 +40,13 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
     : payout.amount === null && state.surveyCompleted && !state.isTrader
       ? en.hub.icxNonTrader
       : en.rewards.icxCondition;
+
+  const showPayoutChannel =
+    !loggedOut &&
+    state.okxUid !== null &&
+    effectiveStatus !== 'NOT_REACHED' &&
+    effectiveStatus !== 'open' &&
+    state.icxPayoutStatus !== 'PAID';
 
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
@@ -83,34 +86,17 @@ export function IcxRewardCard({ onStartSurvey, onRegisterIcx }: Props) {
           </ul>
         </div>
       )}
-      {state.icxAddress && (
+      {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
-          Wallet: {state.icxAddress.slice(0, 6)}…{state.icxAddress.slice(-4)}
+          {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}
         </p>
       )}
       {state.icxPayoutStatus === 'PAID' && state.icxTxHash && (
         <p className="text-body-sm text-text-tertiary">TX: {state.icxTxHash.slice(0, 10)}…</p>
       )}
-      {needsRegistration && registrationCutoffPassed(state) && (
-        <p
-          className="rounded-md text-body-sm italic text-text-tertiary"
-          style={{ background: 'var(--surface-2)', padding: '10px 12px' }}
-        >
-          {en.outsideWindow.registrationClosed}
-        </p>
-      )}
       {showSurveyCta && (
         <button type="button" onClick={onStartSurvey} className="btn-primary-sm mt-auto self-start">
           {en.cta.startSurvey}
-        </button>
-      )}
-      {needsRegistration && !registrationCutoffPassed(state) && onRegisterIcx && (
-        <button
-          type="button"
-          onClick={onRegisterIcx}
-          className="btn-primary-sm mt-auto self-start"
-        >
-          {en.cta.registerIcx} →
         </button>
       )}
     </article>

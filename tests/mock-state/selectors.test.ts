@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest';
 import {
   isQualifiedForUsdt,
   daysUntilEnd,
-  daysUntilCutoff,
   bannerType,
   surveyTrackOpen,
   tradingTrackOpen,
-  registrationCutoffPassed,
   effectiveIcxPayout,
   tradeRewardClosed,
+  maskOkxUid,
+  hubVariant,
 } from '@/lib/mock-state/selectors';
 import { initialState } from '@/lib/mock-state/initial';
 
@@ -61,20 +61,27 @@ describe('selectors', () => {
     expect(tradingTrackOpen({ ...initialState, simulatedDate: '2026-06-29' })).toBe(false);
   });
 
-  it('registrationCutoffPassed after 2026-07-21', () => {
-    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-07-21' })).toBe(false);
-    expect(registrationCutoffPassed({ ...initialState, simulatedDate: '2026-07-22' })).toBe(true);
-  });
-
-  it('daysUntilCutoff counts days to 2026-07-21', () => {
-    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-08' })).toBe(13);
-    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-14' })).toBe(7);
-    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-21' })).toBe(0);
-    expect(daysUntilCutoff({ ...initialState, simulatedDate: '2026-07-22' })).toBe(-1);
-  });
-
   it('effectiveIcxPayout: 100 for trader, null for non-trader (Open Issue F-5)', () => {
     expect(effectiveIcxPayout({ ...initialState, isTrader: true, surveyCompleted: true }).amount).toBe(100);
     expect(effectiveIcxPayout({ ...initialState, isTrader: false, surveyCompleted: true }).amount).toBe(null);
+  });
+
+  it('hubVariant collapses to completed only when both rewards are PAID', () => {
+    expect(hubVariant(initialState)).toBe('default');
+    expect(
+      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PAID' }),
+    ).toBe('completed');
+    expect(
+      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PENDING_PAYOUT' }),
+    ).toBe('default');
+  });
+
+  it('maskOkxUid keeps first/last 2 chars and stars the middle (min 2 stars)', () => {
+    expect(maskOkxUid('1234567890')).toBe('12******90');
+    // Shorter than 5 chars: fully mask (no leak)
+    expect(maskOkxUid('1234')).toBe('****');
+    // 5 chars: middle is 1 char, padded up to 2 stars to avoid leaking the
+    // full UID via a single-character mask.
+    expect(maskOkxUid('12345')).toBe('12**45');
   });
 });

@@ -1,28 +1,23 @@
 export type AuthStatus = 'logged_out' | 'logged_in';
 
-export type UsdtRegistration =
-  | { status: 'none' }
-  | { status: 'wallet'; trc20Address: string }
-  | { status: 'exchange'; okxUid: string; email: string };
-
 // Payout status — EN enum keys per spec §8.2. Mapped to localized UX labels
-// in RewardStatusLabel.tsx.
+// in RewardStatusLabel.tsx. AWAITING_PAYOUT means "qualified, waiting for
+// operator to push via OKX Internal Transfer" — there is no user-side
+// registration step, the linked OKX UID is the destination.
 export type UsdtPayoutStatus =
   | 'NOT_REACHED'
-  | 'AWAITING_REGISTRATION'
+  | 'AWAITING_PAYOUT'
   | 'PENDING_PAYOUT'
   | 'ON_HOLD'
   | 'PAID'
-  | 'EXPIRED'
   | 'CAP_FULL';
 
 export type IcxPayoutStatus =
   | 'NOT_REACHED'
-  | 'AWAITING_REGISTRATION'
+  | 'AWAITING_PAYOUT'
   | 'PENDING_PAYOUT'
   | 'ON_HOLD'
-  | 'PAID'
-  | 'EXPIRED';
+  | 'PAID';
 
 export type DebugViewport = 'auto' | 'mobile-390' | 'tablet-768' | 'desktop-1280';
 
@@ -34,14 +29,14 @@ export type DismissedFlags = {
 export type MockState = {
   // 1. auth
   authStatus: AuthStatus;
-  // 2. eligibility
+  // 2. eligibility — OKX OAuth-linked UID (system-known, not user-input)
   hasOkxLinked: boolean;
+  okxUid: string | null;
   // 3. trading
   tradingVolume: number;          // 0..2000
   // 4. slots
   slotsRemaining: number;          // 0..500
   // 5. USDT
-  usdtRegistration: UsdtRegistration;
   usdtPayoutStatus: UsdtPayoutStatus;
   usdtTxHash: string | null;
   // 6. survey
@@ -49,7 +44,6 @@ export type MockState = {
   surveyCompletedAt: string | null;
   isTrader: boolean;
   // 7. ICX
-  icxAddress: string | null;
   icxPayoutStatus: IcxPayoutStatus;
   icxTxHash: string | null;
   // 8. time
@@ -65,12 +59,10 @@ export type Action =
   | { type: 'TOGGLE_OKX' }
   | { type: 'SET_TRADING_VOLUME'; value: number }
   | { type: 'SET_SLOTS_REMAINING'; value: number }
-  | { type: 'SET_USDT_REGISTRATION'; registration: UsdtRegistration }
   | { type: 'SET_USDT_PAYOUT_STATUS'; status: UsdtPayoutStatus; txHash?: string | null }
   | { type: 'SET_SURVEY_COMPLETED'; isTrader: boolean; at: string }
   | { type: 'TOGGLE_SURVEY_COMPLETED' }
   | { type: 'TOGGLE_IS_TRADER' }
-  | { type: 'SET_ICX_ADDRESS'; address: string | null }
   | { type: 'SET_ICX_PAYOUT_STATUS'; status: IcxPayoutStatus; txHash?: string | null }
   | { type: 'SET_SIMULATED_DATE'; date: string }
   | { type: 'DISMISS'; key: keyof DismissedFlags }

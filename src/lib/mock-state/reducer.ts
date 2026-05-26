@@ -1,5 +1,5 @@
 import type { Action, MockState } from './types';
-import { initialState } from './initial';
+import { initialState, MOCK_OKX_UID } from './initial';
 
 function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n));
@@ -10,8 +10,14 @@ export function reducer(state: MockState, action: Action): MockState {
     case 'SET_AUTH':
       return { ...state, authStatus: action.status };
 
-    case 'TOGGLE_OKX':
-      return { ...state, hasOkxLinked: !state.hasOkxLinked };
+    case 'TOGGLE_OKX': {
+      const next = !state.hasOkxLinked;
+      return {
+        ...state,
+        hasOkxLinked: next,
+        okxUid: next ? MOCK_OKX_UID : null,
+      };
+    }
 
     case 'SET_TRADING_VOLUME':
       return { ...state, tradingVolume: clamp(action.value, 0, 2000) };
@@ -19,21 +25,12 @@ export function reducer(state: MockState, action: Action): MockState {
     case 'SET_SLOTS_REMAINING':
       return { ...state, slotsRemaining: clamp(action.value, 0, 500) };
 
-    case 'SET_USDT_REGISTRATION': {
-      // Guard: cannot change after payout complete (spec §5.7)
-      if (state.usdtPayoutStatus === 'PAID') return state;
-      return { ...state, usdtRegistration: action.registration };
-    }
-
-    case 'SET_USDT_PAYOUT_STATUS': {
-      // Guard: cannot transition to PAID without registration
-      if (action.status === 'PAID' && state.usdtRegistration.status === 'none') return state;
+    case 'SET_USDT_PAYOUT_STATUS':
       return {
         ...state,
         usdtPayoutStatus: action.status,
         usdtTxHash: action.txHash ?? state.usdtTxHash,
       };
-    }
 
     case 'SET_SURVEY_COMPLETED':
       return {
@@ -55,20 +52,12 @@ export function reducer(state: MockState, action: Action): MockState {
     case 'TOGGLE_IS_TRADER':
       return { ...state, isTrader: !state.isTrader };
 
-    case 'SET_ICX_ADDRESS':
-      // Guard: cannot change after payout complete (spec §4.2 — mirrors USDT)
-      if (state.icxPayoutStatus === 'PAID') return state;
-      return { ...state, icxAddress: action.address };
-
-    case 'SET_ICX_PAYOUT_STATUS': {
-      // Guard: cannot transition to PAID without an ICON address
-      if (action.status === 'PAID' && !state.icxAddress) return state;
+    case 'SET_ICX_PAYOUT_STATUS':
       return {
         ...state,
         icxPayoutStatus: action.status,
         icxTxHash: action.txHash ?? state.icxTxHash,
       };
-    }
 
     case 'SET_SIMULATED_DATE':
       return { ...state, simulatedDate: action.date };

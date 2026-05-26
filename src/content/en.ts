@@ -12,8 +12,6 @@ export const en = {
     joinNow: 'Join now',
     tradeNow: 'Trade now',
     startSurvey: 'Start survey',
-    registerUsdt: 'Register USDT info',
-    registerIcx: 'Register ICX wallet',
     goToMain: 'Open Supercycl app',
   },
   rewards: {
@@ -24,12 +22,14 @@ export const en = {
     usdtAmount: '20 USDT',
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
-    usdtConditionReady: '$500 reached — register payout info',
+    usdtConditionReady: '$500 reached — payout scheduled',
     usdtClosed: 'Trade window closed — reward no longer available',
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
     icxCondition: 'Complete the 12-question survey',
-    icxConditionReady: 'Survey complete — register your ICON wallet',
+    icxConditionReady: 'Survey complete — payout scheduled',
+    payoutChannel: (maskedUid: string) =>
+      `OKX UID: ${maskedUid} · payout via Internal Transfer`,
     icxPayoutInfo: {
       surveyOpens: (start: string) => `Survey opens ${shortDate(start)}`,
       traderTier: 'Traders ($500+): 100 ICX',
@@ -56,11 +56,10 @@ export const en = {
   status: {
     locked: 'Locked',
     open: 'Open',
-    notRegistered: 'Registration required',
+    awaitingPayout: 'Awaiting payout',
     pending: 'Pending payout',
     review: 'Under review (max 7 days)',
     completed: 'Paid',
-    expired: 'Expired',
     capFull: '$500 reached — slot capacity full. Thank you.',
   },
   banner: {
@@ -78,24 +77,9 @@ export const en = {
       next: 'Next',
       previous: 'Back',
       completeTitle: 'Thanks for completing the survey!',
-      completeBody: 'Your mini-report is below. Register your ICX wallet to receive the reward.',
-      registerIcxCta: 'Register ICX wallet',
-    },
-    usdt: {
-      title: 'Receive 20 USDT',
-      methodWallet: 'TRC20 wallet',
-      methodExchange: 'OKX exchange',
-      trc20Label: 'TRC20 USDT wallet address',
-      trc20Warning: 'Wrong network = lost funds',
-      networkCheck: 'I confirmed this is a TRC20 address',
-      okxUidLabel: 'OKX UID',
-      okxEmailLabel: 'OKX registered email',
-      submit: 'Register',
-    },
-    icx: {
-      title: 'Register your ICX wallet',
-      addressLabel: 'ICON wallet address (hx…)',
-      submit: 'Register',
+      completeBody:
+        'Your mini-report is below. ICX will be sent to your linked OKX UID within 7 business days.',
+      doneCta: 'Done',
     },
   },
   eventClosed: {
@@ -103,10 +87,6 @@ export const en = {
     titleLine1: 'Thanks for',
     titleLine2: 'riding with us.',
     subtitle: '2026.06.08 ─ 07.07 · Ended',
-    rewardLabel: 'YOUR REWARD IS WAITING',
-    countdownExpires: (d: number, cutoff: string) =>
-      `D-${Math.max(0, d)} until rewards expire · ${cutoff}`,
-    registerCta: 'Register wallet',
     recap: {
       traderCount: '527',
       traderLabel: 'traders',
@@ -126,11 +106,9 @@ export const en = {
   outsideWindow: {
     surveyClosed: 'Survey opens June 29',
     surveyEnded: 'Survey closed',
-    registrationClosed: 'Registration closed',
   },
   errors: {
     required: 'This field is required',
-    inconsistentState: 'Inconsistent mock state',
     persistenceReset: 'Mock state reset due to corruption',
   },
 };
