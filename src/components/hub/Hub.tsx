@@ -9,9 +9,15 @@ import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
 import { HubCompleted } from './HubCompleted';
 import { CampaignHero } from './CampaignHero';
+import { YouthMetaGate } from './YouthMetaGate';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
-import { useMockState, hubVariant, FrozenStateScope } from '@/lib/mock-state';
+import {
+  useMockState,
+  hubVariant,
+  FrozenStateScope,
+  isBlockedNonYouthMeta,
+} from '@/lib/mock-state';
 
 type Open = 'survey' | 'surveyComplete' | null;
 
@@ -97,6 +103,18 @@ export function Hub() {
           </FrozenStateScope>
         </div>
         {modals}
+      </main>
+    );
+  }
+
+  // Spec §7.3.1 — YouthMeta gate. Signed-in account isn't on the roster, so
+  // the trade/survey flow is fully blocked at entry. Hero stays visible so
+  // the user still knows what event they were trying to enter.
+  if (isBlockedNonYouthMeta(state)) {
+    return (
+      <main className="pb-12">
+        <CampaignHero />
+        <YouthMetaGate />
       </main>
     );
   }

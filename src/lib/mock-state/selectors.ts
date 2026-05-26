@@ -20,6 +20,11 @@ export function isQualifiedForUsdt(s: MockState): boolean {
   return s.tradingVolume >= 500 && s.hasOkxLinked;
 }
 
+/** Logged-in user whose account isn't on the YouthMeta roster — entire event blocked. */
+export function isBlockedNonYouthMeta(s: MockState): boolean {
+  return s.authStatus === 'logged_in' && !s.isYouthMetaMember;
+}
+
 export function daysUntilEnd(s: MockState): number {
   return diffDays(CAMPAIGN_END, s.simulatedDate);
 }

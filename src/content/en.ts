@@ -8,6 +8,10 @@ export const en = {
     period: 'Jun 8 – Jul 7, 2026 · 1 MONTH',
     eventLabel: 'Mobile launch event',
   },
+  hero: {
+    youthMetaNotice: 'Open to YouthMeta members only',
+    youthMetaLearnLink: 'Learn how to join',
+  },
   cta: {
     joinNow: 'Join now',
     tradeNow: 'Trade now',
@@ -103,6 +107,13 @@ export const en = {
     stepInProgress: 'In progress',
     stepLocked: 'Up next',
     icxNonTrader: 'Non-trader pool reward: TBD (pending operations decision)',
+    youthMetaGate: {
+      title: 'YouthMeta members only',
+      description:
+        "This festival is exclusive to YouthMeta members. You're signed in, but your account isn't on the YouthMeta roster.",
+      joinCta: 'Become a YouthMeta member',
+      signOutCta: 'Sign out',
+    },
   },
   account: {
     heading: 'My account',

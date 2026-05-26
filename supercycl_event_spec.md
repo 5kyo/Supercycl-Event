@@ -11,7 +11,7 @@
 |------|------|
 | **명칭** | Supercycl Mobile Launch Festival |
 | **기간** | 2026-06-08 (월) 00:00 ~ 2026-07-07 (화) 23:59 KST |
-| **대상** | YouthMeta 멤버 (신규 + 기존 모두) · **OKX 거래소 연동 완료자 한정** |
+| **대상** | **YouthMeta 멤버 한정** (신규 + 기존 모두 · 본 서비스 YouthMeta 로스터 등록자) · **OKX 거래소 연동 완료자 한정** · 비유스메타 계정 참여 불가 |
 | **이벤트 페이지** | **별도 외부 웹사이트** (Supercycl 모바일/PC 본 서비스와 분리) |
 | **연계 채널** | Supercycl 모바일 PWA (출시 기념 대상), 거래소 OAuth, 마이페이지(본 서비스) |
 | **총 보상 예산** | 100,000 ICX + 10,000 USDT |
@@ -67,11 +67,16 @@
 자연스러운 onboarding funnel로 두 이벤트를 단순 병행이 아닌 순차 운영.
 
 ### STEP 1 — Sign Up (전 기간)
+- **YouthMeta 멤버 확인** (본 서비스 로스터 등록 여부)
 - YouthMeta 멤버 로그인 또는 신규 가입
 - **OKX 거래소 연동 완료** (이번 캠페인 한정 — OKX 사용자만 참여 가능)
-- → **단일 entry로 통합**
+- → **단일 entry로 통합** (STEP 1 done 조건 = 본 서비스 로그인 AND YouthMeta 멤버 AND OKX 연동)
 
-> 📌 **참여 자격 정책**: 이번 캠페인의 참여 자격은 **OKX 거래소 연동 완료** 기준입니다. KYC 미완료 유저는 자체적으로 OKX 연동이 불가하므로, 본 서비스 정책상 OKX 연동 완료 = KYC 완료 + 거래소 OAuth/API 키 등록 완료 상태로 간주합니다.
+> 📌 **YouthMeta 자격 정책**: 이번 캠페인은 **YouthMeta 멤버 전용**입니다. "YouthMeta 멤버"의 정의는 **본 서비스의 YouthMeta 로스터에 등록된 계정**(신규/기존 무관). 본 서비스 로그인 직후 백엔드가 YouthMeta 멤버십을 확인해 이벤트 페이지에 전달하며, 비유스메타 계정은 거래/설문 흐름에 진입할 수 없고 차단 화면(§7.3.1)으로 라우팅됩니다.
+>
+> **Why 차단을 진입 시점에 두는가**: 자격 미충족 유저가 거래/설문까지 진행할 경우 운영자 정산 단계에서 일괄 박탈해야 하는 부담이 발생합니다. 진입 시점 차단이 운영 비용·유저 혼란 모두에서 유리합니다.
+
+> 📌 **OKX 자격 정책**: 이번 캠페인의 거래소 조건은 **OKX 거래소 연동 완료** 기준입니다. KYC 미완료 유저는 자체적으로 OKX 연동이 불가하므로, 본 서비스 정책상 OKX 연동 완료 = KYC 완료 + 거래소 OAuth/API 키 등록 완료 상태로 간주합니다.
 
 ### STEP 2 — Trade & Win (1~3주차, 6/8 ~ 6/28)
 - 누적 거래량 $500 충족
@@ -127,7 +132,7 @@
 ## 4. 이벤트 1 — 설문 (Profile & Earn)
 
 ### 4.1 참여 조건
-- YouthMeta 멤버 (신규/기존 무관)
+- **YouthMeta 멤버 한정** (본 서비스 YouthMeta 로스터 등록자 · 신규/기존 무관). 비유스메타 계정은 이벤트 진입 시점에 차단됩니다 (§7.3.1)
 - 이벤트 기간(1개월) 내 1회 응답
 - 모든 필수 문항 응답 시 완료 처리
 - **YouthMeta 멤버 ID 1건당 1회만 응답** (서버측 검증)
@@ -200,7 +205,7 @@
 
 | 항목 | 내용 |
 |------|------|
-| 참여 조건 | YouthMeta 멤버 + **OKX 거래소 연동 완료** + 1개월 내 누적 거래량 $500 USD 이상 |
+| 참여 조건 | **YouthMeta 멤버 한정** (본 서비스 로스터 등록자) + **OKX 거래소 연동 완료** + 1개월 내 누적 거래량 $500 USD 이상. 비유스메타 계정은 이벤트 진입 시점에 차단 (§7.3.1) |
 | 보상 | 공통 20 USDT |
 | 한도 | 선착순 500명 (예산 도달 시 자동 마감) |
 | 정산 주기 | 매주 월 10:00 KST (전주 일요일 23:59 KST 기준 자격 충족자) |
@@ -309,7 +314,7 @@
 | 시점 | 단계 | 액션 | 위치 |
 |------|------|------|------|
 | **6/8 (D-day)** | 캠페인 인지 | YouthMeta 멤버십 영역 / 공개 랜딩 URL → **이벤트 랜딩 진입** | 외부 이벤트 페이지 |
-| **6/8 ~ 6/9** | 가입 또는 로그인 | 이벤트 페이지에서 "참여하기" → 본 서비스로 redirect → 가입/로그인 → KYC → 거래소 OAuth → 이벤트 페이지로 복귀 | 외부 → 본 서비스 → 외부 |
+| **6/8 ~ 6/9** | 가입 또는 로그인 | 이벤트 페이지에서 "참여하기" → 본 서비스로 redirect → 가입/로그인 → KYC → 거래소 OAuth → 이벤트 페이지로 복귀. 로그인 직후 백엔드가 YouthMeta 멤버십을 확인 → **비유스메타 계정은 이벤트 페이지가 YouthMeta-only 차단 화면을 렌더링** (Hero 유지 + 안내 + YouthMeta 가입 link-out + Sign out, §7.3.1) | 외부 → 본 서비스 → 외부 |
 | **6/8 ~ 6/28** | 거래 도달 ($500 → 20 USDT) | 이벤트 허브에서 진척도/슬롯 확인 → "거래하러 가기" 클릭 → 본 서비스 PWA로 deeplink → 거래 실행 → 자격 충족 시 보상 영역 상태가 `AWAITING_PAYOUT`으로 전환 (수령 정보 입력 단계 없음 — 연동된 OKX UID로 자동 송금) | 외부 → 본 서비스 → 외부 |
 | **6/29 ~ 7/5** | 설문 완료 (ICX 지급) | 이벤트 페이지에서 12문항 응답 → 즉시 미니 리포트 (수령 정보 입력 단계 없음 — 연동된 OKX UID로 자동 송금) | 외부 이벤트 페이지 |
 | **7/7 (종료 직후)** | NPS + Exit 인터뷰 | 완료자: 인앱 모달 NPS 1문항 / 미완료자: 50명 표본 1:1 인터뷰 (별도 컨택) | 인앱 모달 / 별도 폼 |
@@ -320,6 +325,7 @@
 |------|----|----|----------|
 | 이벤트 페이지 | 본 서비스 (가입/로그인) | "참여하기" / "Sign up / Log in to join" CTA | **디바이스 판별 redirect** — 모바일은 Supercycl Mobile PWA 로그인/가입 페이지, PC는 Supercycl PC 로그인/가입 페이지 + return URL 파라미터 (이벤트 페이지 내부 로그인 UI 없음) |
 | 이벤트 페이지 | 본 서비스 (거래) | "거래하러 가기" CTA | deeplink (`supercycl://trade` 또는 PWA URL) |
+| 이벤트 페이지 | **YouthMeta 가입 페이지(외부 사이트)** | 공개 랜딩의 "Learn how to join" 링크 / 비유스메타 차단 화면의 "Become a YouthMeta member" CTA | 외부 link-out (`target="_blank"`). URL은 환경변수 `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`로 주입 (미주입 시 fallback 도메인). 이벤트 페이지 내부 가입 폼은 없음 |
 | 본 서비스 | 이벤트 페이지 | KYC/OAuth 완료 후 자동 복귀 | return URL로 redirect (가입/연결 직후 1회) |
 
 > 📌 **수령 정보 입력 단계 없음** — 보상은 모두 연동된 OKX UID로 운영자가 OKX Internal Transfer로 송금합니다. 유저는 거래 → 본 서비스 / 상태 확인 → 이벤트 페이지로 흐름이 분리됩니다.
@@ -349,6 +355,8 @@
 │  · 캠페인 제목 + 기간 (06.08 ─ 07.07)     │
 │  · 🔴 LIVE strip — 실시간 슬롯 잔여       │
 │  · CTA: [Sign up / Log in to join]       │
+│  · ⓘ Open to YouthMeta members only ·    │
+│      [Learn how to join] (외부 link-out)   │
 ├──────────────────────────────────────────┤
 │  (dimmed preview · opacity 0.42)         │
 │                                          │
@@ -370,6 +378,7 @@
 - 공유 가능한 URL — OG 태그 적용
 - SEO 최적화 (검색 노출 허용)
 - CTA는 `Sign up / Log in to join` 단일 — 클릭 시 **이벤트 페이지 내부에서 로그인하지 않고, 본 서비스 가입/로그인 페이지로 redirect**. 디바이스 판별에 따라 **모바일은 Supercycl Mobile PWA 로그인 페이지**, **PC는 Supercycl PC 로그인 페이지**로 분기 (각 본 서비스 버전의 자체 로그인 UI 사용) → 완료 후 동일 이벤트 URL로 복귀 (로그인 콘텐츠 자동 렌더링)
+- **자격 고지** — Hero의 Sign in CTA 바로 아래에 `ⓘ Open to YouthMeta members only · Learn how to join` 라인을 inline subtle 텍스트로 노출. 메인 CTA 강조 약화 방지를 위해 카드/박스가 아닌 한 줄 텍스트. `Learn how to join` 텍스트만 외부 link-out(`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`, `target="_blank"`). 비유스메타 유저의 무의미한 로그인 round-trip을 미리 줄이고, YouthMeta 가입 동선을 동시에 안내
 - `HubHeader / SlotTension / MyProgressMeter / HubCtaBar` 등 로그인 전용 요소는 비로그인 화면에서 미노출 (코드 주석: "redundant or empty pre-auth")
 
 ### 7.3 로그인 화면 (이벤트 허브 콘텐츠)
@@ -437,6 +446,43 @@
 
 > UX 라벨은 동일 enum 값을 유저에게 친숙하게 풀어쓴 영문 표현입니다. 운영자/개발자는 enum 키(`NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL`)로 통일해서 소통합니다.
 
+### 7.3.1 YouthMeta 미가입 상태 — 차단 화면
+
+비유스메타 계정으로 본 서비스 로그인을 완료한 유저가 이벤트 페이지로 돌아왔을 때 노출되는 전용 화면입니다. **CampaignHero는 그대로 유지**해 어느 이벤트인지 컨텍스트를 보존하고, 본문은 차단 안내 + 두 개의 CTA만 표시합니다.
+
+```
+┌──────────────────────────────────────────┐
+│  CampaignHero (그대로 노출)               │
+│   · EVENT · LIVE · N days left           │
+│   · Supercycl Mobile Launch Festival      │
+│   · 2026.06.08 ─ 07.07                    │
+├──────────────────────────────────────────┤
+│                  🔒                       │
+│        YouthMeta members only             │
+│  This festival is exclusive to YouthMeta │
+│  members. You're signed in, but your      │
+│  account isn't on the YouthMeta roster.   │
+│                                           │
+│  [Become a YouthMeta member →]            │
+│  [Sign out]                                │
+└──────────────────────────────────────────┘
+```
+
+**활성화 조건**
+- `authStatus === 'logged_in' AND isYouthMetaMember === false` (코드: `isBlockedNonYouthMeta` selector, `src/lib/mock-state/selectors.ts`)
+- 본 서비스 로그인 직후 백엔드가 YouthMeta 멤버십을 확인해 이벤트 페이지에 전달 (§7.5 외부 페이지 연동 사양 참조)
+
+**노출/숨김 규칙**
+- 노출: `CampaignHero` + `YouthMetaGate` (제목/설명/잠금 아이콘/CTA 두 개)
+- 숨김: `MyAccountCard`, `ProgressTracker`, `MyProgressMeter`, `UsdtRewardCard`, `IcxRewardCard`, `HubCtaBar`, `SurveyModal` 등 정상 허브의 모든 본문/모달
+- 인앱 알림 트리거(§9.1)도 차단 화면에서는 발화 불가 (보상/슬롯 상태에 의존하므로)
+
+**CTA 동작**
+- `Become a YouthMeta member` — 외부 link-out (`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`, `target="_blank" rel="noopener noreferrer"`). 이벤트 페이지 내부 가입 폼은 두지 않음 (가입 동선은 본 서비스/YouthMeta 측 자체 페이지에서 처리)
+- `Sign out` — 본 서비스 세션 종료 후 동일 이벤트 URL로 복귀 → 공개 랜딩 콘텐츠 자동 렌더링. 실 구현에서는 본 서비스 로그아웃 엔드포인트 호출 필요 (구체 방식은 본 서비스 개발팀 협의 — §7.5)
+
+**다국어 정책**: 차단 화면도 영어 단일 UI를 유지합니다 (§7.5).
+
 ### 7.4 설계 원칙
 
 1. **단일 URL 진입점** — 로그인 여부에 따라 콘텐츠만 분기 (공개 랜딩 ↔ 이벤트 허브)
@@ -455,8 +501,9 @@
 | 항목 | 요구사항 |
 |------|---------|
 | **인증** | 이벤트 페이지에서 본 서비스 로그인 상태를 인식할 수 있어야 함 (방식은 본 서비스 개발팀 결정 — SSO/JWT/세션 등). **이벤트 페이지에서 별도 가입/로그인 불가** — 로그인 CTA 클릭 시 디바이스에 따라 Supercycl Mobile PWA 로그인 페이지(모바일) 또는 Supercycl PC 로그인 페이지(PC)로 redirect, 본 서비스 자체 로그인 UI에서 처리 |
+| **YouthMeta 멤버십 조회** | 본 서비스 로그인 시 백엔드가 **YouthMeta 로스터 등록 여부(boolean)** 를 세션/공통 API에서 노출. 이벤트 페이지는 이 값을 read-only로 읽어 차단 화면(§7.3.1) 분기. 멤버십 동기화 지연으로 인한 false-negative는 CS 클레임 J(§10.1)로 처리 |
 | **API 도메인** | 본 서비스와 동일 백엔드 API 호출 (CORS 설정 필요 — 본 서비스 개발팀 협의) |
-| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 / **로그인·가입 페이지(모바일 PWA용 / PC 웹용 각각)** deeplink URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`, `NEXT_PUBLIC_LOGIN_URL_MOBILE`, `NEXT_PUBLIC_LOGIN_URL_PC`) |
+| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 / **로그인·가입 페이지(모바일 PWA용 / PC 웹용 각각)** / **YouthMeta 가입 페이지(외부)** deeplink/외부 URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`, `NEXT_PUBLIC_LOGIN_URL_MOBILE`, `NEXT_PUBLIC_LOGIN_URL_PC`, `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`) |
 | **Return URL** | 본 서비스 가입/OAuth 완료 후 이벤트 페이지로 자동 복귀 → 로그인 상태로 이벤트 허브 콘텐츠 자동 렌더링 (구체 URL은 본 서비스 개발팀 협의) |
 | **세션 동기화** | 본 서비스에서 KYC/거래 완료 시 이벤트 페이지 자동 갱신 (실시간 또는 새로고침) |
 | **반응형** | 모바일/PC 모두 대응 (이벤트 페이지 단일 코드베이스) |
@@ -562,6 +609,7 @@
 | **F** | "설문 응답이 저장 안 됨" | 재응답 안내 (1인 1회 제약은 서버측 검증이므로 재응답 시 중복 차단) | 서버 로그에서 응답 저장 시점 확인 → 미저장 시 운영자가 수동으로 응답 등록 | 영업일 1일 |
 | **H** | "거래소 OAuth 연결이 안 됨" | 본 서비스 CS로 이관 (이벤트 외 본 서비스 기능) | — | 본 서비스 CS SLA |
 | **I** | "이벤트 페이지에 로그인이 안 됨" | 본 서비스 로그인 상태 확인 안내 → 본 서비스 로그인 후 이벤트 페이지 재진입 | SSO/토큰 동기화 이슈인 경우 개발팀 이슈 트래커 등록 | 영업일 1일 |
+| **J** | "로그인했는데 YouthMeta-only 차단 화면이 떴다" | YouthMeta 멤버십 등록 여부 확인 → 미등록자에게는 YouthMeta 가입 안내(§7.3.1 link-out 동일) → 본인이 YouthMeta 멤버라고 주장하면 본 서비스 로스터 동기화 확인 절차 안내 | YouthMeta 로스터에 등록되어 있는데도 false-negative로 차단된 케이스는 본 서비스 멤버십 동기화 이슈로 개발팀 이슈 트래커 등록 | 영업일 1일 |
 
 ### 10.2 클레임 응대 원칙
 
@@ -654,6 +702,7 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 - [ ] **공통 API CORS 설정**
 - [ ] 이벤트 허브 화면 (로그인 시: 진척도 + 슬롯 + 보상)
 - [ ] **🆕 공개 랜딩 콘텐츠 (비로그인 시 동일 URL에서 자동 렌더링) — OG 태그, SEO, CampaignHero LIVE 슬롯 카운터, `Sign up / Log in to join` 단일 CTA, 흐림 프리뷰 (§7.2 참조)**
+- [ ] **🆕 YouthMeta 멤버십 게이팅** — 공개 랜딩에 자격 고지 라인(§7.2) + 비유스메타 로그인 유저 차단 화면(§7.3.1, `YouthMetaGate`) + 외부 가입 link-out(`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`)
 - [ ] **🆕 i18n 구조 셋업 (`next-intl`)** — UI 텍스트는 **영어 단일** 운영(상태 라벨, 안내 메시지, CTA 포함). 한국어는 **설문 12문항 콘텐츠 한정**(`src/content/survey-ko.md`). 언어 전환 토글 미제공. locale 분리 구조는 유지하여 향후 한국어 UI 확장 대비
 - [ ] 설문 12문항 폼 + 응답 저장 (`src/content/survey-ko.md` 참조)
 - [ ] 슬롯 카운터 (5분 갱신)
@@ -666,6 +715,7 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 **[본 서비스 — 기존 Mobile/PC]**
 - [ ] 가입 → KYC → 거래소 OAuth 통합 플로우 (Return URL 지원, 완료 시 이벤트 페이지로 자동 redirect)
 - [ ] OAuth 완료 시 OKX UID를 세션/공통 API에서 노출 (이벤트 페이지가 read-only로 읽을 수 있도록)
+- [ ] **🆕 로그인 응답에 YouthMeta 멤버 플래그(boolean) 노출** — 이벤트 페이지가 차단 화면 분기에 사용 (§7.5)
 - [ ] ~~이벤트 페이지로 돌아가기 링크/버튼~~ → **별도 동선 미제공** (브라우저 뒤로가기/탭 전환으로 복귀)
 
 **[백엔드 — 공통]**

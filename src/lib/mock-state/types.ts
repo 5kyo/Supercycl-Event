@@ -31,7 +31,10 @@ export type MockState = {
   authStatus: AuthStatus;
   // Supercycl-issued account address, populated on login (hx-prefixed).
   accountAddress: string | null;
-  // 2. eligibility — OKX OAuth-linked UID (system-known, not user-input)
+  // 2. eligibility — YouthMeta roster + OKX OAuth-linked UID (both system-known).
+  // YouthMeta membership gates the event entirely (spec §0/§1) — non-members
+  // see a block screen instead of the hub even after Supercycl login.
+  isYouthMetaMember: boolean;
   hasOkxLinked: boolean;
   okxUid: string | null;
   // 3. trading
@@ -59,6 +62,7 @@ export type MockState = {
 export type Action =
   | { type: 'SET_AUTH'; status: AuthStatus }
   | { type: 'TOGGLE_OKX' }
+  | { type: 'TOGGLE_YOUTH_META' }
   | { type: 'SET_TRADING_VOLUME'; value: number }
   | { type: 'SET_SLOTS_REMAINING'; value: number }
   | { type: 'SET_USDT_PAYOUT_STATUS'; status: UsdtPayoutStatus; txHash?: string | null }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   isQualifiedForUsdt,
+  isBlockedNonYouthMeta,
   daysUntilEnd,
   bannerType,
   surveyTrackOpen,
@@ -17,6 +18,18 @@ describe('selectors', () => {
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 500, hasOkxLinked: true })).toBe(true);
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 499, hasOkxLinked: true })).toBe(false);
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 500, hasOkxLinked: false })).toBe(false);
+  });
+
+  it('isBlockedNonYouthMeta: only logged-in non-members are blocked', () => {
+    expect(
+      isBlockedNonYouthMeta({ ...initialState, authStatus: 'logged_in', isYouthMetaMember: false }),
+    ).toBe(true);
+    expect(
+      isBlockedNonYouthMeta({ ...initialState, authStatus: 'logged_in', isYouthMetaMember: true }),
+    ).toBe(false);
+    expect(
+      isBlockedNonYouthMeta({ ...initialState, authStatus: 'logged_out', isYouthMetaMember: false }),
+    ).toBe(false);
   });
 
   it('daysUntilEnd counts days to 2026-07-07', () => {

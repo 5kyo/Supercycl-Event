@@ -28,6 +28,14 @@ export function AuthSection() {
           <input type="checkbox" checked={state.hasOkxLinked} onChange={() => dispatch({ type: 'TOGGLE_OKX' })} />
           OKX linked
         </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={state.isYouthMetaMember}
+            onChange={() => dispatch({ type: 'TOGGLE_YOUTH_META' })}
+          />
+          YouthMeta member
+        </label>
       </div>
       <p className="mt-2 font-mono text-[10px] text-muted">
         Account: {state.accountAddress ?? '—'}

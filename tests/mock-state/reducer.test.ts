@@ -26,6 +26,14 @@ describe('reducer', () => {
     expect(unlinked.okxUid).toBeNull();
   });
 
+  it('TOGGLE_YOUTH_META flips the membership flag without touching anything else', () => {
+    const off = reducer(initialState, { type: 'TOGGLE_YOUTH_META' });
+    expect(off.isYouthMetaMember).toBe(false);
+    const on = reducer(off, { type: 'TOGGLE_YOUTH_META' });
+    expect(on.isYouthMetaMember).toBe(true);
+    expect(on.authStatus).toBe(initialState.authStatus);
+  });
+
   it('SET_TRADING_VOLUME clamps to [0, 2000]', () => {
     const a = reducer(initialState, { type: 'SET_TRADING_VOLUME', value: -100 });
     expect(a.tradingVolume).toBe(0);

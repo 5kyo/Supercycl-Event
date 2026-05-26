@@ -19,6 +19,7 @@ export const MOCK_ACCOUNT_ADDRESS = 'hxfedcba9876fedcba9876fedcba9876fedcba9876'
 export const initialState: MockState = {
   authStatus: 'logged_out',
   accountAddress: null,
+  isYouthMetaMember: true,
   hasOkxLinked: false,
   okxUid: null,
   tradingVolume: 0,

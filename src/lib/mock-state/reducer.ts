@@ -23,6 +23,9 @@ export function reducer(state: MockState, action: Action): MockState {
       };
     }
 
+    case 'TOGGLE_YOUTH_META':
+      return { ...state, isYouthMetaMember: !state.isYouthMetaMember };
+
     case 'SET_TRADING_VOLUME':
       return { ...state, tradingVolume: clamp(action.value, 0, 2000) };
 

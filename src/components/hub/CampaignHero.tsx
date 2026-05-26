@@ -42,6 +42,29 @@ export function CampaignHero() {
     </div>
   );
 
+  // Pre-login eligibility hint. Inline, subtle — placed under the Sign in CTA
+  // so non-YouthMeta visitors learn the entry criterion before bouncing
+  // through the Supercycl login round-trip (spec §7.2).
+  const youthMetaNotice = (
+    <p
+      className="text-text-tertiary"
+      style={{ fontSize: 12, lineHeight: 1.5, marginTop: 10 }}
+    >
+      <span aria-hidden style={{ marginRight: 4 }}>ⓘ</span>
+      {en.hero.youthMetaNotice} ·{' '}
+      <a
+        href={
+          process.env.NEXT_PUBLIC_YOUTHMETA_JOIN_URL || 'https://youthmeta.com'
+        }
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-accent underline-offset-2 hover:underline"
+      >
+        {en.hero.youthMetaLearnLink}
+      </a>
+    </p>
+  );
+
   return (
     <section className="relative overflow-hidden px-6 py-8 lg:px-16 lg:py-12">
       <div
@@ -106,22 +129,25 @@ export function CampaignHero() {
           {/* Mobile right-side substitute — placed in flow under the copy. */}
           <div className="mt-lg lg:hidden">
             {loggedOut ? (
-              <button
-                type="button"
-                onClick={signIn}
-                className="btn-primary"
-                style={{
-                  height: 48,
-                  padding: '0 22px',
-                  fontSize: 15,
-                  alignSelf: 'flex-start',
-                  boxShadow:
-                    '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
-                  animation: 'event-pulse 2.4s ease-in-out infinite',
-                }}
-              >
-                Sign in
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={signIn}
+                  className="btn-primary"
+                  style={{
+                    height: 48,
+                    padding: '0 22px',
+                    fontSize: 15,
+                    alignSelf: 'flex-start',
+                    boxShadow:
+                      '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
+                    animation: 'event-pulse 2.4s ease-in-out infinite',
+                  }}
+                >
+                  Sign in
+                </button>
+                {youthMetaNotice}
+              </>
             ) : (
               progressChip
             )}
@@ -153,21 +179,24 @@ export function CampaignHero() {
             {days} {days === 1 ? 'day' : 'days'} left
           </span>
           {loggedOut ? (
-            <button
-              type="button"
-              onClick={signIn}
-              className="btn-primary"
-              style={{
-                height: 48,
-                padding: '0 22px',
-                fontSize: 15,
-                boxShadow:
-                  '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
-                animation: 'event-pulse 2.4s ease-in-out infinite',
-              }}
-            >
-              Sign in
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={signIn}
+                className="btn-primary"
+                style={{
+                  height: 48,
+                  padding: '0 22px',
+                  fontSize: 15,
+                  boxShadow:
+                    '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
+                  animation: 'event-pulse 2.4s ease-in-out infinite',
+                }}
+              >
+                Sign in
+              </button>
+              <div className="text-right">{youthMetaNotice}</div>
+            </>
           ) : (
             progressChip
           )}
