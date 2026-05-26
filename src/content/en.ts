@@ -45,7 +45,7 @@ export const en = {
     step1: 'Sign up + connect OKX',
     step1OkxNotConnected: 'OKX not connected',
     step2: 'Trade $500 →\nGet 20 USDT',
-    step3: 'Complete survey →\nICX',
+    step3: 'Complete survey →\nGet ICX',
   },
   slot: {
     label: 'Trading slots remaining',
