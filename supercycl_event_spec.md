@@ -384,7 +384,7 @@ OKX 등록 이메일   [_______________]
 
 | From | To | 트리거 | 처리 방식 |
 |------|----|----|----------|
-| 이벤트 페이지 | 본 서비스 (가입) | "참여하기" CTA | redirect + return URL 파라미터 |
+| 이벤트 페이지 | 본 서비스 (가입/로그인) | "참여하기" / "Sign up / Log in to join" CTA | **디바이스 판별 redirect** — 모바일은 Supercycl Mobile PWA 로그인/가입 페이지, PC는 Supercycl PC 로그인/가입 페이지 + return URL 파라미터 (이벤트 페이지 내부 로그인 UI 없음) |
 | 이벤트 페이지 | 본 서비스 (거래) | "거래하러 가기" CTA | deeplink (`supercycl://trade` 또는 PWA URL) |
 | 이벤트 페이지 (자체 내) | 이벤트 페이지 수령 정보 등록 모달 | "USDT 수령 정보 등록" / "ICX 지갑 등록" CTA | 이벤트 페이지 내부 모달 (deeplink 불필요) |
 | 본 서비스 | 이벤트 페이지 | KYC/OAuth 완료 후 자동 복귀 | return URL로 redirect (가입/연결 직후 1회) |
@@ -436,7 +436,7 @@ OKX 등록 이메일   [_______________]
 - 슬롯 잔여 카운터는 `CampaignHero` LIVE strip에서 노출 (FOMO 효과)
 - 공유 가능한 URL — OG 태그 적용
 - SEO 최적화 (검색 노출 허용)
-- CTA는 `Sign up / Log in to join` 단일 — 클릭 시 본 서비스 가입/로그인으로 redirect → 완료 후 동일 URL 복귀 (로그인 콘텐츠 자동 렌더링)
+- CTA는 `Sign up / Log in to join` 단일 — 클릭 시 **이벤트 페이지 내부에서 로그인하지 않고, 본 서비스 가입/로그인 페이지로 redirect**. 디바이스 판별에 따라 **모바일은 Supercycl Mobile PWA 로그인 페이지**, **PC는 Supercycl PC 로그인 페이지**로 분기 (각 본 서비스 버전의 자체 로그인 UI 사용) → 완료 후 동일 이벤트 URL로 복귀 (로그인 콘텐츠 자동 렌더링)
 - `HubHeader / SlotTension / MyProgressMeter / HubCtaBar` 등 로그인 전용 요소는 비로그인 화면에서 미노출 (코드 주석: "redundant or empty pre-auth")
 
 ### 7.3 로그인 화면 (이벤트 허브 콘텐츠)
@@ -513,9 +513,9 @@ OKX 등록 이메일   [_______________]
 
 | 항목 | 요구사항 |
 |------|---------|
-| **인증** | 이벤트 페이지에서 본 서비스 로그인 상태를 인식할 수 있어야 함 (방식은 본 서비스 개발팀 결정 — SSO/JWT/세션 등). 이벤트 페이지에서 별도 가입 불가 |
+| **인증** | 이벤트 페이지에서 본 서비스 로그인 상태를 인식할 수 있어야 함 (방식은 본 서비스 개발팀 결정 — SSO/JWT/세션 등). **이벤트 페이지에서 별도 가입/로그인 불가** — 로그인 CTA 클릭 시 디바이스에 따라 Supercycl Mobile PWA 로그인 페이지(모바일) 또는 Supercycl PC 로그인 페이지(PC)로 redirect, 본 서비스 자체 로그인 UI에서 처리 |
 | **API 도메인** | 본 서비스와 동일 백엔드 API 호출 (CORS 설정 필요 — 본 서비스 개발팀 협의) |
-| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 deeplink URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`) |
+| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 / **로그인·가입 페이지(모바일 PWA용 / PC 웹용 각각)** deeplink URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`, `NEXT_PUBLIC_LOGIN_URL_MOBILE`, `NEXT_PUBLIC_LOGIN_URL_PC`) |
 | **Return URL** | 본 서비스 가입/OAuth 완료 후 이벤트 페이지로 자동 복귀 → 로그인 상태로 이벤트 허브 콘텐츠 자동 렌더링 (구체 URL은 본 서비스 개발팀 협의) |
 | **세션 동기화** | 본 서비스에서 KYC/거래 완료 시 이벤트 페이지 자동 갱신 (실시간 또는 새로고침) |
 | **반응형** | 모바일/PC 모두 대응 (이벤트 페이지 단일 코드베이스) |
