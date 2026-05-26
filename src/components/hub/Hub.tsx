@@ -64,9 +64,8 @@ export function Hub() {
   }
 
   // Default: trade-track active, building progress toward $500.
-  // CampaignHero carries the LIVE strip; MyProgressMeter carries the slots
-  // remaining line, so a separate SlotTension section is redundant on this
-  // surface.
+  // CampaignHero carries the LIVE strip; slot status lives inside
+  // UsdtRewardCard so it sits next to the reward it gates.
   const body = (
     <>
       <MyAccountCard />

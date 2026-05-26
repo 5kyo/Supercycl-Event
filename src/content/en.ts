@@ -50,13 +50,14 @@ export const en = {
   slot: {
     label: 'Trading slots remaining',
     suffix: '/ 500',
+    rewardCardHeading: 'Trade reward slots',
+    fullBadge: 'Full',
   },
   progress: {
     heading: 'My progress',
     volume: (vol: number) => `Cumulative volume on Supercycl $${vol} / $500`,
     remaining: (rem: number) => `${rem > 0 ? `$${rem} to go` : 'Goal reached!'}`,
     daysLeft: (d: number) => `${d > 0 ? `${d} days until end` : 'Campaign ended'}`,
-    slotsLeft: (n: number) => `${n} slots remaining`,
   },
   status: {
     locked: 'Locked',

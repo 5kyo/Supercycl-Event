@@ -2,6 +2,7 @@
 
 import { en } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
+import { SlotTension } from '@/components/shared/SlotTension';
 import {
   useMockState,
   isQualifiedForUsdt,
@@ -81,6 +82,13 @@ export function UsdtRewardCard() {
         )}
         <p className="text-body-md text-text-secondary">{conditionLine}</p>
       </div>
+      {!loggedOut && (
+        <SlotTension
+          size="sm"
+          layout="inline"
+          label={en.slot.rewardCardHeading}
+        />
+      )}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}

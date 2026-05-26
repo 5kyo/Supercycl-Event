@@ -82,9 +82,10 @@ export function effectiveIcxPayout(s: MockState): IcxPayout {
   return { amount: null, reason: 'TBD (non-trader pool — pending operations decision)' };
 }
 
-export type SlotTension = 'none' | 'tension-100' | 'tension-50' | 'tension-10';
+export type SlotTension = 'none' | 'tension-100' | 'tension-50' | 'tension-10' | 'full';
 
 export function slotTension(s: MockState): SlotTension {
+  if (s.slotsRemaining === 0) return 'full';
   if (s.slotsRemaining <= 10) return 'tension-10';
   if (s.slotsRemaining <= 50) return 'tension-50';
   if (s.slotsRemaining <= 100) return 'tension-100';

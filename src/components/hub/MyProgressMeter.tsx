@@ -71,9 +71,6 @@ export function MyProgressMeter() {
             <span className="text-accent font-semibold">
               {en.progress.remaining(remaining)}
             </span>
-            <span className="text-text-tertiary">
-              {' '}· {en.progress.slotsLeft(state.slotsRemaining)}
-            </span>
           </p>
 
           {/* Progress bar */}

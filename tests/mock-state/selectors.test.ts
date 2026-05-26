@@ -10,6 +10,7 @@ import {
   tradeRewardClosed,
   maskOkxUid,
   hubVariant,
+  slotTension,
 } from '@/lib/mock-state/selectors';
 import { initialState } from '@/lib/mock-state/initial';
 
@@ -87,6 +88,15 @@ describe('selectors', () => {
     expect(
       hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PENDING_PAYOUT' }),
     ).toBe('default');
+  });
+
+  it('slotTension stages: none > 100 > 50 > 10 > full (0)', () => {
+    expect(slotTension({ ...initialState, slotsRemaining: 423 })).toBe('none');
+    expect(slotTension({ ...initialState, slotsRemaining: 100 })).toBe('tension-100');
+    expect(slotTension({ ...initialState, slotsRemaining: 50 })).toBe('tension-50');
+    expect(slotTension({ ...initialState, slotsRemaining: 10 })).toBe('tension-10');
+    expect(slotTension({ ...initialState, slotsRemaining: 1 })).toBe('tension-10');
+    expect(slotTension({ ...initialState, slotsRemaining: 0 })).toBe('full');
   });
 
   it('maskOkxUid keeps first/last 2 chars and stars the middle (min 2 stars)', () => {
