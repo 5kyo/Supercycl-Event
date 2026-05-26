@@ -65,7 +65,9 @@ export function ProgressTracker() {
               <span className="flex items-start gap-md">
                 <span className={cls} aria-hidden>{r.num}</span>
                 <span className="flex flex-col">
-                  <span className="text-body-lg">{r.label}</span>
+                  <span className="text-body-lg" style={{ whiteSpace: 'pre-line' }}>
+                    {r.label}
+                  </span>
                   {showOkxNotConnected && (
                     <span className="text-body-sm text-text-tertiary">
                       {en.steps.step1OkxNotConnected}
