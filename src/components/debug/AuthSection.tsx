@@ -29,6 +29,9 @@ export function AuthSection() {
           OKX linked
         </label>
       </div>
+      <p className="mt-2 font-mono text-[10px] text-muted">
+        Account: {state.accountAddress ?? '—'}
+      </p>
     </section>
   );
 }

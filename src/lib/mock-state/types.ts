@@ -29,6 +29,8 @@ export type DismissedFlags = {
 export type MockState = {
   // 1. auth
   authStatus: AuthStatus;
+  // Supercycl-issued account address, populated on login (hx-prefixed).
+  accountAddress: string | null;
   // 2. eligibility — OKX OAuth-linked UID (system-known, not user-input)
   hasOkxLinked: boolean;
   okxUid: string | null;

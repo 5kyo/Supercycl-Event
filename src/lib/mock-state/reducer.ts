@@ -1,5 +1,5 @@
 import type { Action, MockState } from './types';
-import { initialState, MOCK_OKX_UID } from './initial';
+import { initialState, MOCK_ACCOUNT_ADDRESS, MOCK_OKX_UID } from './initial';
 
 function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n));
@@ -8,7 +8,11 @@ function clamp(n: number, lo: number, hi: number): number {
 export function reducer(state: MockState, action: Action): MockState {
   switch (action.type) {
     case 'SET_AUTH':
-      return { ...state, authStatus: action.status };
+      return {
+        ...state,
+        authStatus: action.status,
+        accountAddress: action.status === 'logged_in' ? MOCK_ACCOUNT_ADDRESS : null,
+      };
 
     case 'TOGGLE_OKX': {
       const next = !state.hasOkxLinked;

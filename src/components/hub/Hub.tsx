@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { MyAccountCard } from './MyAccountCard';
 import { ProgressTracker } from './ProgressTracker';
 import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
@@ -62,6 +63,7 @@ export function Hub() {
   // surface.
   const body = (
     <>
+      <MyAccountCard />
       <ProgressTracker />
       <MyProgressMeter />
       <section className="mx-auto grid max-w-6xl gap-lg px-6 py-lg lg:grid-cols-2">

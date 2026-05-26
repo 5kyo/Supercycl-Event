@@ -103,6 +103,12 @@ export const en = {
     stepLocked: 'Up next',
     icxNonTrader: 'Non-trader pool reward: TBD (pending operations decision)',
   },
+  account: {
+    heading: 'My account',
+    addressLabel: 'Supercycl account address',
+    uidLabel: 'OKX UID',
+    uidNotLinked: 'Connect OKX in Step 1',
+  },
   outsideWindow: {
     surveyClosed: 'Survey opens June 29',
     surveyEnded: 'Survey closed',

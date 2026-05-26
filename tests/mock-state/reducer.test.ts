@@ -1,11 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { reducer } from '@/lib/mock-state/reducer';
-import { initialState, MOCK_OKX_UID } from '@/lib/mock-state/initial';
+import { initialState, MOCK_ACCOUNT_ADDRESS, MOCK_OKX_UID } from '@/lib/mock-state/initial';
 
 describe('reducer', () => {
-  it('SET_AUTH transitions logged_out -> logged_in', () => {
+  it('SET_AUTH transitions logged_out -> logged_in and populates accountAddress', () => {
     const s = reducer(initialState, { type: 'SET_AUTH', status: 'logged_in' });
     expect(s.authStatus).toBe('logged_in');
+    expect(s.accountAddress).toBe(MOCK_ACCOUNT_ADDRESS);
+  });
+
+  it('SET_AUTH back to logged_out clears accountAddress', () => {
+    const loggedIn = reducer(initialState, { type: 'SET_AUTH', status: 'logged_in' });
+    const out = reducer(loggedIn, { type: 'SET_AUTH', status: 'logged_out' });
+    expect(out.authStatus).toBe('logged_out');
+    expect(out.accountAddress).toBeNull();
   });
 
   it('TOGGLE_OKX populates okxUid when linking, clears it when unlinking', () => {

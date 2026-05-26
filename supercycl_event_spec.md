@@ -380,6 +380,10 @@
 │  2026.06.08 ─ 07.07 · 1 MONTH        │
 │  [로그인 상태]   [본 서비스로 →]      │
 ├──────────────────────────────────────┤
+│  ✦ MY ACCOUNT                         │
+│  Supercycl address  hx1234…5678       │
+│  OKX UID            1234567890        │
+├──────────────────────────────────────┤
 │  🎯 ProgressTracker (3단계)            │
 │  ✅ STEP 1: Sign up + connect OKX [DONE]│
 │  ⏳ STEP 2: Trade $500 → 20 USDT       │
@@ -433,11 +437,12 @@
 
 1. **단일 URL 진입점** — 로그인 여부에 따라 콘텐츠만 분기 (공개 랜딩 ↔ 이벤트 허브)
 2. **3섹션 구조** (로그인) — 진척도 / 슬롯 / 보상
-3. **실시간 슬롯** — 5분 갱신, 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통)
-4. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
-5. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)
-6. **전환 동선** — 가입 → 거래 → 설문 CTA로 sequential 흐름
-7. **본 서비스 연계** — 거래/KYC CTA만 본 서비스 deeplink로 이동 (보상 지급은 운영자가 OKX Internal Transfer로 자동 처리)
+3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시 UID 자리에 "Connect OKX in Step 1" 힌트 표시.
+4. **실시간 슬롯** — 5분 갱신, 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통)
+5. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
+6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)
+7. **전환 동선** — 가입 → 거래 → 설문 CTA로 sequential 흐름
+8. **본 서비스 연계** — 거래/KYC CTA만 본 서비스 deeplink로 이동 (보상 지급은 운영자가 OKX Internal Transfer로 자동 처리)
 
 ### 7.5 외부 페이지 — 본 서비스 연동 사양
 
