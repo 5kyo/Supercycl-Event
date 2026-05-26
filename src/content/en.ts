@@ -48,7 +48,7 @@ export const en = {
   },
   progress: {
     heading: 'My progress',
-    volume: (vol: number) => `Cumulative volume $${vol} / $500`,
+    volume: (vol: number) => `Cumulative volume on Supercycl $${vol} / $500`,
     remaining: (rem: number) => `${rem > 0 ? `$${rem} to go` : 'Goal reached!'}`,
     daysLeft: (d: number) => `${d > 0 ? `${d} days until end` : 'Campaign ended'}`,
     slotsLeft: (n: number) => `${n} slots remaining`,

@@ -36,7 +36,7 @@ export function MyProgressMeter() {
 
         <div className="relative flex flex-col gap-md">
           <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
-            Cumulative volume
+            Cumulative volume on Supercycl
           </p>
 
           {/* Big stat — primary anchor */}

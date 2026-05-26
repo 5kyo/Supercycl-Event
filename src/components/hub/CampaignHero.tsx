@@ -21,7 +21,7 @@ export function CampaignHero() {
   const progressChip = (
     <div className="flex flex-col gap-1" style={{ minWidth: 180 }}>
       <div className="flex items-baseline justify-between gap-2">
-        <span className="upper-label text-text-tertiary">My volume</span>
+        <span className="upper-label text-text-tertiary">My volume on Supercycl</span>
         <span className="tabnum font-mono text-body-sm text-text-secondary-strong">
           ${state.tradingVolume} <span className="text-text-tertiary">/ $500</span>
         </span>
