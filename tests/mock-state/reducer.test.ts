@@ -52,10 +52,31 @@ describe('reducer', () => {
     expect(s.usdtTxHash).toBe('0xabc');
   });
 
+  it('SET_USDT_PAYOUT_STATUS clears tx hash when txHash is explicitly null', () => {
+    const paid = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
+    const reverted = reducer(paid, { type: 'SET_USDT_PAYOUT_STATUS', status: 'NOT_REACHED', txHash: null });
+    expect(reverted.usdtPayoutStatus).toBe('NOT_REACHED');
+    expect(reverted.usdtTxHash).toBeNull();
+  });
+
+  it('SET_USDT_PAYOUT_STATUS preserves tx hash when txHash key is omitted', () => {
+    const paid = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
+    const moved = reducer(paid, { type: 'SET_USDT_PAYOUT_STATUS', status: 'ON_HOLD' });
+    expect(moved.usdtPayoutStatus).toBe('ON_HOLD');
+    expect(moved.usdtTxHash).toBe('0xabc');
+  });
+
   it('SET_ICX_PAYOUT_STATUS PAID stores tx hash with no prerequisite registration', () => {
     const s = reducer(initialState, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID', txHash: '0xicxtx' });
     expect(s.icxPayoutStatus).toBe('PAID');
     expect(s.icxTxHash).toBe('0xicxtx');
+  });
+
+  it('SET_ICX_PAYOUT_STATUS clears tx hash when txHash is explicitly null', () => {
+    const paid = reducer(initialState, { type: 'SET_ICX_PAYOUT_STATUS', status: 'PAID', txHash: '0xicxtx' });
+    const reverted = reducer(paid, { type: 'SET_ICX_PAYOUT_STATUS', status: 'NOT_REACHED', txHash: null });
+    expect(reverted.icxPayoutStatus).toBe('NOT_REACHED');
+    expect(reverted.icxTxHash).toBeNull();
   });
 
   it('DISMISS flips the named flag', () => {

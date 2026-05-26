@@ -36,7 +36,9 @@ export function reducer(state: MockState, action: Action): MockState {
       return {
         ...state,
         usdtPayoutStatus: action.status,
-        usdtTxHash: action.txHash ?? state.usdtTxHash,
+        // `undefined` preserves the prior hash; explicit `null` clears it.
+        // `??` collapsed both, so flipping PAID→NOT_REACHED left a stale hash.
+        usdtTxHash: 'txHash' in action ? action.txHash ?? null : state.usdtTxHash,
       };
 
     case 'SET_SURVEY_COMPLETED':
@@ -63,7 +65,7 @@ export function reducer(state: MockState, action: Action): MockState {
       return {
         ...state,
         icxPayoutStatus: action.status,
-        icxTxHash: action.txHash ?? state.icxTxHash,
+        icxTxHash: 'txHash' in action ? action.txHash ?? null : state.icxTxHash,
       };
 
     case 'SET_SIMULATED_DATE':
