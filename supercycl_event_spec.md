@@ -314,7 +314,7 @@
 | 시점 | 단계 | 액션 | 위치 |
 |------|------|------|------|
 | **6/8 (D-day)** | 캠페인 인지 | YouthMeta 멤버십 영역 / 공개 랜딩 URL → **이벤트 랜딩 진입** | 외부 이벤트 페이지 |
-| **6/8 ~ 6/9** | 가입 또는 로그인 | 이벤트 페이지에서 "참여하기" → 본 서비스로 redirect → 가입/로그인 → KYC → 거래소 OAuth → 이벤트 페이지로 복귀. 로그인 직후 백엔드가 YouthMeta 멤버십을 확인 → **비유스메타 계정은 이벤트 페이지가 YouthMeta-only 차단 화면을 렌더링** (Hero 유지 + 안내 + YouthMeta 가입 link-out + Sign out, §7.3.1) | 외부 → 본 서비스 → 외부 |
+| **6/8 ~ 6/9** | 가입 또는 로그인 | 이벤트 페이지에서 "참여하기" → 본 서비스로 redirect → 가입/로그인 → KYC → 거래소 OAuth → 이벤트 페이지로 복귀. 로그인 직후 백엔드가 YouthMeta 멤버십을 확인 → **비유스메타 계정은 이벤트 페이지가 YouthMeta-only 차단 화면을 렌더링** (Hero 유지 + 안내 + Supercycl Home 복귀 link-out, §7.3.1) | 외부 → 본 서비스 → 외부 |
 | **6/8 ~ 6/28** | 거래 도달 ($500 → 20 USDT) | 이벤트 허브에서 진척도/슬롯 확인 → "거래하러 가기" 클릭 → 본 서비스 PWA로 deeplink → 거래 실행 → 자격 충족 시 보상 영역 상태가 `AWAITING_PAYOUT`으로 전환 (수령 정보 입력 단계 없음 — 연동된 OKX UID로 자동 송금) | 외부 → 본 서비스 → 외부 |
 | **6/29 ~ 7/5** | 설문 완료 (ICX 지급) | 이벤트 페이지에서 12문항 응답 → 즉시 미니 리포트 (수령 정보 입력 단계 없음 — 연동된 OKX UID로 자동 송금) | 외부 이벤트 페이지 |
 | **7/7 (종료 직후)** | NPS + Exit 인터뷰 | 완료자: 인앱 모달 NPS 1문항 / 미완료자: 50명 표본 1:1 인터뷰 (별도 컨택) | 인앱 모달 / 별도 폼 |
@@ -325,7 +325,8 @@
 |------|----|----|----------|
 | 이벤트 페이지 | 본 서비스 (가입/로그인) | "참여하기" / "Sign up / Log in to join" CTA | **디바이스 판별 redirect** — 모바일은 Supercycl Mobile PWA 로그인/가입 페이지, PC는 Supercycl PC 로그인/가입 페이지 + return URL 파라미터 (이벤트 페이지 내부 로그인 UI 없음) |
 | 이벤트 페이지 | 본 서비스 (거래) | "거래하러 가기" CTA | deeplink (`supercycl://trade` 또는 PWA URL) |
-| 이벤트 페이지 | **YouthMeta 가입 페이지(외부 사이트)** | 공개 랜딩의 "Learn how to join" 링크 / 비유스메타 차단 화면의 "Become a YouthMeta member" CTA | 외부 link-out (`target="_blank"`). URL은 환경변수 `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`로 주입 (미주입 시 fallback 도메인). 이벤트 페이지 내부 가입 폼은 없음 |
+| 이벤트 페이지 | **YouthMeta 가입 페이지(외부 사이트)** | 공개 랜딩의 "Learn how to join" 링크 | 외부 link-out (`target="_blank"`). URL은 환경변수 `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`로 주입 (미주입 시 fallback 도메인). 이벤트 페이지 내부 가입 폼은 없음 |
+| 이벤트 페이지 | **Supercycl Home (외부 본 서비스)** | 비유스메타 차단 화면의 "Go to Home" CTA | 외부 link-out (`target="_blank" rel="noopener noreferrer"`) — 본 서비스 홈 (`https://supercycl-mobile.vercel.app`)으로 이동 |
 | 본 서비스 | 이벤트 페이지 | KYC/OAuth 완료 후 자동 복귀 | return URL로 redirect (가입/연결 직후 1회) |
 
 > 📌 **수령 정보 입력 단계 없음** — 보상은 모두 연동된 OKX UID로 운영자가 OKX Internal Transfer로 송금합니다. 유저는 거래 → 본 서비스 / 상태 확인 → 이벤트 페이지로 흐름이 분리됩니다.
@@ -392,7 +393,8 @@
 │  ✦ MY ACCOUNT                         │
 │  Supercycl address  hx1234…5678       │
 │  OKX UID            1234567890        │
-│   (OKX 미연동 시: [Not connected] chip)  │
+│   (OKX 미연동 시: [Not connected] chip   │
+│    + 옆에 [Connect OKX →] link-out)     │
 ├──────────────────────────────────────┤
 │  🎯 ProgressTracker (3단계)            │
 │    1. Sign up + connect OKX            │
@@ -463,8 +465,7 @@
 │  members. You're signed in, but your      │
 │  account isn't on the YouthMeta roster.   │
 │                                           │
-│  [Become a YouthMeta member →]            │
-│  [Sign out]                                │
+│  [Go to Home →]                            │
 └──────────────────────────────────────────┘
 ```
 
@@ -473,13 +474,12 @@
 - 본 서비스 로그인 직후 백엔드가 YouthMeta 멤버십을 확인해 이벤트 페이지에 전달 (§7.5 외부 페이지 연동 사양 참조)
 
 **노출/숨김 규칙**
-- 노출: `CampaignHero` + `YouthMetaGate` (제목/설명/잠금 아이콘/CTA 두 개)
+- 노출: `CampaignHero` + `YouthMetaGate` (제목/설명/잠금 아이콘/단일 CTA)
 - 숨김: `MyAccountCard`, `ProgressTracker`, `MyProgressMeter`, `UsdtRewardCard`, `IcxRewardCard`, `HubCtaBar`, `SurveyModal` 등 정상 허브의 모든 본문/모달
 - 인앱 알림 트리거(§9.1)도 차단 화면에서는 발화 불가 (보상/슬롯 상태에 의존하므로)
 
 **CTA 동작**
-- `Become a YouthMeta member` — 외부 link-out (`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`, `target="_blank" rel="noopener noreferrer"`). 이벤트 페이지 내부 가입 폼은 두지 않음 (가입 동선은 본 서비스/YouthMeta 측 자체 페이지에서 처리)
-- `Sign out` — 본 서비스 세션 종료 후 동일 이벤트 URL로 복귀 → 공개 랜딩 콘텐츠 자동 렌더링. 실 구현에서는 본 서비스 로그아웃 엔드포인트 호출 필요 (구체 방식은 본 서비스 개발팀 협의 — §7.5)
+- `Go to Home` — 외부 link-out (`https://supercycl-mobile.vercel.app`, `target="_blank" rel="noopener noreferrer"`) — 비유스메타 유저를 본 서비스 홈으로 보내 자연스러운 이탈 경로 제공. 이벤트 페이지 내부 가입/로그아웃 폼은 두지 않음 (YouthMeta 가입 안내는 공개 랜딩의 "Learn how to join" 링크로 일원화)
 
 **다국어 정책**: 차단 화면도 영어 단일 UI를 유지합니다 (§7.5).
 
@@ -487,7 +487,7 @@
 
 1. **단일 URL 진입점** — 로그인 여부에 따라 콘텐츠만 분기 (공개 랜딩 ↔ 이벤트 허브)
 2. **3섹션 구조** (로그인) — 진척도 / 슬롯 / 보상
-3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시: My account UID 자리에 `Not connected` chip, ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
+3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시: My account UID 자리에 `Not connected` chip + 우측에 `Connect OKX →` 인라인 링크(본 서비스 `https://supercycl-mobile.vercel.app`로 link-out — OAuth 동선은 본 서비스에서 처리), ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
 4. **실시간 슬롯** — 5분 갱신, 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통)
 5. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
 6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)

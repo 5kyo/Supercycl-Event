@@ -111,8 +111,7 @@ export const en = {
       title: 'YouthMeta members only',
       description:
         "This festival is exclusive to YouthMeta members. You're signed in, but your account isn't on the YouthMeta roster.",
-      joinCta: 'Become a YouthMeta member',
-      signOutCta: 'Sign out',
+      homeCta: 'Go to Home',
     },
   },
   account: {
@@ -120,6 +119,7 @@ export const en = {
     addressLabel: 'Supercycl account address',
     uidLabel: 'OKX UID',
     okxNotConnected: 'Not connected',
+    okxConnectCta: 'Connect OKX',
   },
   outsideWindow: {
     surveyClosed: 'Survey opens June 29',

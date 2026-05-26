@@ -1,22 +1,7 @@
-'use client';
-
 import { en } from '@/content/en';
-import { useMockState } from '@/lib/mock-state';
-
-// Placeholder kept in the component so the build never fails when the env var
-// isn't injected yet (operations will swap this for the real URL once the
-// YouthMeta join page is finalized — spec §6.1).
-const FALLBACK_JOIN_URL = 'https://youthmeta.com';
-
-const joinUrl = process.env.NEXT_PUBLIC_YOUTHMETA_JOIN_URL || FALLBACK_JOIN_URL;
 
 export function YouthMetaGate() {
-  const { dispatch } = useMockState();
   const copy = en.hub.youthMetaGate;
-
-  function signOut() {
-    dispatch({ type: 'SET_AUTH', status: 'logged_out' });
-  }
 
   return (
     <section
@@ -49,16 +34,13 @@ export function YouthMetaGate() {
         </p>
         <div className="mt-md flex w-full flex-col items-stretch gap-sm sm:max-w-xs">
           <a
-            href={joinUrl}
+            href="https://supercycl-mobile.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
           >
-            {copy.joinCta} →
+            {copy.homeCta} →
           </a>
-          <button type="button" onClick={signOut} className="btn-secondary">
-            {copy.signOutCta}
-          </button>
         </div>
       </article>
     </section>

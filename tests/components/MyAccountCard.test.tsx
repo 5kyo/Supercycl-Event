@@ -34,8 +34,8 @@ describe('MyAccountCard', () => {
     expect(screen.getByText('My account')).toBeInTheDocument();
     expect(screen.getByText(mockState.MOCK_ACCOUNT_ADDRESS)).toBeInTheDocument();
     expect(screen.getByText('Not connected')).toBeInTheDocument();
-    // Hint text removed — chip stands on its own
-    expect(screen.queryByText(/Connect in Step 1/)).not.toBeInTheDocument();
+    const connect = screen.getByTestId('okx-connect-cta');
+    expect(connect).toHaveAttribute('href', 'https://supercycl-mobile.vercel.app');
   });
 
   it('shows the full address + full UID when both are present', () => {

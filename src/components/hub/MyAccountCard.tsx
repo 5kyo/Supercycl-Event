@@ -35,11 +35,20 @@ export function MyAccountCard() {
             {state.hasOkxLinked && state.okxUid ? (
               <span className="font-mono text-text-primary">{state.okxUid}</span>
             ) : (
-              <span
-                className="inline-flex items-center rounded-full border border-amber/40 bg-amber/15 px-2 py-0.5 text-label-sm text-amber"
-                data-testid="okx-not-connected"
-              >
-                {en.account.okxNotConnected}
+              <span className="inline-flex flex-wrap items-center gap-sm">
+                <span
+                  className="inline-flex items-center rounded-full border border-amber/40 bg-amber/15 px-2 py-0.5 text-label-sm text-amber"
+                  data-testid="okx-not-connected"
+                >
+                  {en.account.okxNotConnected}
+                </span>
+                <a
+                  href="https://supercycl-mobile.vercel.app"
+                  className="text-label-sm text-accent underline-offset-2 hover:underline"
+                  data-testid="okx-connect-cta"
+                >
+                  {en.account.okxConnectCta} →
+                </a>
               </span>
             )}
           </dd>
