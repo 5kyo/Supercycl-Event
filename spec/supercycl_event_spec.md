@@ -359,8 +359,7 @@
 │  · 캠페인 제목 + 기간 (06.08 ─ 07.07)     │
 │  · 🔴 LIVE strip — 실시간 슬롯 잔여       │
 │  · CTA: [Sign up / Log in to join]       │
-│  · ⓘ Open to YouthMeta members only ·    │
-│      [Learn how to join] (외부 link-out)   │
+│  · ⓘ Open to YouthMeta members only       │
 ├──────────────────────────────────────────┤
 │  (dimmed preview · opacity 0.42)         │
 │                                          │
@@ -382,7 +381,7 @@
 - 공유 가능한 URL — OG 태그 적용
 - SEO 최적화 (검색 노출 허용)
 - CTA는 `Sign up / Log in to join` 단일 — 클릭 시 **이벤트 페이지 내부에서 로그인하지 않고, 본 서비스 가입/로그인 페이지로 redirect**. 디바이스 판별에 따라 **모바일은 Supercycl Mobile PWA 로그인 페이지**, **PC는 Supercycl PC 로그인 페이지**로 분기 (각 본 서비스 버전의 자체 로그인 UI 사용) → 완료 후 동일 이벤트 URL로 복귀 (로그인 콘텐츠 자동 렌더링)
-- **자격 고지** — Hero의 Sign in CTA 바로 아래에 `ⓘ Open to YouthMeta members only · Learn how to join` 라인을 inline subtle 텍스트로 노출. 메인 CTA 강조 약화 방지를 위해 카드/박스가 아닌 한 줄 텍스트. `Learn how to join` 텍스트만 외부 link-out(`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`, `target="_blank"`). 비유스메타 유저의 무의미한 로그인 round-trip을 미리 줄이고, YouthMeta 가입 동선을 동시에 안내
+- **자격 고지** — Hero의 Sign in CTA 바로 아래에 `ⓘ Open to YouthMeta members only` 라인을 inline subtle 텍스트로 노출. 메인 CTA 강조 약화 방지를 위해 카드/박스가 아닌 한 줄 텍스트. 비유스메타 유저의 무의미한 로그인 round-trip을 미리 줄임
 - `HubHeader / SlotTension / MyProgressMeter / HubCtaBar` 등 로그인 전용 요소는 비로그인 화면에서 미노출 (코드 주석: "redundant or empty pre-auth")
 
 ### 7.3 로그인 화면 (이벤트 허브 콘텐츠)
@@ -395,8 +394,7 @@
 │   · Trade $500 → Get 20 USDT (h1)     │
 │   · [My volume $X / $500   ████░░]    │
 │        (비로그인 시: [Sign in] +       │
-│         "Open to YouthMeta only ·     │
-│          Learn how to join")          │
+│         "Open to YouthMeta only")     │
 ├──────────────────────────────────────┤
 │  ✦ MY ACCOUNT                         │
 │  Supercycl address  hxfedcba98…ba9876 │
@@ -417,6 +415,8 @@
 │  ⏳ STEP 2: Trade $500 → Get 20 USDT   │
 │  ⬜ STEP 3: Complete survey →            │
 │             Get ICX (~$5)                │
+│  ⬜ STEP 4: Receive 20 USDT              │
+│  ⬜ STEP 5: Receive 100 ICX (~$5)        │
 ├──────────────────────────────────────┤
 │  📊 실시간 슬롯                        │
 │  거래 슬롯 잔여        423 / 500       │
@@ -443,15 +443,19 @@
 └──────────────────────────────────────┘
 ```
 
-#### ProgressTracker 3단계 (코드: `src/components/hub/ProgressTracker.tsx`)
+#### ProgressTracker 5단계 (코드: `src/components/hub/ProgressTracker.tsx`)
+
+자격 충족(Steps 1–3)과 보상 수령(Steps 4–5)을 한 트래커에 모아 표시합니다. Steps 1–3는 유저 액션으로 done이 되고, Steps 4–5는 운영팀이 OKX Internal Transfer 마감 후 `PAID`로 마킹할 때 done이 됩니다.
 
 | Step | 라벨 (en.ts) | done 조건 |
 |---|---|---|
 | 1 | `Sign up + connect OKX` (en.ts `steps.step1`) | `state.hasOkxLinked` |
 | 2 | `Trade $500 → \nGet 20 USDT` (en.ts `steps.step2`, 두 줄) | Step 1 done **AND** `state.tradingVolume >= 500` |
 | 3 | `Complete survey → \nGet ICX (~$5)` (en.ts `steps.step3`, 두 줄 — `~$5`는 ICX 가치 프레이밍, §3) | Step 2 done **AND** `state.surveyCompleted` |
+| 4 | `Receive 20 USDT` (en.ts `steps.step4`) | Step 2 done **AND** `state.usdtPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` / `PENDING_PAYOUT` / `ON_HOLD` 상태에서는 `inProgress`. |
+| 5 | `Receive 100 ICX (~$5)` (en.ts `steps.step5`) | Step 3 done **AND** `state.icxPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` / `PENDING_PAYOUT` / `ON_HOLD` 상태에서는 `inProgress`. |
 
-상태 enum: `done | inProgress | locked`. **Strict sequential gating** — 각 단계의 `done`은 이전 단계가 `done`이어야만 진입 가능 (디버그 토글로 Step 2만 끄고 Step 3 done이 되는 케이스 방지). 이전 단계 미완 시 후속 단계는 `locked`.
+상태 enum: `done | inProgress | locked`. **Strict sequential gating** — Steps 1→2→3는 직전 단계가 done이어야 진입 가능. Steps 4/5는 보상 수령 단계로, 각각 자격 단계(Step 2 / Step 3)가 done인 경우에만 진척이 발생합니다 (USDT 수령이 ICX 수령에 종속되지 않음 — 두 보상 채널은 독립적이며 운영 배치 시점도 다름).
 
 > 📌 **거래량 도달 + OKX 미연결 엣지 케이스** (`volumeReachedNoOkx` selector, `src/lib/mock-state/selectors.ts`): `state.tradingVolume >= 500 && !state.hasOkxLinked` 인 경우 (디버그 토글 또는 백엔드 동기화 지연 등), Step 1이 strict gate이므로 보상 자격은 아직 충족되지 않은 상태입니다. 이를 명확히 알리기 위해 다음 세 표면을 교체합니다:
 > - **UsdtRewardCard 우상단 칩**: `RewardStatusLabel`의 `Locked` 칩 대신 **클릭 가능한 amber 링크** `⚠ Connect OKX to unlock →` (외부 link-out: `https://supercycl-mobile.vercel.app`, `target="_blank" rel="noopener noreferrer"`, `data-testid="usdt-needs-okx-chip"`). 칩 자체가 액션 진입점 역할을 합니다.

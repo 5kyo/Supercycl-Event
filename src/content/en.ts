@@ -18,7 +18,6 @@ export const en = {
   },
   hero: {
     youthMetaNotice: 'Open to YouthMeta members only',
-    youthMetaLearnLink: 'Learn how to join',
   },
   cta: {
     joinNow: 'Join now',
@@ -42,6 +41,11 @@ export const en = {
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) =>
       amount === 100 ? `${amount} ICX (~$5 airdrop)` : `${amount} ICX`,
+    // Pre-survey headline framing — non-trader users may end up with a pool
+    // share smaller than the trader tier, so the cap is communicated up
+    // front with "Up to N ICX".
+    icxAmountUpTo: (amount: number) =>
+      amount === 100 ? `Up to ${amount} ICX (~$5 airdrop)` : `Up to ${amount} ICX`,
     icxCondition: 'Complete the survey',
     icxConditionReady: 'Survey complete — payout scheduled',
     icxTradeUrl: 'https://www.okx.com/trade-spot/icx-usdt',
@@ -59,6 +63,8 @@ export const en = {
     step1OkxNotConnected: 'OKX not connected',
     step2: 'Trade $500 →\nGet 20 USDT',
     step3: 'Complete survey →\nGet ICX (~$5)',
+    step4: 'Receive 20 USDT',
+    step5: 'Receive 100 ICX (~$5)',
   },
   slot: {
     label: 'Trading slots remaining',

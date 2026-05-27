@@ -40,6 +40,26 @@ export function ProgressTracker() {
   const step3: StepState =
     step3Done ? 'done' : step2Done && surveyOpen ? 'inProgress' : 'locked';
 
+  // Steps 4/5 — payout receipt tracking. Done iff operator has marked PAID;
+  // any non-NOT_REACHED state on a qualified user reads as "in progress"
+  // (AWAITING/PENDING/ON_HOLD). Gate on the action step (2 for USDT, 3 for
+  // ICX) so reward steps can't paint green before the user has even
+  // qualified — symmetrical with the other strict-gate rules above.
+  const usdtPaid = state.usdtPayoutStatus === 'PAID';
+  const icxPaid = state.icxPayoutStatus === 'PAID';
+  const usdtAwaiting =
+    state.usdtPayoutStatus === 'AWAITING_PAYOUT' ||
+    state.usdtPayoutStatus === 'PENDING_PAYOUT' ||
+    state.usdtPayoutStatus === 'ON_HOLD';
+  const icxAwaiting =
+    state.icxPayoutStatus === 'AWAITING_PAYOUT' ||
+    state.icxPayoutStatus === 'PENDING_PAYOUT' ||
+    state.icxPayoutStatus === 'ON_HOLD';
+  const step4: StepState =
+    step2Done && usdtPaid ? 'done' : step2Done && usdtAwaiting ? 'inProgress' : 'locked';
+  const step5: StepState =
+    step3Done && icxPaid ? 'done' : step3Done && icxAwaiting ? 'inProgress' : 'locked';
+
   const step3BadgeOverride =
     step3 === 'locked' && step2Done ? `Opens ${shortDate(SURVEY_TRACK_START)}` : undefined;
 
@@ -47,6 +67,8 @@ export function ProgressTracker() {
     { num: 1, label: en.steps.step1, state: step1 },
     { num: 2, label: en.steps.step2, state: step2 },
     { num: 3, label: en.steps.step3, state: step3, badgeOverride: step3BadgeOverride },
+    { num: 4, label: en.steps.step4, state: step4 },
+    { num: 5, label: en.steps.step5, state: step5 },
   ];
   return (
     <section className="mx-auto max-w-6xl px-6 py-md">
