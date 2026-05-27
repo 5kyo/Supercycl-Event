@@ -4,7 +4,9 @@ import { useEffect, type ReactNode } from 'react';
 import { useFocusTrap } from '@/lib/a11y/useFocusTrap';
 
 type Props = {
-  title: string;
+  /** Optional — omit to render a header with only the close button (used by
+   * SurveyCompleteModal where the body's big heading carries the title). */
+  title?: string;
   onClose: () => void;
   children: ReactNode;
   size?: 'md' | 'lg';
@@ -28,7 +30,7 @@ export function Modal({ title, onClose, children, size = 'md', headerExtra }: Pr
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={title}
+      aria-label={title || 'Dialog'}
       className="modal-overlay flex items-end justify-center lg:items-center"
       onClick={onClose}
     >
@@ -44,7 +46,7 @@ export function Modal({ title, onClose, children, size = 'md', headerExtra }: Pr
         }}
       >
         <header className="mb-lg flex items-start justify-between gap-md">
-          <h2 className="text-title-lg">{title}</h2>
+          {title ? <h2 className="text-title-lg">{title}</h2> : <span />}
           <div className="flex shrink-0 items-center gap-sm">
             {headerExtra}
             <button

@@ -31,6 +31,7 @@ export const initialState: MockState = {
   isTrader: false,
   icxPayoutStatus: 'NOT_REACHED',
   icxTxHash: null,
+  nonTraderIcxAmount: null,
   simulatedDate: CAMPAIGN_START,
   dismissedFlags: {},
   debugViewport: 'auto',

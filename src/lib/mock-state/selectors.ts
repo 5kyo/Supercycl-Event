@@ -89,8 +89,13 @@ export type IcxPayout = { amount: number | null; reason?: string };
 export function effectiveIcxPayout(s: MockState): IcxPayout {
   if (!s.surveyCompleted) return { amount: null, reason: 'Survey not completed' };
   if (s.isTrader) return { amount: 100 };
-  // Open Issue F-5 — non-trader amount TBD by operations
-  return { amount: null, reason: 'TBD (non-trader pool — pending operations decision)' };
+  // Non-trader pool: actual per-user amount lives on `state.nonTraderIcxAmount`.
+  // Until operations decides (spec §12 Open Issue #5), it stays null and the UI
+  // surfaces a "??" placeholder so the headline shape stays `N ICX` rather than
+  // collapsing to a generic "Bonus ICX" string.
+  return s.nonTraderIcxAmount !== null
+    ? { amount: s.nonTraderIcxAmount }
+    : { amount: null, reason: 'TBD (non-trader pool — pending operations decision)' };
 }
 
 export type SlotTension = 'none' | 'tension-100' | 'tension-50' | 'tension-10' | 'full';

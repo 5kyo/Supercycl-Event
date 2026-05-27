@@ -32,22 +32,21 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
       ? 'AWAITING_PAYOUT'
       : state.icxPayoutStatus;
 
-  // Pre-survey, fall back to the trader-tier default (100 ICX) so the
-  // "~$5 airdrop" value framing is visible from the start. After the survey
-  // completes, the actual payout takes over — non-trader resolves to the
-  // generic "Bonus ICX" headline (TBD pool).
-  const headlineAmount =
-    payout.amount ?? (state.surveyCompleted ? null : 100);
-  // Pre-survey uses the "Up to N ICX" cap framing — non-trader pool share
-  // may end up smaller than 100 ICX, so we don't claim the full amount
-  // until the user actually qualifies. Post-survey, the trader path has a
-  // confirmed payout and shows the plain "N ICX" value.
-  const amountText =
-    headlineAmount !== null
-      ? state.surveyCompleted
-        ? en.rewards.icxAmountWithValue(headlineAmount)
-        : en.rewards.icxAmountUpTo(headlineAmount)
-      : en.rewards.icxAmount;
+  // Headline shape stays `N ICX` (or `?? ICX` while a number isn't known
+  // yet), never the generic "Bonus ICX". Three branches:
+  //   1. Pre-survey: optimistic trader default (100 ICX) framed as "Up to N
+  //      ICX" — non-trader pool share may be smaller, so we don't claim the
+  //      full amount until the user qualifies.
+  //   2. Post-survey w/ known amount: actual payout (`N ICX` + ~$5 framing
+  //      when N === 100).
+  //   3. Post-survey w/ pending non-trader amount: `?? ICX` placeholder.
+  //      Once operations sets `state.nonTraderIcxAmount`, the headline
+  //      flips to (2) automatically.
+  const amountText = !state.surveyCompleted
+    ? en.rewards.icxAmountUpTo(100)
+    : payout.amount !== null
+      ? en.rewards.icxAmountWithValue(payout.amount)
+      : en.rewards.icxAmountPending;
   // Both trader and non-trader see the same "Survey complete — payout
   // scheduled" line once the survey is done. The amount distinction (fixed
   // 100 ICX vs. pool share) is already carried by the headline (`100 ICX

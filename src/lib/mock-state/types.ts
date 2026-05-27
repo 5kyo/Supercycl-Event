@@ -46,6 +46,11 @@ export type MockState = {
   // 7. ICX
   icxPayoutStatus: IcxPayoutStatus;
   icxTxHash: string | null;
+  // Per-user ICX payout amount for the non-trader pool. Null while operations
+  // hasn't finalized the split (spec §12 Open Issue #5) — UI surfaces a "??"
+  // placeholder until a number is assigned. Trader payout stays hardcoded at
+  // 100 inside `effectiveIcxPayout`.
+  nonTraderIcxAmount: number | null;
   // 8. time
   simulatedDate: string;           // ISO yyyy-mm-dd
   // 9. dismiss flags
@@ -65,6 +70,7 @@ export type Action =
   | { type: 'TOGGLE_SURVEY_COMPLETED' }
   | { type: 'TOGGLE_IS_TRADER' }
   | { type: 'SET_ICX_PAYOUT_STATUS'; status: IcxPayoutStatus; txHash?: string | null }
+  | { type: 'SET_NON_TRADER_ICX_AMOUNT'; value: number | null }
   | { type: 'SET_SIMULATED_DATE'; date: string }
   | { type: 'DISMISS'; key: keyof DismissedFlags }
   | { type: 'RESET_DISMISSED' }

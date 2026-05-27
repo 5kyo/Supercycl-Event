@@ -38,7 +38,11 @@ export const en = {
       `Payout: ${shortDateWithWeekday(date)} · 10:00 KST`,
     usdtConditionNeedsOkx: 'Connect OKX to unlock',
     usdtClosed: 'Trade window closed — reward no longer available',
-    icxAmount: 'Bonus ICX',
+    // Placeholder headline for the non-trader pool while the per-user
+    // amount is still pending (`nonTraderIcxAmount === null`). Once
+    // operations confirms the number, state flips and the headline
+    // becomes the normal `N ICX` shape via `icxAmountWithValue`.
+    icxAmountPending: '?? ICX',
     icxAmountWithValue: (amount: number) =>
       amount === 100 ? `${amount} ICX (~$5 airdrop)` : `${amount} ICX`,
     // Pre-survey headline framing — non-trader users may end up with a pool
@@ -100,9 +104,6 @@ export const en = {
   },
   modal: {
     survey: {
-      completeTitle: 'Thanks for completing the survey!',
-      completeBody:
-        'Your mini-report is below. ICX will be sent to your linked OKX UID within 7 business days.',
       doneCta: 'Done',
     },
   },
@@ -111,15 +112,6 @@ export const en = {
     titleLine1: 'Thanks for',
     titleLine2: 'riding with us.',
     subtitle: '2026.06.08 ─ 07.07 · Ended',
-    recap: {
-      traderCount: '527',
-      traderLabel: 'traders',
-      surveyCount: '738',
-      surveyLabel: 'surveys',
-      volumeAmount: '$1.2M',
-      volumeLabel: 'volume',
-    },
-    openApp: 'Open Supercycl app',
   },
   hub: {
     stepDone: 'Done',

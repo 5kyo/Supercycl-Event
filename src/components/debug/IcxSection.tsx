@@ -8,8 +8,8 @@ const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PAID'];
 export function IcxSection() {
   const { state, dispatch } = useMockState();
   return (
-    <section>
-      <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-muted">ICX</h3>
+    <section className="flex flex-col gap-2">
+      <h3 className="mb-1 text-xs font-bold uppercase tracking-widest text-muted">ICX</h3>
       <label className="flex items-center gap-2 text-xs">
         Status:
         <select
@@ -19,6 +19,23 @@ export function IcxSection() {
         >
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
+      </label>
+      <label className="flex items-center gap-2 text-xs">
+        Non-trader amount (ICX):
+        <input
+          type="number"
+          min={0}
+          step={1}
+          value={state.nonTraderIcxAmount ?? ''}
+          placeholder="?? (TBD)"
+          onChange={(e) =>
+            dispatch({
+              type: 'SET_NON_TRADER_ICX_AMOUNT',
+              value: e.target.value === '' ? null : Number(e.target.value),
+            })
+          }
+          className="w-24 rounded-md bg-bg/40 px-2 py-1"
+        />
       </label>
     </section>
   );

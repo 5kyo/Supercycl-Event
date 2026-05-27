@@ -8,6 +8,7 @@ import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
 import { CampaignHero } from './CampaignHero';
+import { CampaignHeroEnded } from './CampaignHeroEnded';
 import { YouthMetaGate } from './YouthMetaGate';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
@@ -15,6 +16,7 @@ import {
   useMockState,
   FrozenStateScope,
   isBlockedNonYouthMeta,
+  eventEnded,
 } from '@/lib/mock-state';
 
 type Open = 'survey' | 'surveyComplete' | null;
@@ -23,6 +25,10 @@ export function Hub() {
   const { state, dispatch } = useMockState();
   const [open, setOpen] = useState<Open>(null);
   const loggedOut = state.authStatus === 'logged_out';
+  // Post-end, swap the hero only — the rest of the Hub stays mounted so each
+  // user can still see their final reward chips / progress state.
+  const ended = eventEnded(state);
+  const hero = ended ? <CampaignHeroEnded /> : <CampaignHero />;
 
   useEffect(() => {
     if (
@@ -73,7 +79,7 @@ export function Hub() {
     // toggles (volume, OKX, survey) don't bleed into the dimmed snapshot.
     return (
       <main className="pb-12">
-        <CampaignHero />
+        {hero}
         <div
           aria-hidden
           className="pointer-events-none select-none"
@@ -98,7 +104,7 @@ export function Hub() {
   if (isBlockedNonYouthMeta(state)) {
     return (
       <main className="pb-12">
-        <CampaignHero />
+        {hero}
         <YouthMetaGate />
       </main>
     );
@@ -106,7 +112,7 @@ export function Hub() {
 
   return (
     <main className="pb-24 lg:pb-12">
-      <CampaignHero />
+      {hero}
       {body}
       {modals}
     </main>

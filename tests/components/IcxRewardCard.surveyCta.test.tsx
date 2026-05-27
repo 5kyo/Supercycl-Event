@@ -93,7 +93,7 @@ describe('IcxRewardCard — survey CTA visibility', () => {
     expect(screen.getByText(/Up to 100 ICX \(~\$5 airdrop\)/)).toBeInTheDocument();
   });
 
-  it('annotates the trader amount with ~$5 airdrop but leaves Bonus ICX untouched', () => {
+  it('annotates the trader amount with ~$5 airdrop; non-trader stays in N ICX shape (placeholder until operations sets amount)', () => {
     mockUseStateWith({
       authStatus: 'logged_in',
       isTrader: true,
@@ -106,13 +106,29 @@ describe('IcxRewardCard — survey CTA visibility', () => {
     unmount();
     vi.restoreAllMocks();
 
+    // Non-trader with no operator-set amount → placeholder.
     mockUseStateWith({
       authStatus: 'logged_in',
       isTrader: false,
       surveyCompleted: true,
+      nonTraderIcxAmount: null,
+    });
+    const { unmount: unmount2 } = render(<IcxRewardCard onStartSurvey={noop} />);
+    expect(screen.getByText('?? ICX')).toBeInTheDocument();
+    expect(screen.queryByText('Bonus ICX')).not.toBeInTheDocument();
+    expect(screen.queryByText(/~\$5 airdrop/)).not.toBeInTheDocument();
+    unmount2();
+    vi.restoreAllMocks();
+
+    // Non-trader once operations finalizes the per-user amount → plain `N ICX`.
+    mockUseStateWith({
+      authStatus: 'logged_in',
+      isTrader: false,
+      surveyCompleted: true,
+      nonTraderIcxAmount: 50,
     });
     render(<IcxRewardCard onStartSurvey={noop} />);
-    expect(screen.getByText('Bonus ICX')).toBeInTheDocument();
+    expect(screen.getByText('50 ICX')).toBeInTheDocument();
     expect(screen.queryByText(/~\$5 airdrop/)).not.toBeInTheDocument();
   });
 });

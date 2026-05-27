@@ -43,9 +43,13 @@ export function MyAccountCard() {
                 >
                   {en.account.okxNotConnected}
                 </span>
+                {/* OAuth lives on the mobile PWA; on PC the link sends users
+                    to a flow they can't complete on the same device. Hide it
+                    at lg+ so PC users only see the "Not connected" status,
+                    and they finish the connect step on mobile separately. */}
                 <a
                   href="https://supercycl-mobile.vercel.app"
-                  className="text-label-sm text-accent underline-offset-2 hover:underline"
+                  className="text-label-sm text-accent underline-offset-2 hover:underline lg:hidden"
                   data-testid="okx-connect-cta"
                 >
                   {en.account.okxConnectCta} →

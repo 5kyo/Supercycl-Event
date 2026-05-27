@@ -78,6 +78,15 @@ export function reducer(state: MockState, action: Action): MockState {
         icxTxHash: 'txHash' in action ? action.txHash ?? null : state.icxTxHash,
       };
 
+    case 'SET_NON_TRADER_ICX_AMOUNT':
+      return {
+        ...state,
+        nonTraderIcxAmount:
+          action.value === null
+            ? null
+            : Math.max(0, Math.round(action.value)),
+      };
+
     case 'SET_SIMULATED_DATE':
       return { ...state, simulatedDate: action.date };
 
@@ -95,5 +104,14 @@ export function reducer(state: MockState, action: Action): MockState {
 
     case 'IMPORT_STATE':
       return action.state;
+
+    default: {
+      // Exhaustiveness check — if a new Action variant is added without a
+      // matching case above, `action` won't narrow to `never` here and TS
+      // will flag the gap at compile time.
+      const _exhaustive: never = action;
+      void _exhaustive;
+      return state;
+    }
   }
 }
