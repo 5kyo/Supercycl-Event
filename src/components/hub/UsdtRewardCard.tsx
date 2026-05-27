@@ -8,6 +8,7 @@ import {
   isQualifiedForUsdt,
   maskOkxUid,
   tradeRewardClosed,
+  volumeReachedNoOkx,
 } from '@/lib/mock-state';
 
 export function UsdtRewardCard() {
@@ -30,13 +31,19 @@ export function UsdtRewardCard() {
       ? 'AWAITING_PAYOUT'
       : state.usdtPayoutStatus;
 
+  // OKX-first guard: when volume is met but Step 1 (OKX OAuth) is still
+  // pending, surface "Connect OKX to unlock" instead of the volume-remaining
+  // copy — which would compute to "Trade $0 more to unlock" and mislead the
+  // user about the real blocker.
   const conditionLine = closed
     ? en.rewards.usdtClosed
     : qualified
       ? en.rewards.usdtConditionReady
-      : state.usdtPayoutStatus === 'NOT_REACHED'
-        ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
-        : en.rewards.usdtCondition;
+      : volumeReachedNoOkx(state)
+        ? en.rewards.usdtConditionNeedsOkx
+        : state.usdtPayoutStatus === 'NOT_REACHED'
+          ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
+          : en.rewards.usdtCondition;
 
   const showPayoutChannel =
     !closed &&

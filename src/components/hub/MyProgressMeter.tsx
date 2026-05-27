@@ -2,7 +2,7 @@
 
 import { en } from '@/content/en';
 import { ProgressBar } from '@/components/shared/ProgressBar';
-import { useMockState } from '@/lib/mock-state';
+import { useMockState, volumeReachedNoOkx } from '@/lib/mock-state';
 
 /**
  * MyProgressMeter — Festival direction.
@@ -66,10 +66,15 @@ export function MyProgressMeter() {
             </span>
           </div>
 
-          {/* Friendly line */}
+          {/* Friendly line — when volume is met but OKX is still unlinked,
+              swap the celebratory "Goal reached!" for an OKX-first guard rail
+              so the card doesn't conflict with the reward card and the user
+              knows the real blocker is Step 1, not more volume. */}
           <p className="text-body-md text-text-secondary-strong">
             <span className="text-accent font-semibold">
-              {en.progress.remaining(remaining)}
+              {volumeReachedNoOkx(state)
+                ? en.progress.remainingNeedsOkx
+                : en.progress.remaining(remaining)}
             </span>
           </p>
 

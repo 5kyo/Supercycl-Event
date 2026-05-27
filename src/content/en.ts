@@ -27,6 +27,7 @@ export const en = {
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
     usdtConditionReady: '$500 reached — payout scheduled',
+    usdtConditionNeedsOkx: 'Connect OKX to unlock',
     usdtClosed: 'Trade window closed — reward no longer available',
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) => `${amount} ICX`,
@@ -57,6 +58,7 @@ export const en = {
     heading: 'My progress',
     volume: (vol: number) => `Cumulative volume on Supercycl $${vol} / $500`,
     remaining: (rem: number) => `${rem > 0 ? `$${rem} to go` : 'Goal reached!'}`,
+    remainingNeedsOkx: 'Volume reached — connect OKX to claim',
     daysLeft: (d: number) => `${d > 0 ? `${d} days until end` : 'Campaign ended'}`,
   },
   status: {

@@ -43,4 +43,17 @@ describe('UsdtRewardCard slot block', () => {
       screen.getByText(/Trade window closed — reward no longer available/i),
     ).toBeInTheDocument();
   });
+
+  it('shows "Connect OKX to unlock" when volume is met but OKX is not linked', () => {
+    mockStateWith({
+      authStatus: 'logged_in',
+      hasOkxLinked: false,
+      tradingVolume: 500,
+      usdtPayoutStatus: 'NOT_REACHED',
+    });
+    render(<UsdtRewardCard />);
+    expect(screen.getByText('Connect OKX to unlock')).toBeInTheDocument();
+    // The misleading "Trade $0 more to unlock" copy must not leak through.
+    expect(screen.queryByText(/Trade \$0 more to unlock/i)).not.toBeInTheDocument();
+  });
 });

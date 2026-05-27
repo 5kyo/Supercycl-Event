@@ -11,6 +11,7 @@ import {
   maskOkxUid,
   hubVariant,
   slotTension,
+  volumeReachedNoOkx,
 } from '@/lib/mock-state/selectors';
 import { initialState } from '@/lib/mock-state/initial';
 
@@ -19,6 +20,13 @@ describe('selectors', () => {
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 500, hasOkxLinked: true })).toBe(true);
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 499, hasOkxLinked: true })).toBe(false);
     expect(isQualifiedForUsdt({ ...initialState, tradingVolume: 500, hasOkxLinked: false })).toBe(false);
+  });
+
+  it('volumeReachedNoOkx: fires only when volume met AND OKX missing', () => {
+    expect(volumeReachedNoOkx({ ...initialState, tradingVolume: 500, hasOkxLinked: false })).toBe(true);
+    expect(volumeReachedNoOkx({ ...initialState, tradingVolume: 750, hasOkxLinked: false })).toBe(true);
+    expect(volumeReachedNoOkx({ ...initialState, tradingVolume: 499, hasOkxLinked: false })).toBe(false);
+    expect(volumeReachedNoOkx({ ...initialState, tradingVolume: 500, hasOkxLinked: true })).toBe(false);
   });
 
   it('isBlockedNonYouthMeta: only logged-in non-members are blocked', () => {

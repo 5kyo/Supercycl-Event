@@ -20,6 +20,14 @@ export function isQualifiedForUsdt(s: MockState): boolean {
   return s.tradingVolume >= 500 && s.hasOkxLinked;
 }
 
+// Volume goal met but Step 1 (OKX OAuth) still pending. Surfaces an
+// OKX-first guard rail on the reward card and the volume meter so the user
+// isn't misled by "Goal reached!" / "Trade $0 more to unlock" copy when the
+// real blocker is the OKX link, not more volume.
+export function volumeReachedNoOkx(s: MockState): boolean {
+  return s.tradingVolume >= 500 && !s.hasOkxLinked;
+}
+
 /** Logged-in user whose account isn't on the YouthMeta roster — entire event blocked. */
 export function isBlockedNonYouthMeta(s: MockState): boolean {
   return s.authStatus === 'logged_in' && !s.isYouthMetaMember;
