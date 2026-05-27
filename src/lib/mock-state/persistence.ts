@@ -13,11 +13,17 @@ const LEGACY_STATUS_MAP: Record<string, string> = {
   // Original KO labels
   '미달성': 'NOT_REACHED',
   '수령 정보 미등록': 'AWAITING_PAYOUT',
-  '대기': 'PENDING_PAYOUT',
-  '보류': 'ON_HOLD',
   '완료': 'PAID',
   '만료': 'AWAITING_PAYOUT', // EXPIRED retired — surface as payout pending
-  '슬롯_마감_후_도달': 'CAP_FULL',
+  // Statuses retired after the payout enum was collapsed to
+  // NOT_REACHED / AWAITING_PAYOUT / PAID. Funnel them into the closest
+  // surviving status so older localStorage payloads don't render blank.
+  '대기': 'AWAITING_PAYOUT',
+  '보류': 'AWAITING_PAYOUT',
+  '슬롯_마감_후_도달': 'NOT_REACHED',
+  'PENDING_PAYOUT': 'AWAITING_PAYOUT',
+  'ON_HOLD': 'AWAITING_PAYOUT',
+  'CAP_FULL': 'NOT_REACHED',
   // Renamed EN enum
   'AWAITING_REGISTRATION': 'AWAITING_PAYOUT',
   'EXPIRED': 'AWAITING_PAYOUT',

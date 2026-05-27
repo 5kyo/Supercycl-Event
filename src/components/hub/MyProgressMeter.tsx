@@ -3,6 +3,7 @@
 import { en } from '@/content/en';
 import { ProgressBar } from '@/components/shared/ProgressBar';
 import { useMockState, volumeReachedNoOkx } from '@/lib/mock-state';
+import { getLastSyncMs, useNow, formatRelativeTime } from '@/lib/lastSync';
 
 /**
  * MyProgressMeter — Festival direction.
@@ -20,6 +21,10 @@ export function MyProgressMeter() {
   const remaining = Math.max(0, 500 - state.tradingVolume);
   const pct = Math.min(100, Math.round((state.tradingVolume / 500) * 100));
   const halfReached = state.tradingVolume >= 250;
+  // Volume snapshot isn't real-time (~5 min sync); surface the freshness so
+  // users don't expect a tick-by-tick counter.
+  const now = useNow();
+  const lastSyncLabel = formatRelativeTime(getLastSyncMs(), now);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-md">
@@ -115,6 +120,16 @@ export function MyProgressMeter() {
             <span className={halfReached ? 'text-accent' : ''}>$250</span>
             <span>$500</span>
           </div>
+
+          {/* Freshness hint — the volume isn't tick-by-tick, backend snapshot
+              is on a ~5 min cadence (spec §5.3 / §7.5). */}
+          <p
+            className="text-text-tertiary"
+            style={{ fontSize: 11, letterSpacing: '0.04em' }}
+            data-testid="volume-last-sync"
+          >
+            Last updated {lastSyncLabel}
+          </p>
         </div>
       </div>
     </section>

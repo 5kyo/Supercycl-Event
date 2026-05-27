@@ -3,7 +3,7 @@
 import { useMockState } from '@/lib/mock-state';
 import type { UsdtPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: UsdtPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID', 'CAP_FULL'];
+const STATUSES: UsdtPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PAID'];
 
 export function UsdtSection() {
   const { state, dispatch } = useMockState();

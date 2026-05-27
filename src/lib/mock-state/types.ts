@@ -7,16 +7,11 @@ export type AuthStatus = 'logged_out' | 'logged_in';
 export type UsdtPayoutStatus =
   | 'NOT_REACHED'
   | 'AWAITING_PAYOUT'
-  | 'PENDING_PAYOUT'
-  | 'ON_HOLD'
-  | 'PAID'
-  | 'CAP_FULL';
+  | 'PAID';
 
 export type IcxPayoutStatus =
   | 'NOT_REACHED'
   | 'AWAITING_PAYOUT'
-  | 'PENDING_PAYOUT'
-  | 'ON_HOLD'
   | 'PAID';
 
 export type DebugViewport = 'auto' | 'mobile-390' | 'tablet-768' | 'desktop-1280';

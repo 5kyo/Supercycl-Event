@@ -96,7 +96,7 @@ describe('selectors', () => {
       hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PAID' }),
     ).toBe('completed');
     expect(
-      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PENDING_PAYOUT' }),
+      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'AWAITING_PAYOUT' }),
     ).toBe('default');
   });
 

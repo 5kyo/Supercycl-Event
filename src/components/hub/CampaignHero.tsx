@@ -2,6 +2,7 @@
 
 import { en } from '@/content/en';
 import { useMockState, daysUntilEnd } from '@/lib/mock-state';
+import { getLastSyncMs, useNow, formatRelativeTime } from '@/lib/lastSync';
 
 /**
  * CampaignHero — compact campaign intro for both auth states.
@@ -17,6 +18,10 @@ export function CampaignHero() {
   const loggedOut = state.authStatus === 'logged_out';
   const signIn = () => dispatch({ type: 'SET_AUTH', status: 'logged_in' });
   const pct = Math.max(0, Math.min(100, (state.tradingVolume / 500) * 100));
+  // Volume snapshot is ~5 min stale (spec §5.3 / §7.5) — show freshness so
+  // the chip doesn't read as a live tick.
+  const now = useNow();
+  const lastSyncLabel = formatRelativeTime(getLastSyncMs(), now);
 
   const progressChip = (
     <div className="flex flex-col gap-1" style={{ minWidth: 180 }}>
@@ -39,6 +44,12 @@ export function CampaignHero() {
           }}
         />
       </div>
+      <p
+        className="text-text-tertiary"
+        style={{ fontSize: 10, letterSpacing: '0.04em' }}
+      >
+        Last updated {lastSyncLabel}
+      </p>
     </div>
   );
 

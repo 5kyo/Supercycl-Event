@@ -64,7 +64,7 @@ export const en = {
     step2: 'Trade $500 →\nGet 20 USDT',
     step3: 'Complete survey →\nGet ICX (~$5)',
     step4: 'Receive 20 USDT',
-    step5: 'Receive 100 ICX (~$5)',
+    step5: 'Receive ICX airdrop (~$5)',
   },
   slot: {
     label: 'Trading slots remaining',
@@ -83,10 +83,7 @@ export const en = {
     locked: 'Locked',
     open: 'Open',
     awaitingPayout: 'Awaiting payout',
-    pending: 'Pending payout',
-    review: 'Under review (max 7 days)',
     completed: 'Paid',
-    capFull: '$500 reached — slot capacity full. Thank you.',
   },
   banner: {
     campaignRunning: (start: string, end: string) =>

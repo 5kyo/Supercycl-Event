@@ -3,7 +3,7 @@
 import { useMockState } from '@/lib/mock-state';
 import type { IcxPayoutStatus } from '@/lib/mock-state';
 
-const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PENDING_PAYOUT', 'ON_HOLD', 'PAID'];
+const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PAID'];
 
 export function IcxSection() {
   const { state, dispatch } = useMockState();

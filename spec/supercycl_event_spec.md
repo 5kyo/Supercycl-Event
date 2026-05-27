@@ -418,7 +418,7 @@
 │  ⬜ STEP 3: Complete survey →            │
 │             Get ICX (~$5)                │
 │  ⬜ STEP 4: Receive 20 USDT              │
-│  ⬜ STEP 5: Receive 100 ICX (~$5)        │
+│  ⬜ STEP 5: Receive ICX airdrop (~$5)    │
 ├──────────────────────────────────────┤
 │  📊 실시간 슬롯                        │
 │  거래 슬롯 잔여        423 / 500       │
@@ -454,8 +454,8 @@
 | 1 | `Sign up + connect OKX` (en.ts `steps.step1`) | `state.hasOkxLinked` |
 | 2 | `Trade $500 → \nGet 20 USDT` (en.ts `steps.step2`, 두 줄) | Step 1 done **AND** `state.tradingVolume >= 500` |
 | 3 | `Complete survey → \nGet ICX (~$5)` (en.ts `steps.step3`, 두 줄 — `~$5`는 ICX 가치 프레이밍, §3) | Step 2 done **AND** `state.surveyCompleted` |
-| 4 | `Receive 20 USDT` (en.ts `steps.step4`) | Step 2 done **AND** `state.usdtPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` / `PENDING_PAYOUT` / `ON_HOLD` 상태에서는 `inProgress`. |
-| 5 | `Receive 100 ICX (~$5)` (en.ts `steps.step5`) | Step 3 done **AND** `state.icxPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` / `PENDING_PAYOUT` / `ON_HOLD` 상태에서는 `inProgress`. |
+| 4 | `Receive 20 USDT` (en.ts `steps.step4`) | Step 2 done **AND** `state.usdtPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` 상태에서는 `inProgress`. |
+| 5 | `Receive ICX airdrop (~$5)` (en.ts `steps.step5`) | Step 3 done **AND** `state.icxPayoutStatus === 'PAID'`. `AWAITING_PAYOUT` 상태에서는 `inProgress`. ICX 금액(100)을 라벨에 표기하지 않는 이유는 "에어드롭"이라는 호의적 프레이밍을 유지하기 위함 — 정확한 토큰 수량은 보상 카드 헤드라인에 노출됨. |
 
 상태 enum: `done | inProgress | locked`. **Strict sequential gating** — Steps 1→2→3는 직전 단계가 done이어야 진입 가능. Steps 4/5는 보상 수령 단계로, 각각 자격 단계(Step 2 / Step 3)가 done인 경우에만 진척이 발생합니다 (USDT 수령이 ICX 수령에 종속되지 않음 — 두 보상 채널은 독립적이며 운영 배치 시점도 다름).
 
@@ -474,14 +474,11 @@
 |------|------|------|------|
 | `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the 12-question survey` (`en.rewards.icxCondition`). 헤드라인은 pre-survey 거래자 디폴트로 `100 ICX (~$5 airdrop)` 노출 (§3 가치 프레이밍, §4.2). 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
 | `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 12****78 · payout via Internal Transfer` | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 12****78 · payout via Internal Transfer` |
-| `PENDING_PAYOUT` | `Pending payout` (`en.status.pending`) | 본문 동일(조건 라인 + UID 표시) | 본문 동일 |
-| `ON_HOLD` | `Under review (max 7 days)` (`en.status.review`) | 본문: 조건 라인 + UID | 본문: 조건 라인 + UID |
 | `PAID` | `Paid` (`en.status.completed`) | 별도 라인: `TX: <앞 10자>…` (TX 해시 존재 시) — 완료일자는 별도 표시하지 않음 | 별도 라인: `TX: <앞 10자>…` (동일) |
-| `CAP_FULL` (USDT 전용) | `$500 reached — slot capacity full. Thank you.` (`en.status.capFull`) | 금액 strikethrough + 슬롯 sub-block이 `full` 단계(§5.3) | — |
 
 > 📌 `PAID` 표기: 칩은 **`Paid` 단일 문구**입니다. 운영 SOP에서 자주 언급되는 "YYYY-MM-DD · TX 해시"는 칩이 아니라 **카드 내부 별도 라인**으로 TX 해시만 렌더하며, 완료일자는 현재 UI에 노출하지 않습니다 (운영자 도구에서만 보유).
 
-> UX 라벨은 동일 enum 값을 유저에게 친숙하게 풀어쓴 영문 표현입니다. 운영자/개발자는 enum 키(`NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL`)로 통일해서 소통합니다.
+> UX 라벨은 동일 enum 값을 유저에게 친숙하게 풀어쓴 영문 표현입니다. 운영자/개발자는 enum 키(`NOT_REACHED / AWAITING_PAYOUT / PAID`)로 통일해서 소통합니다.
 
 ### 7.3.1 YouthMeta 미가입 상태 — 차단 화면
 
@@ -525,7 +522,7 @@
 3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). 계정 주소는 `shortenAccountAddress(addr)` 헬퍼(`HEAD=10, TAIL=6`)로 `hxfedcba98…ba9876` 형태로 잘라 표시하고, **원본 전체 값은 `<dd>`의 `title` 속성에 보존**해 hover / copy / 스크린리더 경로로 접근 가능하게 합니다(테스트 픽스: `account-address` testid). OKX UID는 마스킹 없는 원문(예: `1234567890`)을 그대로 노출 — 자가확인 우선. OKX 미연동 시: My account UID 자리에 `Not connected` chip + 우측에 `Connect OKX →` 인라인 링크(본 서비스 `https://supercycl-mobile.vercel.app`로 link-out — OAuth 동선은 본 서비스에서 처리), ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
 4. **실시간 슬롯** — 백엔드 데이터 5분 이내 최신화 (§5.3 갱신 주기), 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통). **클라이언트 측 폴링 로직은 본 서비스 연동 시 결정** — mock 단에서는 미구현.
 5. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
-6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)
+6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PAID` (§8.2 enum/UX 라벨 매핑 참조)
 7. **전환 동선** — 가입 → 거래 → 설문 CTA로 sequential 흐름
 8. **본 서비스 연계** — 거래/KYC CTA만 본 서비스 deeplink로 이동 (보상 지급은 운영자가 OKX Internal Transfer로 자동 처리)
 
@@ -592,11 +589,8 @@
 | Enum 키 | 의미 | USDT UX 라벨 | ICX UX 라벨 |
 |---|---|---|---|
 | `NOT_REACHED` | 자격 미충족 (거래 진행 중 / 설문 미응답) | "Locked" | "Locked" |
-| `AWAITING_PAYOUT` | 자격 충족, **운영자 송금 대기** (유저 입력 단계 없음 — 연동된 OKX UID로 자동 송금 예정) | "Awaiting payout" | "Awaiting payout" |
-| `PENDING_PAYOUT` | 운영자가 송금 큐에 잡았으나 아직 실행 전 | "Pending payout" | "Pending payout" |
-| `ON_HOLD` | 의심 케이스로 검토 중 (최대 7일) | "Under review (max 7 days)" | "Under review (max 7 days)" |
+| `AWAITING_PAYOUT` | 자격 충족, **운영자 송금 대기** (유저 입력 단계 없음 — 연동된 OKX UID로 자동 송금 예정). Pending/review/cap-full 등 중간 상태가 있어도 유저 표면에서는 모두 `AWAITING_PAYOUT`으로 통합 노출 (운영 내부 상태는 운영자 도구에서만 트래킹) | "Awaiting payout" | "Awaiting payout" |
 | `PAID` | 송금 완료 (완료일자 표시, TX 해시 있으면 링크) | "Paid" | "Paid" |
-| `CAP_FULL` (USDT 전용) | 슬롯 마감 후 $500 도달 — 보상 지급 불가 | "$500 reached — slot capacity full. Thank you." | — |
 
 > 📌 **유저 액션**: 보상 영역은 read-only 상태 표시입니다. 등록/클레임 버튼은 존재하지 않으며, 연동된 OKX UID(마스킹 처리)와 현재 상태 라벨만 노출합니다.
 
@@ -640,7 +634,7 @@
 |---|----------------|---------|--------------|---------|
 | **A** | "거래했는데 진척도에 안 잡힘" | 거래 시각 확인 → 자격 도달 처리 사이클 이후 반영 안내 (백엔드 처리 주기 안내) | 다음 영업일 진척도 미반영 시 운영자 도구에서 브로커 API 로그 조회 → 자전거래/미체결 등 거래량 미인정 사유 확인 → 사유 회신 또는 수동 보정 | 영업일 1일 |
 | **B** | "지급 완료라고 떴는데 못 받음" | 운영자 도구에서 TX 해시 + 연동된 OKX UID 확인 → 유저에게 공유 | 1) OKX 연동 UID와 실제 OKX 계정 동일 여부 확인 2) TX 해시 미존재 시 운영자 송금 누락 확인 → 재송금 | 영업일 2일 |
-| **C** | "OKX 연동 계정과 송금 받을 계정이 다르다" | OAuth 재연동 안내 (본 서비스에서 OKX 재연결) | 미지급 상태(`AWAITING_PAYOUT` / `PENDING_PAYOUT`)면 OAuth 갱신 후 새 UID로 송금. 이미 `PAID`면 회수 불가 안내 (1차 응대 시 명시) | 영업일 1일 |
+| **C** | "OKX 연동 계정과 송금 받을 계정이 다르다" | OAuth 재연동 안내 (본 서비스에서 OKX 재연결) | 미지급 상태(`AWAITING_PAYOUT`)면 OAuth 갱신 후 새 UID로 송금. 이미 `PAID`면 회수 불가 안내 (1차 응대 시 명시) | 영업일 1일 |
 | **E** | "슬롯에 들어갔는데 떨어졌다" | 운영자 도구에서 슬롯 박탈 여부 확인 → 사유(어뷰징/보류 등) 회신 | 박탈 사유는 운영팀 어뷰징/의심 케이스 정책에 따른 판단 결과로 회신 (운영 매뉴얼) | 영업일 2일 |
 | **F** | "설문 응답이 저장 안 됨" | 재응답 안내 (1인 1회 제약은 서버측 검증이므로 재응답 시 중복 차단) | 서버 로그에서 응답 저장 시점 확인 → 미저장 시 운영자가 수동으로 응답 등록 | 영업일 1일 |
 | **H** | "거래소 OAuth 연결이 안 됨" | 본 서비스 CS로 이관 (이벤트 외 본 서비스 기능) | — | 본 서비스 CS SLA |
@@ -729,53 +723,7 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 
 ---
 
-## 13. 개발 우선순위 체크리스트
-
-### 🔴 P0 — 필수 (D-day 전 반드시 완료)
-
-**[이벤트 페이지 — 외부]**
-- [ ] **이벤트 페이지 인프라 셋업** (도메인, SSL, 배포 파이프라인)
-- [ ] **본 서비스와 인증 공유** (SSO/JWT/세션)
-- [ ] **공통 API CORS 설정**
-- [ ] 이벤트 허브 화면 (로그인 시: 진척도 + 슬롯 + 보상)
-- [ ] **🆕 공개 랜딩 콘텐츠 (비로그인 시 동일 URL에서 자동 렌더링) — OG 태그, SEO, CampaignHero LIVE 슬롯 카운터, `Sign up / Log in to join` 단일 CTA, 흐림 프리뷰 (§7.2 참조)**
-- [ ] **🆕 YouthMeta 멤버십 게이팅** — 공개 랜딩에 자격 고지 라인(§7.2) + 비유스메타 로그인 유저 차단 화면(§7.3.1, `YouthMetaGate`)
-- [ ] **🆕 i18n 구조 셋업 (`next-intl`)** — UI 텍스트는 **영어 단일** 운영(상태 라벨, 안내 메시지, CTA 포함). 한국어는 **설문 콘텐츠 한정**(`src/content/survey-ko.md`, 현재 11문항). 언어 전환 토글 미제공. locale 분리 구조는 유지하여 향후 한국어 UI 확장 대비
-- [ ] 설문 폼 + 응답 저장 (`src/content/survey-ko.md` 참조 — 문항 수는 mdx 원본에서 자동 계산)
-- [ ] 슬롯 카운터 (백엔드 5분 이내 최신화 — 클라이언트 폴링 방식은 §5.3 / §7.5 연동 협의)
-- [ ] 진척도 바 (실시간 거래량 표시)
-- [ ] 보상 상태 표시 (`NOT_REACHED/AWAITING_PAYOUT/PENDING_PAYOUT/ON_HOLD/PAID/CAP_FULL` — §8.2 매핑 참조)
-- [ ] **연동된 OKX UID 마스킹 노출** (자격 충족 시 보상 카드에 read-only로 표시 — 별도 입력 모달 없음)
-- [ ] **본 서비스 Deeplink 연결** (거래/KYC)
-- [ ] **Return URL 처리** (본 서비스 → 이벤트 페이지 복귀)
-
-**[본 서비스 — 기존 Mobile/PC]**
-- [ ] 가입 → KYC → 거래소 OAuth 통합 플로우 (Return URL 지원, 완료 시 이벤트 페이지로 자동 redirect)
-- [ ] OAuth 완료 시 OKX UID를 세션/공통 API에서 노출 (이벤트 페이지가 read-only로 읽을 수 있도록)
-- [ ] **🆕 로그인 응답에 YouthMeta 멤버 플래그(boolean) 노출** — 이벤트 페이지가 차단 화면 분기에 사용 (§7.5)
-- [ ] ~~이벤트 페이지로 돌아가기 링크/버튼~~ → **별도 동선 미제공** (브라우저 뒤로가기/탭 전환으로 복귀)
-
-**[백엔드 — 공통]**
-- [ ] 자격 검증 백엔드 구현 (배치/실시간/이벤트 기반 등 방식은 백엔드 자체 판단, §5.5 참조) — 단, 주간 정산 D-1(일요일 23:59 KST) 이전 거래는 모두 다음 정산일 전에 반영 필요
-- [ ] 어뷰징 방지 로직 (디바이스 fingerprint, 자전거래 탐지)
-- [ ] **지급 큐 / TX 해시 / 지급 완료 마킹 API** (수령 정보 입력 기능 없음 — 연동된 OKX UID를 destination으로 사용)
-
-### 🟡 P1 — 운영 필수
-- [ ] 5개 인앱 표시 트리거 구현 (배너/모달/토스트/상태 라벨 — §9.1 참조)
-- [ ] **"지급 완료" 토글 시 보상 상태 라벨 자동 갱신 (인앱)**
-- [ ] CS FAQ 페이지 (이벤트 페이지 내) — 20문항+, SOP는 §10 참조
-- [ ] 2x 레버리지 이벤트 추적 (본 서비스, 모달 노출/슬라이더 드래그 로그)
-- [ ] **이벤트 페이지 ↔ 본 서비스 세션 동기화** (KYC/거래 완료 시 실시간 반영)
-
-### 🟢 P2 — 검증/리포팅
-- [ ] 퍼널 단계별 이벤트 추적 (4단계)
-- [ ] First Trade Time-to-Conversion 측정
-- [ ] 시그널 CTR / 주문 실행률 / PnL 비교 로깅
-- [ ] 종료 후 인사이트 리포트 데이터 추출 쿼리
-
----
-
-## 14. 주요 일정 요약
+## 13. 주요 일정 요약
 
 | 날짜 | 이벤트 |
 |------|--------|

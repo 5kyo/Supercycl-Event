@@ -18,8 +18,4 @@ describe('RewardStatusLabel', () => {
     const chip = screen.getByText('Paid');
     expect(chip.className).toMatch(/green/);
   });
-  it('renders cap-full state for USDT-only CAP_FULL', () => {
-    render(<RewardStatusLabel status="CAP_FULL" />);
-    expect(screen.getByText(/slot capacity full/i)).toBeInTheDocument();
-  });
 });

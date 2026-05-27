@@ -41,20 +41,14 @@ export function ProgressTracker() {
     step3Done ? 'done' : step2Done && surveyOpen ? 'inProgress' : 'locked';
 
   // Steps 4/5 — payout receipt tracking. Done iff operator has marked PAID;
-  // any non-NOT_REACHED state on a qualified user reads as "in progress"
-  // (AWAITING/PENDING/ON_HOLD). Gate on the action step (2 for USDT, 3 for
-  // ICX) so reward steps can't paint green before the user has even
-  // qualified — symmetrical with the other strict-gate rules above.
+  // AWAITING_PAYOUT on a qualified user reads as "in progress". Gate on the
+  // action step (2 for USDT, 3 for ICX) so reward steps can't paint green
+  // before the user has even qualified — symmetrical with the other
+  // strict-gate rules above.
   const usdtPaid = state.usdtPayoutStatus === 'PAID';
   const icxPaid = state.icxPayoutStatus === 'PAID';
-  const usdtAwaiting =
-    state.usdtPayoutStatus === 'AWAITING_PAYOUT' ||
-    state.usdtPayoutStatus === 'PENDING_PAYOUT' ||
-    state.usdtPayoutStatus === 'ON_HOLD';
-  const icxAwaiting =
-    state.icxPayoutStatus === 'AWAITING_PAYOUT' ||
-    state.icxPayoutStatus === 'PENDING_PAYOUT' ||
-    state.icxPayoutStatus === 'ON_HOLD';
+  const usdtAwaiting = state.usdtPayoutStatus === 'AWAITING_PAYOUT';
+  const icxAwaiting = state.icxPayoutStatus === 'AWAITING_PAYOUT';
   const step4: StepState =
     step2Done && usdtPaid ? 'done' : step2Done && usdtAwaiting ? 'inProgress' : 'locked';
   const step5: StepState =

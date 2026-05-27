@@ -61,8 +61,8 @@ describe('reducer', () => {
 
   it('SET_USDT_PAYOUT_STATUS preserves tx hash when txHash key is omitted', () => {
     const paid = reducer(initialState, { type: 'SET_USDT_PAYOUT_STATUS', status: 'PAID', txHash: '0xabc' });
-    const moved = reducer(paid, { type: 'SET_USDT_PAYOUT_STATUS', status: 'ON_HOLD' });
-    expect(moved.usdtPayoutStatus).toBe('ON_HOLD');
+    const moved = reducer(paid, { type: 'SET_USDT_PAYOUT_STATUS', status: 'AWAITING_PAYOUT' });
+    expect(moved.usdtPayoutStatus).toBe('AWAITING_PAYOUT');
     expect(moved.usdtTxHash).toBe('0xabc');
   });
 
