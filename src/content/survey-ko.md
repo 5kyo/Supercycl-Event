@@ -118,4 +118,4 @@
   - ETH
   - Alt
   - Meme
-  - Index
+  - RWA (하이닉스, 삼성전자, 코스피 등)
