@@ -43,11 +43,14 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
     headlineAmount !== null
       ? en.rewards.icxAmountWithValue(headlineAmount)
       : en.rewards.icxAmount;
-  const conditionLine = qualifiedForIcx
+  // Both trader and non-trader see the same "Survey complete — payout
+  // scheduled" line once the survey is done. The amount distinction (fixed
+  // 100 ICX vs. pool share) is already carried by the headline (`100 ICX
+  // (~$5 airdrop)` vs. `Bonus ICX`), so we don't need a separate TBD line
+  // that would clash with the AWAITING_PAYOUT chip.
+  const conditionLine = state.surveyCompleted
     ? en.rewards.icxConditionReady
-    : payout.amount === null && state.surveyCompleted && !state.isTrader
-      ? en.hub.icxNonTrader
-      : en.rewards.icxCondition;
+    : en.rewards.icxCondition;
 
   const showPayoutChannel =
     !loggedOut &&

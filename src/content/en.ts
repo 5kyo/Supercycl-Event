@@ -126,7 +126,6 @@ export const en = {
     stepDone: 'Done',
     stepInProgress: 'In progress',
     stepLocked: 'Up next',
-    icxNonTrader: 'Non-trader pool reward: TBD (pending operations decision)',
     youthMetaGate: {
       title: 'YouthMeta members only',
       description:

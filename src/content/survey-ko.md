@@ -25,8 +25,7 @@
 
 ## Q2
 - area: UX
-- type: single
-- allowFree: true
+- type: multi
 - question: 가장 조작이 어려웠던 화면/기능
 - options:
   - 거래소 연결
@@ -34,7 +33,7 @@
   - 시그널 화면
   - 포트폴리오
   - 없음
-  - 기타(직접 입력)
+  - 기타
 
 ## Q3
 - area: UX
