@@ -51,6 +51,10 @@ export type MockState = {
   // placeholder until a number is assigned. Trader payout stays hardcoded at
   // 100 inside `effectiveIcxPayout`.
   nonTraderIcxAmount: number | null;
+  // Total ICX paid out so far across both trader and non-trader pools (0..100,000).
+  // Drives the IcxRewardCard pool bar — sourced from the operator console in
+  // production; surfaced via the debug drawer for mock-state prototyping.
+  icxConsumed: number;
   // 8. time
   simulatedDate: string;           // ISO yyyy-mm-dd
   // 9. dismiss flags
@@ -71,6 +75,7 @@ export type Action =
   | { type: 'TOGGLE_IS_TRADER' }
   | { type: 'SET_ICX_PAYOUT_STATUS'; status: IcxPayoutStatus; txHash?: string | null }
   | { type: 'SET_NON_TRADER_ICX_AMOUNT'; value: number | null }
+  | { type: 'SET_ICX_CONSUMED'; value: number }
   | { type: 'SET_SIMULATED_DATE'; date: string }
   | { type: 'DISMISS'; key: keyof DismissedFlags }
   | { type: 'RESET_DISMISSED' }

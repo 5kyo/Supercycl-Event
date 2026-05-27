@@ -9,23 +9,23 @@ function mockStateWith(overrides: Partial<MockState>) {
   vi.spyOn(mockState, 'useMockState').mockReturnValue({ state, dispatch: vi.fn() });
 }
 
-describe('UsdtRewardCard slot block', () => {
+describe('UsdtRewardCard pool block', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('shows the embedded slot heading + count for signed-in users', () => {
+  it('shows the embedded pool heading + count for signed-in users', () => {
     mockStateWith({ authStatus: 'logged_in', slotsRemaining: 423 });
     render(<UsdtRewardCard />);
-    expect(screen.getByText('Trade reward slots')).toBeInTheDocument();
-    // SlotTension uses NumberRoller — the rendered count appears as text.
-    expect(screen.getByText(/\/ 500/)).toBeInTheDocument();
+    expect(screen.getByText('USDT reward pool')).toBeInTheDocument();
+    // 423 slots × 20 USDT = 8,460 USDT remaining out of 10,000.
+    expect(screen.getByText(/\/ 10,000 USDT/)).toBeInTheDocument();
   });
 
-  it('hides the slot block when logged out (Sign in to view framing)', () => {
+  it('hides the pool block when logged out (Sign in to view framing)', () => {
     mockStateWith({ authStatus: 'logged_out' });
     render(<UsdtRewardCard />);
-    expect(screen.queryByText('Trade reward slots')).not.toBeInTheDocument();
+    expect(screen.queryByText('USDT reward pool')).not.toBeInTheDocument();
     expect(screen.getByText(/Sign in to view/i)).toBeInTheDocument();
   });
 
@@ -36,7 +36,7 @@ describe('UsdtRewardCard slot block', () => {
       usdtPayoutStatus: 'NOT_REACHED',
     });
     render(<UsdtRewardCard />);
-    expect(screen.getByText('Trade reward slots')).toBeInTheDocument();
+    expect(screen.getByText('USDT reward pool')).toBeInTheDocument();
     expect(screen.getByText(/full/i)).toBeInTheDocument();
     expect(screen.getByText('Closed')).toBeInTheDocument();
     expect(

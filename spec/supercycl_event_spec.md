@@ -238,13 +238,14 @@
 
 ### 5.3 슬롯 카운터 (FOMO UI)
 
-- **USDT 보상 카드 내부에 슬롯 카운터를 통합 노출** (`UsdtRewardCard` → 보상 금액·조건 아래 슬롯 sub-block). 슬롯과 그 슬롯이 게이팅하는 보상이 같은 카드 안에서 한 번에 읽힘.
-- 표시 형식: `"Trade reward slots · 423 / 500"` + 색·진행바 (구현: `src/components/shared/SlotTension.tsx`, `layout="inline"`)
-- 단계별 색상: `none`(>100, green) → `tension-100`(51-100, amber) → `tension-50`(11-50, orange + 약한 pulse) → `tension-10`(1-10, red + 강한 pulse) → `full`(0, muted red, pulse 없음, **FULL** 배지)
-- **갱신 주기 (백엔드 계약)**: 슬롯 수치는 **백엔드 API 폴링/푸시로 5분 이내 최신화**되어야 합니다. 현재 프로토타입(`src/lib/mock-state/`)은 reducer 기반 mock이라 **클라이언트 폴링 미구현** — 본 서비스 연동 시 SWR/Realtime/cron-revalidate 등 구체 방식은 본 서비스 개발팀과 협의 (§7.5 인터페이스 요구사항)
+- **USDT 보상 카드 내부에 보상 풀 카운터를 통합 노출** (`UsdtRewardCard` → 보상 금액·조건 아래 풀 sub-block). 풀 잔여와 그 풀이 게이팅하는 보상이 같은 카드 안에서 한 번에 읽힘.
+- 표시 형식: `"USDT reward pool · 8,460 / 10,000 USDT"` + 색·진행바 (구현: `src/components/shared/SlotTension.tsx`, `layout="inline"`, `unit="USDT"`). 내부적으로 `slotsRemaining × 20` 으로 USDT 잔여를 도출 (슬롯당 20 USDT 1:1 매핑, §3).
+- **`IcxRewardCard` 도 동일 컴포넌트로 풀 바를 노출**: `"ICX reward pool · 60,000 / 100,000 ICX"`. 데이터 소스는 `state.icxConsumed` (운영 콘솔 데이터의 단일 입력점 — mock 에서는 디버그 드로어로 조작). 거래자/비거래자 풀 합산값을 기준으로 운영팀이 입력.
+- 단계별 색상은 **풀 잔여 비율** 기준 (`poolTension(remaining, total)`): `none`(>20%, green) → `tension-100`(>10% 이하 ~20%, amber) → `tension-50`(>2% 이하 ~10%, orange + 약한 pulse) → `tension-10`(>0% 이하 ~2%, red + 강한 pulse) → `full`(=0, muted red, pulse 없음, **FULL** 배지). USDT 의 절대 슬롯 단위 임계값(100/50/10) 도 비율 환산 시 동일하게 정렬됨.
+- **갱신 주기 (백엔드 계약)**: 슬롯/풀 수치는 **백엔드 API 폴링/푸시로 5분 이내 최신화**되어야 합니다. 현재 프로토타입(`src/lib/mock-state/`)은 reducer 기반 mock이라 **클라이언트 폴링 미구현** — 본 서비스 연동 시 SWR/Realtime/cron-revalidate 등 구체 방식은 본 서비스 개발팀과 협의 (§7.5 인터페이스 요구사항)
 - 100슬롯 단위 도달 시 **이벤트 페이지 상단 배너로 인앱 안내** (다음 페이지 방문 시 표시)
   - 예: "이벤트 잔여 슬롯 100개! 지금 거래 시작하세요"
-- 슬롯 0 (cap-full) 상태에서는 별도 상단 배너 없이 카드 내부 `FULL` 배지 + 카드 상단 `Closed` chip + 금액 strikethrough 조합으로 마감을 표시 (§5.5).
+- 풀 소진 (cap-full) 상태에서는 별도 상단 배너 없이 카드 내부 `FULL` 배지 + 카드 상단 `Closed` chip + 금액 strikethrough 조합으로 마감을 표시 (§5.5).
 
 ### 5.4 사용자 진척도 UI
 

@@ -18,6 +18,9 @@ type Props = {
   letterSpacing?: string;
   /** Optional aria-label override. */
   ariaLabel?: string;
+  /** Format the numeric value before rendering. Non-digit chars (e.g. thousand
+   *  separators) flow through the static-span path and don't animate. */
+  format?: (n: number) => string;
 };
 
 /**
@@ -40,6 +43,7 @@ export function NumberRoller({
   duration = 800,
   letterSpacing = '-0.03em',
   ariaLabel,
+  format,
 }: Props) {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
@@ -52,12 +56,13 @@ export function NumberRoller({
   }, []);
 
   const cellHeight = Math.round(fontSize * 0.95);
-  const chars = String(value).split('');
+  const displayStr = format ? format(value) : String(value);
+  const chars = displayStr.split('');
   const effectiveDuration = reduced ? 0 : duration;
 
   return (
     <span
-      aria-label={ariaLabel ?? String(value)}
+      aria-label={ariaLabel ?? displayStr}
       role={ariaLabel ? 'status' : undefined}
       style={{
         display: 'inline-flex',

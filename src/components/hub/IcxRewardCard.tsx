@@ -2,13 +2,17 @@
 
 import { en, shortDate } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
+import { SlotTension } from '@/components/shared/SlotTension';
 import {
   useMockState,
   effectiveIcxPayout,
   surveyTrackOpen,
+  poolTension,
   SURVEY_TRACK_START,
   CAMPAIGN_END,
 } from '@/lib/mock-state';
+
+const ICX_POOL_TOTAL = 100_000;
 
 type Props = {
   onStartSurvey: () => void;
@@ -135,6 +139,20 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           {en.rewards.icxTradeLinkLabel} ↗
         </a>
       )}
+      {!loggedOut && (() => {
+        const icxRemaining = Math.max(0, ICX_POOL_TOTAL - state.icxConsumed);
+        return (
+          <SlotTension
+            size="sm"
+            layout="inline"
+            remaining={icxRemaining}
+            total={ICX_POOL_TOTAL}
+            stage={poolTension(icxRemaining, ICX_POOL_TOTAL)}
+            label={en.slot.icxPoolHeading}
+            unit="ICX"
+          />
+        );
+      })()}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(state.okxUid)}

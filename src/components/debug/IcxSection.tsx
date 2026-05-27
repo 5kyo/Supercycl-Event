@@ -4,6 +4,7 @@ import { useMockState } from '@/lib/mock-state';
 import type { IcxPayoutStatus } from '@/lib/mock-state';
 
 const STATUSES: IcxPayoutStatus[] = ['NOT_REACHED', 'AWAITING_PAYOUT', 'PAID'];
+const ICX_CONSUMED_PRESETS = [0, 20_000, 50_000, 80_000, 98_000, 100_000];
 
 export function IcxSection() {
   const { state, dispatch } = useMockState();
@@ -37,6 +38,21 @@ export function IcxSection() {
           className="w-24 rounded-md bg-bg/40 px-2 py-1"
         />
       </label>
+      <div className="flex flex-col gap-1 text-xs">
+        <p>Consumed: {state.icxConsumed.toLocaleString()} / 100,000 ICX</p>
+        <div className="flex flex-wrap gap-2">
+          {ICX_CONSUMED_PRESETS.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => dispatch({ type: 'SET_ICX_CONSUMED', value: p })}
+              className="rounded-md bg-bg/40 px-2 py-1 text-xs"
+            >
+              {p.toLocaleString()}
+            </button>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

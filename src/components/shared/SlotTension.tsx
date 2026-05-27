@@ -20,6 +20,12 @@ type Props = {
   hideProgress?: boolean;
   /** stacked (default, vertical) or inline (label + counter on one row). */
   layout?: Layout;
+  /** Override the tension stage. When omitted, derives from `slotTension(state)`
+   *  using `remaining` — required when driving the bar from a non-slot signal
+   *  (e.g. USDT/ICX pool consumption where slot thresholds don't apply). */
+  stage?: SlotTensionStage;
+  /** Unit suffix appended after the total (e.g. "USDT", "ICX"). */
+  unit?: string;
 };
 
 const SIZES: Record<Size, { num: number; sub: number }> = {
@@ -61,10 +67,12 @@ export function SlotTension({
   label,
   hideProgress = false,
   layout = 'stacked',
+  stage: stageProp,
+  unit,
 }: Props) {
   const { state } = useMockState();
   const r = remaining ?? state.slotsRemaining;
-  const stage = slotTension({ ...state, slotsRemaining: r });
+  const stage = stageProp ?? slotTension({ ...state, slotsRemaining: r });
   const cfg = STAGE_CONFIG[stage];
   const f = SIZES[size];
   // Cap-full: bar fully filled even though r/total === 0 — the bar reflects
@@ -103,13 +111,18 @@ export function SlotTension({
           transition: 'color 600ms ease, text-shadow 600ms ease, opacity 600ms ease',
         }}
       >
-        <NumberRoller value={r} fontSize={f.num} color="currentColor" />
+        <NumberRoller
+          value={r}
+          fontSize={f.num}
+          color="currentColor"
+          format={(n) => n.toLocaleString()}
+        />
       </span>
       <span
         className="text-text-tertiary font-mono"
         style={{ fontSize: f.sub, lineHeight: 1 }}
       >
-        / {total}
+        / {total.toLocaleString()}{unit ? ` ${unit}` : ''}
       </span>
       {stage === 'full' && (
         <span

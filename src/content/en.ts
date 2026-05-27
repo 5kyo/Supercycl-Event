@@ -78,6 +78,8 @@ export const en = {
     label: 'Trading slots remaining',
     suffix: '/ 500',
     rewardCardHeading: 'Trade reward slots',
+    usdtPoolHeading: 'USDT reward pool',
+    icxPoolHeading: 'ICX reward pool',
     fullBadge: 'Full',
   },
   progress: {

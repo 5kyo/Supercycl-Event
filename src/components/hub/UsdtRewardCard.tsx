@@ -9,7 +9,11 @@ import {
   tradeRewardClosed,
   volumeReachedNoOkx,
   nextWeeklyPayoutDate,
+  poolTension,
 } from '@/lib/mock-state';
+
+const USDT_PER_SLOT = 20;
+const USDT_POOL_TOTAL = 10_000;
 
 export function UsdtRewardCard() {
   const { state } = useMockState();
@@ -129,13 +133,20 @@ export function UsdtRewardCard() {
             <p className="text-body-md text-text-secondary">{conditionLine}</p>
           ))}
       </div>
-      {!loggedOut && (
-        <SlotTension
-          size="sm"
-          layout="inline"
-          label={en.slot.rewardCardHeading}
-        />
-      )}
+      {!loggedOut && (() => {
+        const usdtRemaining = state.slotsRemaining * USDT_PER_SLOT;
+        return (
+          <SlotTension
+            size="sm"
+            layout="inline"
+            remaining={usdtRemaining}
+            total={USDT_POOL_TOTAL}
+            stage={poolTension(usdtRemaining, USDT_POOL_TOTAL)}
+            label={en.slot.usdtPoolHeading}
+            unit="USDT"
+          />
+        );
+      })()}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(state.okxUid)}

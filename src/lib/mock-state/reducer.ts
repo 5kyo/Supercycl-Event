@@ -87,6 +87,9 @@ export function reducer(state: MockState, action: Action): MockState {
             : Math.max(0, Math.round(action.value)),
       };
 
+    case 'SET_ICX_CONSUMED':
+      return { ...state, icxConsumed: clamp(Math.round(action.value), 0, 100_000) };
+
     case 'SET_SIMULATED_DATE':
       return { ...state, simulatedDate: action.date };
 

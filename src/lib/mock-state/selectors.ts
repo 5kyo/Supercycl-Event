@@ -108,6 +108,21 @@ export function slotTension(s: MockState): SlotTension {
   return 'none';
 }
 
+// Pool-based tension — generalizes `slotTension` for any (remaining, total)
+// pair. Thresholds match the slot version proportionally so the visual stages
+// line up across USDT (10,000 pool) and ICX (100,000 pool):
+//   slot.tension-100 = 100/500 = 20%
+//   slot.tension-50  =  50/500 = 10%
+//   slot.tension-10  =  10/500 =  2%
+export function poolTension(remaining: number, total: number): SlotTension {
+  if (remaining <= 0) return 'full';
+  const pct = (remaining / total) * 100;
+  if (pct <= 2) return 'tension-10';
+  if (pct <= 10) return 'tension-50';
+  if (pct <= 20) return 'tension-100';
+  return 'none';
+}
+
 /** Mask a UID like `1234567890` → `12******90` for in-product display. */
 export function maskOkxUid(uid: string): string {
   if (uid.length <= 4) return '*'.repeat(uid.length);
