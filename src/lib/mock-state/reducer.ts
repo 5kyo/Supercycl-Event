@@ -42,11 +42,15 @@ export function reducer(state: MockState, action: Action): MockState {
       };
 
     case 'SET_SURVEY_COMPLETED':
+      // Reset surveyCompleteSeen so the completion modal opens fresh on every
+      // submission — Hub's effect gates on this flag and would otherwise stay
+      // silent for a user who dismissed the modal in an earlier session.
       return {
         ...state,
         surveyCompleted: true,
         surveyCompletedAt: action.at,
         isTrader: action.isTrader,
+        dismissedFlags: { ...state.dismissedFlags, surveyCompleteSeen: false },
       };
 
     case 'TOGGLE_SURVEY_COMPLETED': {
@@ -55,6 +59,12 @@ export function reducer(state: MockState, action: Action): MockState {
         ...state,
         surveyCompleted: next,
         surveyCompletedAt: next ? state.simulatedDate : null,
+        // When flipping to true (debug drawer), mirror SET_SURVEY_COMPLETED
+        // and reset the seen flag so the completion modal re-fires. Flipping
+        // to false leaves the flag alone — the modal isn't shown anyway.
+        dismissedFlags: next
+          ? { ...state.dismissedFlags, surveyCompleteSeen: false }
+          : state.dismissedFlags,
       };
     }
 

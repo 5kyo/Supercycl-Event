@@ -114,6 +114,35 @@ describe('reducer', () => {
     expect(back.surveyCompletedAt).toBeNull();
   });
 
+  it('SET_SURVEY_COMPLETED resets surveyCompleteSeen so the modal opens fresh', () => {
+    const stale = {
+      ...initialState,
+      dismissedFlags: { surveyCompleteSeen: true },
+    };
+    const next = reducer(stale, {
+      type: 'SET_SURVEY_COMPLETED',
+      isTrader: true,
+      at: '2026-06-30',
+    });
+    expect(next.surveyCompleted).toBe(true);
+    expect(next.dismissedFlags.surveyCompleteSeen).toBe(false);
+  });
+
+  it('TOGGLE_SURVEY_COMPLETED → true also resets surveyCompleteSeen', () => {
+    const stale = {
+      ...initialState,
+      dismissedFlags: { surveyCompleteSeen: true },
+    };
+    const flipped = reducer(stale, { type: 'TOGGLE_SURVEY_COMPLETED' });
+    expect(flipped.surveyCompleted).toBe(true);
+    expect(flipped.dismissedFlags.surveyCompleteSeen).toBe(false);
+    // Flipping back off should leave the seen flag wherever it landed —
+    // modal isn't shown when surveyCompleted is false anyway.
+    const back = reducer(flipped, { type: 'TOGGLE_SURVEY_COMPLETED' });
+    expect(back.surveyCompleted).toBe(false);
+    expect(back.dismissedFlags.surveyCompleteSeen).toBe(false);
+  });
+
   it('TOGGLE_IS_TRADER flips isTrader without affecting surveyCompleted', () => {
     const flipped = reducer(initialState, { type: 'TOGGLE_IS_TRADER' });
     expect(flipped.isTrader).toBe(true);

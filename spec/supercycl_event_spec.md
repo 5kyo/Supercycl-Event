@@ -328,7 +328,6 @@
 |------|----|----|----------|
 | 이벤트 페이지 | 본 서비스 (가입/로그인) | "참여하기" / "Sign up / Log in to join" CTA | **디바이스 판별 redirect** — 모바일은 Supercycl Mobile PWA 로그인/가입 페이지, PC는 Supercycl PC 로그인/가입 페이지 + return URL 파라미터 (이벤트 페이지 내부 로그인 UI 없음) |
 | 이벤트 페이지 | 본 서비스 (거래) | "거래하러 가기" CTA | deeplink (`supercycl://trade` 또는 PWA URL) |
-| 이벤트 페이지 | **YouthMeta 가입 페이지(외부 사이트)** | 공개 랜딩의 "Learn how to join" 링크 | 외부 link-out (`target="_blank"`). URL은 환경변수 `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`로 주입 (미주입 시 fallback 도메인). 이벤트 페이지 내부 가입 폼은 없음 |
 | 이벤트 페이지 | **Supercycl Home (외부 본 서비스)** | 비유스메타 차단 화면의 "Go to Home" CTA | 외부 link-out (`target="_blank" rel="noopener noreferrer"`) — 본 서비스 홈 (`https://supercycl-mobile.vercel.app`)으로 이동 |
 | 본 서비스 | 이벤트 페이지 | KYC/OAuth 완료 후 자동 복귀 | return URL로 redirect (가입/연결 직후 1회) |
 
@@ -512,7 +511,7 @@
 - 인앱 알림 트리거(§9.1)도 차단 화면에서는 발화 불가 (보상/슬롯 상태에 의존하므로)
 
 **CTA 동작**
-- `Go to Home` — 외부 link-out (`https://supercycl-mobile.vercel.app`, `target="_blank" rel="noopener noreferrer"`) — 비유스메타 유저를 본 서비스 홈으로 보내 자연스러운 이탈 경로 제공. 이벤트 페이지 내부 가입/로그아웃 폼은 두지 않음 (YouthMeta 가입 안내는 공개 랜딩의 "Learn how to join" 링크로 일원화)
+- `Go to Home` — 외부 link-out (`https://supercycl-mobile.vercel.app`, `target="_blank" rel="noopener noreferrer"`) — 비유스메타 유저를 본 서비스 홈으로 보내 자연스러운 이탈 경로 제공. 이벤트 페이지 내부 가입/로그아웃 폼은 두지 않음
 
 **다국어 정책**: 차단 화면도 영어 단일 UI를 유지합니다 (§7.5).
 
@@ -536,7 +535,7 @@
 | **인증** | 이벤트 페이지에서 본 서비스 로그인 상태를 인식할 수 있어야 함 (방식은 본 서비스 개발팀 결정 — SSO/JWT/세션 등). **이벤트 페이지에서 별도 가입/로그인 불가** — 로그인 CTA 클릭 시 디바이스에 따라 Supercycl Mobile PWA 로그인 페이지(모바일) 또는 Supercycl PC 로그인 페이지(PC)로 redirect, 본 서비스 자체 로그인 UI에서 처리 |
 | **YouthMeta 멤버십 조회** | 본 서비스 로그인 시 백엔드가 **YouthMeta 로스터 등록 여부(boolean)** 를 세션/공통 API에서 노출. 이벤트 페이지는 이 값을 read-only로 읽어 차단 화면(§7.3.1) 분기. 멤버십 동기화 지연으로 인한 false-negative는 CS 클레임 J(§10.1)로 처리 |
 | **API 도메인** | 본 서비스와 동일 백엔드 API 호출 (CORS 설정 필요 — 본 서비스 개발팀 협의) |
-| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 / **로그인·가입 페이지(모바일 PWA용 / PC 웹용 각각)** / **YouthMeta 가입 페이지(외부)** deeplink/외부 URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`, `NEXT_PUBLIC_LOGIN_URL_MOBILE`, `NEXT_PUBLIC_LOGIN_URL_PC`, `NEXT_PUBLIC_YOUTHMETA_JOIN_URL`) |
+| **Deeplink 스킴** | 본 서비스 거래 화면 / KYC 화면 / **로그인·가입 페이지(모바일 PWA용 / PC 웹용 각각)** deeplink/외부 URL은 본 서비스 개발팀과 협의 후 환경 설정에 주입 (예: `NEXT_PUBLIC_TRADE_URL`, `NEXT_PUBLIC_LOGIN_URL_MOBILE`, `NEXT_PUBLIC_LOGIN_URL_PC`) |
 | **Return URL** | 본 서비스 가입/OAuth 완료 후 이벤트 페이지로 자동 복귀 → 로그인 상태로 이벤트 허브 콘텐츠 자동 렌더링 (구체 URL은 본 서비스 개발팀 협의) |
 | **세션 동기화** | 본 서비스에서 KYC/거래 완료 시 이벤트 페이지 자동 갱신 (실시간 또는 새로고침) |
 | **반응형** | 모바일/PC 모두 대응 (이벤트 페이지 단일 코드베이스) |
@@ -737,7 +736,7 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 - [ ] **공통 API CORS 설정**
 - [ ] 이벤트 허브 화면 (로그인 시: 진척도 + 슬롯 + 보상)
 - [ ] **🆕 공개 랜딩 콘텐츠 (비로그인 시 동일 URL에서 자동 렌더링) — OG 태그, SEO, CampaignHero LIVE 슬롯 카운터, `Sign up / Log in to join` 단일 CTA, 흐림 프리뷰 (§7.2 참조)**
-- [ ] **🆕 YouthMeta 멤버십 게이팅** — 공개 랜딩에 자격 고지 라인(§7.2) + 비유스메타 로그인 유저 차단 화면(§7.3.1, `YouthMetaGate`) + 외부 가입 link-out(`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`)
+- [ ] **🆕 YouthMeta 멤버십 게이팅** — 공개 랜딩에 자격 고지 라인(§7.2) + 비유스메타 로그인 유저 차단 화면(§7.3.1, `YouthMetaGate`)
 - [ ] **🆕 i18n 구조 셋업 (`next-intl`)** — UI 텍스트는 **영어 단일** 운영(상태 라벨, 안내 메시지, CTA 포함). 한국어는 **설문 콘텐츠 한정**(`src/content/survey-ko.md`, 현재 11문항). 언어 전환 토글 미제공. locale 분리 구조는 유지하여 향후 한국어 UI 확장 대비
 - [ ] 설문 폼 + 응답 저장 (`src/content/survey-ko.md` 참조 — 문항 수는 mdx 원본에서 자동 계산)
 - [ ] 슬롯 카운터 (백엔드 5분 이내 최신화 — 클라이언트 폴링 방식은 §5.3 / §7.5 연동 협의)

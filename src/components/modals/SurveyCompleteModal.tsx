@@ -24,6 +24,12 @@ export function SurveyCompleteModal({
   const { state } = useMockState();
   const maskedUid = state.okxUid ? maskOkxUid(state.okxUid) : null;
   const totalQuestions = surveyKo.length;
+  // Match the ICX card framing — trader sees the confirmed 100 ICX amount,
+  // non-trader sees the generic "Bonus ICX" label since their share is still
+  // a pool calculation. Same gate as IcxRewardCard's headline branch.
+  const headline = state.isTrader
+    ? en.rewards.icxAmountWithValue(100)
+    : en.rewards.icxAmount;
 
   return (
     <Modal title={en.modal.survey.completeTitle} onClose={onClose} size="lg">
@@ -38,7 +44,7 @@ export function SurveyCompleteModal({
         <br />
         your time.
         <br />
-        <span className="accent-text">{en.rewards.icxAmountWithValue(100)}</span> incoming.
+        <span className="accent-text">{headline}</span> incoming.
       </h2>
       <p className="mt-md text-body-md text-text-secondary">
         {maskedUid

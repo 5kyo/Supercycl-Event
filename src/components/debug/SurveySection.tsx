@@ -22,7 +22,7 @@ export function SurveySection() {
             checked={state.isTrader}
             onChange={() => dispatch({ type: 'TOGGLE_IS_TRADER' })}
           />
-          Is trader
+          Is trader ($500+ volume)
         </label>
       </div>
     </section>

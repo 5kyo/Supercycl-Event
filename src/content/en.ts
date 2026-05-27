@@ -107,6 +107,7 @@ export const en = {
       submit: 'Submit',
       next: 'Next',
       previous: 'Back',
+      requiredHint: '응답을 선택 또는 입력해주세요',
       completeTitle: 'Thanks for completing the survey!',
       completeBody:
         'Your mini-report is below. ICX will be sent to your linked OKX UID within 7 business days.',

@@ -12,12 +12,11 @@ import { ViewportSection } from './ViewportSection';
 import { FlagsSection } from './FlagsSection';
 import { useMockState } from '@/lib/mock-state';
 import { clearState } from '@/lib/mock-state/persistence';
-import { initialState } from '@/lib/mock-state';
 import { useIsEmbedded } from '@/lib/useIsEmbedded';
 
 export function DebugDrawer() {
   const [open, setOpen] = useState(false);
-  const { state, dispatch } = useMockState();
+  const { dispatch } = useMockState();
   const embedded = useIsEmbedded();
 
   useEffect(() => {
@@ -30,20 +29,6 @@ export function DebugDrawer() {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
-
-  function exportState() {
-    navigator.clipboard.writeText(JSON.stringify(state, null, 2));
-  }
-  async function importState() {
-    const raw = window.prompt('Paste exported state JSON');
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw);
-      dispatch({ type: 'IMPORT_STATE', state: { ...initialState, ...parsed } });
-    } catch {
-      window.alert('Invalid JSON');
-    }
-  }
 
   // Inside the ViewportFrame iframe — the drawer stays in the parent only.
   if (embedded) return null;
@@ -102,20 +87,6 @@ export function DebugDrawer() {
               className="rounded-md bg-red/15 px-3 py-2 text-red ring-1 ring-red/40"
             >
               Reset all
-            </button>
-            <button
-              type="button"
-              onClick={exportState}
-              className="rounded-md px-3 py-2 ring-1 ring-white/15 hover:bg-white/5"
-            >
-              Export
-            </button>
-            <button
-              type="button"
-              onClick={importState}
-              className="rounded-md px-3 py-2 ring-1 ring-white/15 hover:bg-white/5"
-            >
-              Import
             </button>
           </div>
         </aside>

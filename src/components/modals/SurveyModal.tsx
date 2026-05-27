@@ -22,6 +22,10 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
   // typing stays clean and the input value isn't lost when "기타" is
   // toggled off and back on.
   const [freeTextAnswers, setFreeTextAnswers] = useState<Record<number, string>>({});
+  // Surfaces a hint under the current question only after the user has
+  // attempted to advance without answering. Resets on step change and on
+  // any user input (setAnswer clears it).
+  const [showRequiredHint, setShowRequiredHint] = useState(false);
 
   const q = surveyKo[step];
   const total = surveyKo.length;
@@ -31,9 +35,31 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
   function setAnswer(v: Answer) {
     if (!q) return;
     setAnswers((a) => ({ ...a, [q.id]: v }));
+    setShowRequiredHint(false);
+  }
+
+  function isAnswered(): boolean {
+    if (!q) return true;
+    const v = answers[q.id];
+    if (q.type === 'multi') return Array.isArray(v) && (v as string[]).length > 0;
+    if (q.type === 'single' || q.type === 'scale5') return v !== undefined && v !== null;
+    if (q.type === 'free') {
+      // Required free questions must have non-whitespace content; optional
+      // free questions can be skipped silently. Today only Q3 is required.
+      if ('required' in q && q.required === true) {
+        return ((v as string) ?? '').trim().length > 0;
+      }
+      return true;
+    }
+    return true;
   }
 
   function next() {
+    if (!isAnswered()) {
+      setShowRequiredHint(true);
+      return;
+    }
+    setShowRequiredHint(false);
     if (last) {
       dispatch({
         type: 'SET_SURVEY_COMPLETED',
@@ -45,20 +71,13 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
       onClose();
     } else {
       setStep((s) => s + 1);
+      // Defensive reset — setAnswer already clears on user input, but a
+      // fresh question starts without any stale hint.
+      setShowRequiredHint(false);
     }
   }
 
   if (!q) return null;
-
-  // Block Next when a required free-text answer is empty. Other types
-  // (single/multi/scale5) leave validation to product; here only free+required
-  // is enforced so the user doesn't skip mandatory questions.
-  const requiredFreeEmpty =
-    q.type === 'free' &&
-    'required' in q &&
-    q.required === true &&
-    (((answers[q.id] as string) ?? '').trim().length === 0);
-  const nextDisabled = requiredFreeEmpty;
 
   return (
     <Modal title={en.modal.survey.title} onClose={onClose} size="lg">
@@ -261,11 +280,25 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         </div>
       )}
 
+      {/* Required-answer hint — only renders after a failed Next attempt. */}
+      {showRequiredHint && (
+        <p
+          role="alert"
+          aria-live="polite"
+          className="mt-md text-body-sm font-medium text-amber"
+        >
+          ⚠ {en.modal.survey.requiredHint}
+        </p>
+      )}
+
       {/* Footer */}
-      <div className="mt-2xl flex gap-sm">
+      <div className="mt-lg flex gap-sm">
         <button
           type="button"
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
+          onClick={() => {
+            setShowRequiredHint(false);
+            setStep((s) => Math.max(0, s - 1));
+          }}
           disabled={step === 0}
           className="btn-secondary-sm"
           style={{ width: 60, padding: 0 }}
@@ -275,7 +308,6 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           onClick={next}
-          disabled={nextDisabled}
           className="btn-primary-sm flex-1"
         >
           {last ? en.modal.survey.submit : `${en.modal.survey.next} →`}

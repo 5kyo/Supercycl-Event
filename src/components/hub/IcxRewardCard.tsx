@@ -39,9 +39,15 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
   // generic "Bonus ICX" headline (TBD pool).
   const headlineAmount =
     payout.amount ?? (state.surveyCompleted ? null : 100);
+  // Pre-survey uses the "Up to N ICX" cap framing — non-trader pool share
+  // may end up smaller than 100 ICX, so we don't claim the full amount
+  // until the user actually qualifies. Post-survey, the trader path has a
+  // confirmed payout and shows the plain "N ICX" value.
   const amountText =
     headlineAmount !== null
-      ? en.rewards.icxAmountWithValue(headlineAmount)
+      ? state.surveyCompleted
+        ? en.rewards.icxAmountWithValue(headlineAmount)
+        : en.rewards.icxAmountUpTo(headlineAmount)
       : en.rewards.icxAmount;
   // Both trader and non-trader see the same "Survey complete — payout
   // scheduled" line once the survey is done. The amount distinction (fixed

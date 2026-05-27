@@ -51,17 +51,7 @@ export function CampaignHero() {
       style={{ fontSize: 12, lineHeight: 1.5, marginTop: 10 }}
     >
       <span aria-hidden style={{ marginRight: 4 }}>ⓘ</span>
-      {en.hero.youthMetaNotice} ·{' '}
-      <a
-        href={
-          process.env.NEXT_PUBLIC_YOUTHMETA_JOIN_URL || 'https://youthmeta.com'
-        }
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-accent underline-offset-2 hover:underline"
-      >
-        {en.hero.youthMetaLearnLink}
-      </a>
+      {en.hero.youthMetaNotice}
     </p>
   );
 

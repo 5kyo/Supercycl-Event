@@ -84,6 +84,15 @@ describe('IcxRewardCard — survey CTA visibility', () => {
     expect(screen.queryByRole('link', { name: /Trade ICX on OKX/i })).not.toBeInTheDocument();
   });
 
+  it('frames pre-survey headline as "Up to 100 ICX" so non-traders see a cap, not a guarantee', () => {
+    mockUseStateWith({
+      authStatus: 'logged_in',
+      surveyCompleted: false,
+    });
+    render(<IcxRewardCard onStartSurvey={noop} />);
+    expect(screen.getByText(/Up to 100 ICX \(~\$5 airdrop\)/)).toBeInTheDocument();
+  });
+
   it('annotates the trader amount with ~$5 airdrop but leaves Bonus ICX untouched', () => {
     mockUseStateWith({
       authStatus: 'logged_in',
@@ -92,6 +101,8 @@ describe('IcxRewardCard — survey CTA visibility', () => {
     });
     const { unmount } = render(<IcxRewardCard onStartSurvey={noop} />);
     expect(screen.getByText(/100 ICX \(~\$5 airdrop\)/)).toBeInTheDocument();
+    // Post-survey trader sees the confirmed amount without the "Up to" cap.
+    expect(screen.queryByText(/Up to 100 ICX/)).not.toBeInTheDocument();
     unmount();
     vi.restoreAllMocks();
 
