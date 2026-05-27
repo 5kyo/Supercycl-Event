@@ -2,7 +2,10 @@ import { en } from '@/content/en';
 import type { BannerType } from '@/lib/mock-state/selectors';
 import { CAMPAIGN_START, CAMPAIGN_END } from '@/lib/mock-state';
 
-type Props = { variant: BannerType };
+// `daysLeft` is only consumed by the d-3 variant; defaults to 3 so callers
+// that already pass a known d-3 trigger without needing the actual remaining
+// count (e.g. test fixtures) keep rendering the same "3 days..." string.
+type Props = { variant: BannerType; daysLeft?: number };
 
 /* Keeps legacy palette names (mono-green/amber/orange/red/blue) so existing
  * TopBanner.test.tsx assertions continue to pass; alpha syntax now works
@@ -15,17 +18,17 @@ const colorByVariant: Record<NonNullable<BannerType>, string> = {
   'd-3':              'bg-blue/15 text-blue border-blue/40',
 };
 
-function textFor(variant: NonNullable<BannerType>): string {
+function textFor(variant: NonNullable<BannerType>, daysLeft: number): string {
   switch (variant) {
     case 'campaign-running': return en.banner.campaignRunning(CAMPAIGN_START, CAMPAIGN_END);
     case 'slots-100':        return en.banner.slots100;
     case 'slots-50':         return en.banner.slots50;
     case 'slots-10':         return en.banner.slots10;
-    case 'd-3':              return en.banner.d3;
+    case 'd-3':              return en.banner.d3(daysLeft);
   }
 }
 
-export function TopBanner({ variant }: Props) {
+export function TopBanner({ variant, daysLeft = 3 }: Props) {
   if (!variant) return null;
   return (
     <div
@@ -33,7 +36,7 @@ export function TopBanner({ variant }: Props) {
       role="region"
       aria-live="polite"
     >
-      <div className="mx-auto max-w-6xl">{textFor(variant)}</div>
+      <div className="mx-auto max-w-6xl">{textFor(variant, daysLeft)}</div>
     </div>
   );
 }

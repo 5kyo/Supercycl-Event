@@ -88,7 +88,12 @@ export const en = {
     slots100: '100 slots left! Start trading now',
     slots50: '50 slots left! Don’t miss out',
     slots10: '10 slots left! Final call',
-    d3: '3 days until the campaign ends',
+    d3: (daysLeft: number) =>
+      daysLeft <= 0
+        ? 'Final day — campaign ends today'
+        : daysLeft === 1
+          ? '1 day until the campaign ends'
+          : `${daysLeft} days until the campaign ends`,
   },
   modal: {
     survey: {

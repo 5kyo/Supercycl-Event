@@ -52,12 +52,8 @@
   }
 }
 
-/* Tension state colors for slot counter — 4 distinct stages.
- * Kept as utility classes for backwards compatibility with LiveSlotCounter;
- * the new SlotTension component reads the same stages via inline color. */
-.event-tension-100 { color: #FFA726; }                                /* amber */
-.event-tension-50  { color: #FF7A2A; animation: event-pulse 2.4s ease-in-out infinite; }  /* hot orange + subtle pulse */
-.event-tension-10  { color: var(--sell); animation: event-pulse 1.2s ease-in-out infinite; } /* red + strong pulse */
+/* Pulse keyframe — referenced inline by SlotTension (and other components
+ * that opt into the festival rhythm via `animation: event-pulse ...`). */
 @keyframes event-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.6; }
