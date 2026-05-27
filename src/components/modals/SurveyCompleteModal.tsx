@@ -3,7 +3,7 @@
 import { Modal } from './Modal';
 import { en } from '@/content/en';
 import { surveyKo } from '@/content/survey-ko';
-import { useMockState, maskOkxUid } from '@/lib/mock-state';
+import { useMockState } from '@/lib/mock-state';
 
 /**
  * Survey complete — confirmation only.
@@ -22,7 +22,7 @@ export function SurveyCompleteModal({
   answeredCount = surveyKo.length,
 }: Props) {
   const { state } = useMockState();
-  const maskedUid = state.okxUid ? maskOkxUid(state.okxUid) : null;
+  const uid = state.okxUid;
   const totalQuestions = surveyKo.length;
   // Match the ICX card framing — trader sees the confirmed 100 ICX amount,
   // non-trader sees the generic "Bonus ICX" label since their share is still
@@ -47,8 +47,8 @@ export function SurveyCompleteModal({
         <span className="accent-text">{headline}</span> incoming.
       </h2>
       <p className="mt-md text-body-md text-text-secondary">
-        {maskedUid
-          ? `We'll send it to your linked OKX UID (${maskedUid}) via Internal Transfer within 7 business days.`
+        {uid
+          ? `We'll send it to your linked OKX UID (${uid}) via Internal Transfer within 7 business days.`
           : "We'll send it to your linked OKX UID via Internal Transfer within 7 business days."}
       </p>
 

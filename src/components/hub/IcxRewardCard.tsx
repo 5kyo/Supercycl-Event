@@ -5,7 +5,6 @@ import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import {
   useMockState,
   effectiveIcxPayout,
-  maskOkxUid,
   surveyTrackOpen,
   SURVEY_TRACK_START,
 } from '@/lib/mock-state';
@@ -58,12 +57,14 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
     ? en.rewards.icxConditionReady
     : en.rewards.icxCondition;
 
+  // Show the OKX UID once the user clears NOT_REACHED — AWAITING_PAYOUT and
+  // PAID both surface the destination so the user can verify where the funds
+  // are/were sent. UID is shown unmasked (see UsdtRewardCard for rationale).
   const showPayoutChannel =
     !loggedOut &&
     state.okxUid !== null &&
     effectiveStatus !== 'NOT_REACHED' &&
-    effectiveStatus !== 'open' &&
-    state.icxPayoutStatus !== 'PAID';
+    effectiveStatus !== 'open';
 
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
@@ -121,11 +122,8 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
       )}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
-          {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}
+          {en.rewards.payoutChannel(state.okxUid)}
         </p>
-      )}
-      {state.icxPayoutStatus === 'PAID' && state.icxTxHash && (
-        <p className="text-body-sm text-text-tertiary">TX: {state.icxTxHash.slice(0, 10)}…</p>
       )}
       {showSurveyCta && (
         <button type="button" onClick={onStartSurvey} className="btn-primary-sm mt-auto self-start">

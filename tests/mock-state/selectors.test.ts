@@ -9,7 +9,6 @@ import {
   effectiveIcxPayout,
   tradeRewardClosed,
   maskOkxUid,
-  hubVariant,
   slotTension,
   volumeReachedNoOkx,
   nextWeeklyPayoutDate,
@@ -88,16 +87,6 @@ describe('selectors', () => {
   it('effectiveIcxPayout: 100 for trader, null for non-trader (Open Issue F-5)', () => {
     expect(effectiveIcxPayout({ ...initialState, isTrader: true, surveyCompleted: true }).amount).toBe(100);
     expect(effectiveIcxPayout({ ...initialState, isTrader: false, surveyCompleted: true }).amount).toBe(null);
-  });
-
-  it('hubVariant collapses to completed only when both rewards are PAID', () => {
-    expect(hubVariant(initialState)).toBe('default');
-    expect(
-      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'PAID' }),
-    ).toBe('completed');
-    expect(
-      hubVariant({ ...initialState, usdtPayoutStatus: 'PAID', icxPayoutStatus: 'AWAITING_PAYOUT' }),
-    ).toBe('default');
   });
 
   it('nextWeeklyPayoutDate returns the next Monday (today if already Monday)', () => {

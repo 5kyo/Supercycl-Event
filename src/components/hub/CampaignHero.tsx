@@ -155,9 +155,14 @@ export function CampaignHero() {
           </div>
         </div>
 
-        {/* Desktop right column — LIVE badge + "N days left" above either Sign
-            in or progress chip. The pulse on the dot signals "currently running"
-            so the days remaining no longer reads as "until the event starts". */}
+        {/* Desktop right column — LIVE badge + "N days left" above either
+            the YouthMeta eligibility notice (logged-out) or the progress chip
+            (logged-in). The pulse on the dot signals "currently running" so
+            the days remaining no longer reads as "until the event starts".
+            Note: no Sign-in CTA on PC by product decision — desktop users
+            sign in via the main service (Supercycl PC) flow, not from the
+            event page. Mobile keeps the inline Sign-in button (§7.5
+            device-specific login redirect). */}
         <div className="hidden shrink-0 lg:flex lg:flex-col lg:items-end lg:gap-1.5">
           <span
             className="inline-flex items-center gap-1.5 font-mono uppercase text-accent"
@@ -180,24 +185,7 @@ export function CampaignHero() {
             {days} {days === 1 ? 'day' : 'days'} left
           </span>
           {loggedOut ? (
-            <>
-              <button
-                type="button"
-                onClick={signIn}
-                className="btn-primary"
-                style={{
-                  height: 48,
-                  padding: '0 22px',
-                  fontSize: 15,
-                  boxShadow:
-                    '0 8px 28px rgba(0,230,118,0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px rgba(0,230,118,0.22)',
-                  animation: 'event-pulse 2.4s ease-in-out infinite',
-                }}
-              >
-                Sign in
-              </button>
-              <div className="text-right">{youthMetaNotice}</div>
-            </>
+            <div className="text-right">{youthMetaNotice}</div>
           ) : (
             progressChip
           )}

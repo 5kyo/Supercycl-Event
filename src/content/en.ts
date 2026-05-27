@@ -50,8 +50,8 @@ export const en = {
     icxConditionReady: 'Survey complete — payout scheduled',
     icxTradeUrl: 'https://www.okx.com/trade-spot/icx-usdt',
     icxTradeLinkLabel: 'Trade ICX on OKX',
-    payoutChannel: (maskedUid: string) =>
-      `OKX UID: ${maskedUid} · payout via Internal Transfer`,
+    payoutChannel: (uid: string) =>
+      `OKX UID: ${uid} · payout via Internal Transfer`,
     icxPayoutInfo: {
       traderTier: 'Trade $500+ → earn 100 ICX each',
       nonTraderTier: 'Otherwise → share of the remaining pool',

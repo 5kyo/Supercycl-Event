@@ -6,7 +6,6 @@ import { SlotTension } from '@/components/shared/SlotTension';
 import {
   useMockState,
   isQualifiedForUsdt,
-  maskOkxUid,
   tradeRewardClosed,
   volumeReachedNoOkx,
   nextWeeklyPayoutDate,
@@ -46,12 +45,15 @@ export function UsdtRewardCard() {
           ? en.rewards.usdtConditionRemaining(Math.max(0, 500 - state.tradingVolume))
           : en.rewards.usdtCondition;
 
+  // Show the OKX UID once the user clears NOT_REACHED — AWAITING_PAYOUT and
+  // PAID both surface the destination so the user can verify where the funds
+  // are/were sent. UID is shown unmasked: it's a public OKX identifier the
+  // user knows and needs to read in full to cross-check with their OKX app.
   const showPayoutChannel =
     !closed &&
     !loggedOut &&
     state.okxUid !== null &&
-    effectiveStatus !== 'NOT_REACHED' &&
-    state.usdtPayoutStatus !== 'PAID';
+    effectiveStatus !== 'NOT_REACHED';
 
   return (
     <article className="card-elevated flex flex-col gap-md" style={{ padding: '20px' }}>
@@ -131,11 +133,8 @@ export function UsdtRewardCard() {
       )}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
-          {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}
+          {en.rewards.payoutChannel(state.okxUid)}
         </p>
-      )}
-      {state.usdtPayoutStatus === 'PAID' && state.usdtTxHash && (
-        <p className="text-body-sm text-text-tertiary">TX: {state.usdtTxHash.slice(0, 10)}…</p>
       )}
     </article>
   );

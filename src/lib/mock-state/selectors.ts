@@ -66,16 +66,6 @@ export function eventEnded(s: MockState): boolean {
   return s.simulatedDate > CAMPAIGN_END;
 }
 
-export type HubVariant = 'default' | 'completed';
-
-/** Pick which Hub layout to render based on user/event state. */
-export function hubVariant(s: MockState): HubVariant {
-  if (s.usdtPayoutStatus === 'PAID' && s.icxPayoutStatus === 'PAID') {
-    return 'completed';
-  }
-  return 'default';
-}
-
 export function bannerType(s: MockState): BannerType {
   if (!inCampaignWindow(s)) return null;
   // Slots exhausted: the trade reward is no longer reachable. The reward card

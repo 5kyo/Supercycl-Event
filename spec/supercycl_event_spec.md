@@ -307,7 +307,7 @@
 거래 자격($500 도달) 충족 시 **별도 수령 정보 입력 단계 없이** 시스템이 이미 알고 있는 OKX UID로 운영자가 OKX Internal Transfer를 실행합니다.
 
 - 참여 자격이 **OKX 연동 완료**(STEP 1)이므로 OAuth 완료 시점에 OKX UID가 시스템에 저장되어 있습니다.
-- 이벤트 페이지에는 유저가 직접 주소를 입력하는 모달/폼이 존재하지 않습니다 (보상 영역은 read-only 상태 표시 + 연동된 마스킹 UID 표시).
+- 이벤트 페이지에는 유저가 직접 주소를 입력하는 모달/폼이 존재하지 않습니다 (보상 영역은 read-only 상태 표시 + 연동된 OKX UID 원문 표시 — 자가 확인을 우선해 마스킹 없이 그대로 노출).
 - 운영자는 자격 충족자 리스트를 받아 각 유저의 연동 OKX UID로 Internal Transfer 실행 → "지급 완료" 마킹.
 - 약관 동의는 **본 서비스 가입 시점**의 가입 약관·개인정보 처리방침으로 갈음합니다 (별도 이벤트 약관 없음).
 
@@ -383,6 +383,7 @@
 - 공유 가능한 URL — OG 태그 적용
 - SEO 최적화 (검색 노출 허용)
 - CTA는 `Sign up / Log in to join` 단일 — 클릭 시 **이벤트 페이지 내부에서 로그인하지 않고, 본 서비스 가입/로그인 페이지로 redirect**. 디바이스 판별에 따라 **모바일은 Supercycl Mobile PWA 로그인 페이지**, **PC는 Supercycl PC 로그인 페이지**로 분기 (각 본 서비스 버전의 자체 로그인 UI 사용) → 완료 후 동일 이벤트 URL로 복귀 (로그인 콘텐츠 자동 렌더링)
+- **PC 뷰포트의 Hero 내부 Sign-in 버튼은 노출하지 않음** (`lg:` breakpoint 이상): PC 사용자는 본 서비스(Supercycl PC)에서 로그인 후 이벤트 페이지로 복귀하는 동선이 일반적이므로 Hero에 별도 진입 버튼을 두지 않습니다. 모바일에서는 인라인 `Sign in` 버튼을 유지해 PWA 로그인으로 자연스럽게 연결합니다. (`src/components/hub/CampaignHero.tsx`)
 - **자격 고지** — Hero의 Sign in CTA 바로 아래에 `ⓘ Open to YouthMeta members only` 라인을 inline subtle 텍스트로 노출. 메인 CTA 강조 약화 방지를 위해 카드/박스가 아닌 한 줄 텍스트. 비유스메타 유저의 무의미한 로그인 round-trip을 미리 줄임
 - `HubHeader / SlotTension / MyProgressMeter / HubCtaBar` 등 로그인 전용 요소는 비로그인 화면에서 미노출 (코드 주석: "redundant or empty pre-auth")
 
@@ -427,7 +428,7 @@
 │                                       │
 │  20 USDT — 거래 $500 달성 시          │
 │   상태: 자격 충족 · AWAITING_PAYOUT    │
-│   OKX UID: 12******78 (자동 송금 예정)│
+│   OKX UID: 1234567890 (자동 송금 예정) │
 │                                       │
 │  ICX 보상 — 설문 완료 시                │
 │   100 ICX (~$5 airdrop)                │
@@ -438,7 +439,7 @@
 │   [Trade ICX on OKX ↗] (외부 link-out: │
 │    okx.com/trade-spot/icx-usdt)         │
 │   상태: AWAITING_PAYOUT                │
-│   OKX UID: 12******78 (자동 송금 예정)│
+│   OKX UID: 1234567890 (자동 송금 예정) │
 ├──────────────────────────────────────┤
 │  [거래하러 가기 →]   [설문 시작]       │
 │   (본 서비스로 이동)                    │
@@ -473,10 +474,10 @@
 | Enum 키 (§8.2) | 칩 라벨 (§8.2 정합 기준) | USDT 카드 본문 | ICX 카드 본문 |
 |------|------|------|------|
 | `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the 12-question survey` (`en.rewards.icxCondition`). 헤드라인은 pre-survey 거래자 디폴트로 `100 ICX (~$5 airdrop)` 노출 (§3 가치 프레이밍, §4.2). 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
-| `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 12****78 · payout via Internal Transfer` | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 12****78 · payout via Internal Transfer` |
-| `PAID` | `Paid` (`en.status.completed`) | 별도 라인: `TX: <앞 10자>…` (TX 해시 존재 시) — 완료일자는 별도 표시하지 않음 | 별도 라인: `TX: <앞 10자>…` (동일) |
+| `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) |
+| `PAID` | `Paid` (`en.status.completed`) | `OKX UID: 1234567890 · payout via Internal Transfer` (AWAITING_PAYOUT과 동일 — 송금된 목적지를 그대로 노출해 자가 확인 우선) | 동일 — `OKX UID: 1234567890 · payout via Internal Transfer` |
 
-> 📌 `PAID` 표기: 칩은 **`Paid` 단일 문구**입니다. 운영 SOP에서 자주 언급되는 "YYYY-MM-DD · TX 해시"는 칩이 아니라 **카드 내부 별도 라인**으로 TX 해시만 렌더하며, 완료일자는 현재 UI에 노출하지 않습니다 (운영자 도구에서만 보유).
+> 📌 `PAID` 표기: 칩은 **`Paid` 단일 문구**이며, 카드 본문은 **AWAITING_PAYOUT과 동일하게 OKX UID 라인을 그대로 유지**합니다 (이전에 노출했던 `TX: <앞 10자>…` 라인은 제거 — 유저는 자기 OKX 계정에서 직접 입금 내역을 확인하므로 TX 해시를 별도로 노출할 필요 없음). TX 해시는 운영자 도구에서만 보유.
 
 > UX 라벨은 동일 enum 값을 유저에게 친숙하게 풀어쓴 영문 표현입니다. 운영자/개발자는 enum 키(`NOT_REACHED / AWAITING_PAYOUT / PAID`)로 통일해서 소통합니다.
 
@@ -590,9 +591,9 @@
 |---|---|---|---|
 | `NOT_REACHED` | 자격 미충족 (거래 진행 중 / 설문 미응답) | "Locked" | "Locked" |
 | `AWAITING_PAYOUT` | 자격 충족, **운영자 송금 대기** (유저 입력 단계 없음 — 연동된 OKX UID로 자동 송금 예정). Pending/review/cap-full 등 중간 상태가 있어도 유저 표면에서는 모두 `AWAITING_PAYOUT`으로 통합 노출 (운영 내부 상태는 운영자 도구에서만 트래킹) | "Awaiting payout" | "Awaiting payout" |
-| `PAID` | 송금 완료 (완료일자 표시, TX 해시 있으면 링크) | "Paid" | "Paid" |
+| `PAID` | 송금 완료 (카드 본문은 AWAITING_PAYOUT과 동일하게 `OKX UID …` 라인을 유지 — 유저는 OKX 계정에서 입금 내역을 직접 확인). TX 해시는 운영자 도구에서만 보유. | "Paid" | "Paid" |
 
-> 📌 **유저 액션**: 보상 영역은 read-only 상태 표시입니다. 등록/클레임 버튼은 존재하지 않으며, 연동된 OKX UID(마스킹 처리)와 현재 상태 라벨만 노출합니다.
+> 📌 **유저 액션**: 보상 영역은 read-only 상태 표시입니다. 등록/클레임 버튼은 존재하지 않으며, 연동된 OKX UID(원문 — 마스킹 없음)와 현재 상태 라벨만 노출합니다.
 
 ---
 

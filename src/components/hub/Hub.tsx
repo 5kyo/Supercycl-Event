@@ -7,14 +7,12 @@ import { MyProgressMeter } from './MyProgressMeter';
 import { UsdtRewardCard } from './UsdtRewardCard';
 import { IcxRewardCard } from './IcxRewardCard';
 import { HubCtaBar } from './HubCtaBar';
-import { HubCompleted } from './HubCompleted';
 import { CampaignHero } from './CampaignHero';
 import { YouthMetaGate } from './YouthMetaGate';
 import { SurveyModal } from '@/components/modals/SurveyModal';
 import { SurveyCompleteModal } from '@/components/modals/SurveyCompleteModal';
 import {
   useMockState,
-  hubVariant,
   FrozenStateScope,
   isBlockedNonYouthMeta,
 } from '@/lib/mock-state';
@@ -25,9 +23,6 @@ export function Hub() {
   const { state, dispatch } = useMockState();
   const [open, setOpen] = useState<Open>(null);
   const loggedOut = state.authStatus === 'logged_out';
-  // logged-out users always see the default Hub body (as a dimmed preview),
-  // regardless of any progress flags toggled via the debug drawer.
-  const variant = loggedOut ? 'default' : hubVariant(state);
 
   useEffect(() => {
     if (
@@ -53,15 +48,6 @@ export function Hub() {
       )}
     </>
   );
-
-  if (variant === 'completed') {
-    return (
-      <main className="pb-2xl">
-        <HubCompleted />
-        {modals}
-      </main>
-    );
-  }
 
   // Default: trade-track active, building progress toward $500.
   // CampaignHero carries the LIVE strip; slot status lives inside
