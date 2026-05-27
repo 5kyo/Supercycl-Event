@@ -129,16 +129,6 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           </ul>
         </div>
       )}
-      {!loggedOut && (
-        <a
-          href={en.rewards.icxTradeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-body-sm text-accent underline-offset-2 hover:underline"
-        >
-          {en.rewards.icxTradeLinkLabel} ↗
-        </a>
-      )}
       {!loggedOut && (() => {
         const icxRemaining = Math.max(0, ICX_POOL_TOTAL - state.icxConsumed);
         return (
@@ -163,6 +153,16 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           <span aria-hidden style={{ marginRight: 4 }}>→</span>
           {en.rewards.paidNotice}
         </p>
+      )}
+      {!loggedOut && (
+        <a
+          href={en.rewards.icxTradeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-body-sm text-accent underline-offset-2 hover:underline"
+        >
+          {en.rewards.icxTradeLinkLabel} ↗
+        </a>
       )}
       {showSurveyCta && (
         <button type="button" onClick={onStartSurvey} className="btn-primary-sm mt-auto self-start">
