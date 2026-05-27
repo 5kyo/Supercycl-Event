@@ -17,6 +17,7 @@
 - question: Supercycl을 쓰면서 가장 좋았던 점
 - options:
   - 속도/반응성
+  - UI/UX (조작 편의성)
   - 시그널 알림(매수/매도 시그널)
   - 시그널 알림(역방향 경고 시그널)
   - 원탭 주문 / 간편 매매
@@ -38,7 +39,8 @@
 ## Q3
 - area: UX
 - type: free
-- question: 추가되었으면 하는 기능 TOP 1 (선택)
+- required: true
+- question: 추가되었으면 하는 기능
 
 ## Q4
 - area: 자동매매
@@ -48,12 +50,15 @@
 ## Q5
 - area: 거래소
 - type: multi
-- question: 현재 가장 많이 쓰는 거래소 3곳
+- question: 현재 쓰고 있는 거래소
 - options:
   - Bybit
   - OKX
   - Bitget
   - Binance
+  - BingX
+  - Gate
+  - Hyperliquid
   - 기타
 
 ## Q6
@@ -70,17 +75,16 @@
 ## Q7
 - area: 2x 레버리지
 - type: scale5
-- question: 2x 제한이 Supercycl 사용에 영향을 미치나요 (1~5)
+- question: Supercycl의 2x 레버리지 제한이 리스크 관리에 도움이 되나요
 
 ## Q8
 - area: 2x 레버리지
 - type: multi
-- question: 2x 제한 있어도 쓸 의향이 있다면 그 이유
+- question: Supercycl의 2x 제한에 대한 본인의 입장
 - options:
   - 리스크 관리에 적합
   - 시그널 품질
-  - 수수료
-  - 리워드
+  - 2x 제한 때문에 이용 안 함
   - 기타
 
 ## Q9
@@ -97,13 +101,13 @@
 ## Q10
 - area: 프로필
 - type: single
-- question: 월평균 크립토 거래 금액대 (익명 보장)
+- question: 월평균 크립토 거래 금액대
 - options:
-  - ~ $1k
-  - $1k – $10k
-  - $10k – $50k
-  - $50k – $200k
-  - $200k+
+  - $1,000 미만
+  - $1,000 – $10,000
+  - $10,000 – $50,000
+  - $50,000 – $200,000
+  - $200,000 이상
 
 ## Q11
 - area: 시그널 개인화

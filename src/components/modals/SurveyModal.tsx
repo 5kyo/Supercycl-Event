@@ -50,6 +50,16 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
 
   if (!q) return null;
 
+  // Block Next when a required free-text answer is empty. Other types
+  // (single/multi/scale5) leave validation to product; here only free+required
+  // is enforced so the user doesn't skip mandatory questions.
+  const requiredFreeEmpty =
+    q.type === 'free' &&
+    'required' in q &&
+    q.required === true &&
+    (((answers[q.id] as string) ?? '').trim().length === 0);
+  const nextDisabled = requiredFreeEmpty;
+
   return (
     <Modal title={en.modal.survey.title} onClose={onClose} size="lg">
       {/* Segmented progress bar — one rectangle per question */}
@@ -225,21 +235,29 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
       )}
 
       {q.type === 'scale5' && (
-        <div className="mt-lg flex justify-between gap-sm">
-          {[1, 2, 3, 4, 5].map((n) => {
-            const selected = answers[q.id] === n;
-            return (
-              <button
-                key={n}
-                type="button"
-                onClick={() => setAnswer(n)}
-                className={selected ? 'btn-primary-sm flex-1' : 'btn-secondary-sm flex-1'}
-                style={{ minWidth: 0 }}
-              >
-                {n}
-              </button>
-            );
-          })}
+        <div className="mt-lg flex flex-col gap-xs">
+          <div className="flex justify-between gap-sm">
+            {[1, 2, 3, 4, 5].map((n) => {
+              const selected = answers[q.id] === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setAnswer(n)}
+                  className={selected ? 'btn-primary-sm flex-1' : 'btn-secondary-sm flex-1'}
+                  style={{ minWidth: 0 }}
+                >
+                  {n}
+                </button>
+              );
+            })}
+          </div>
+          {/* Polar labels — make the 1/5 semantic explicit (the bare numbers
+              alone don't communicate which end is "high"). */}
+          <div className="flex justify-between px-1 text-body-sm text-text-tertiary">
+            <span>1 — 아니오</span>
+            <span>5 — 예</span>
+          </div>
         </div>
       )}
 
@@ -254,7 +272,12 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         >
           ←
         </button>
-        <button type="button" onClick={next} className="btn-primary-sm flex-1">
+        <button
+          type="button"
+          onClick={next}
+          disabled={nextDisabled}
+          className="btn-primary-sm flex-1"
+        >
           {last ? en.modal.survey.submit : `${en.modal.survey.next} →`}
         </button>
       </div>
