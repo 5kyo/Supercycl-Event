@@ -7,8 +7,7 @@ const JUMPS: { label: string; date: string }[] = [
   { label: 'End-trade',     date: '2026-06-28' },
   { label: 'Start-survey',  date: '2026-06-29' },
   { label: 'D-3',           date: '2026-07-04' },
-  { label: 'End',           date: '2026-07-07' },
-  { label: '14d-cutoff',    date: '2026-07-22' },
+  { label: 'Final Day',     date: '2026-07-07' },
 ];
 
 export function TimeSection() {

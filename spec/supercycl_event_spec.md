@@ -116,10 +116,14 @@
 | **비거래자** (캠페인 기간 중 거래 0회) | **추후 확정** ⏳ | 30,000 ICX (인원 미정) |
 
 - 거래자의 인당 지급량과 풀 크기는 §4.2와 정합
-- 비거래자의 인당 지급량은 운영팀 의사결정 후 확정 (§12 Open Issues 참조)
+- 비거래자의 인당 지급량은 운영팀 의사결정 후 확정 (§12 Open Issues 참조). UI 측은 `state.nonTraderIcxAmount` 를 단일 입력점으로 둠 — 값이 `null` 인 동안엔 헤드라인이 `?? ICX` placeholder (`en.rewards.icxAmountPending`) 로 노출되고, 운영이 숫자를 주입하면 자동으로 `N ICX` 헤드라인으로 전환됩니다 (관련 셀렉터: `effectiveIcxPayout`, `src/lib/mock-state/selectors.ts`).
 - "거래자" 정의 = **캠페인 기간 내 Supercycl 통해 1회 이상 체결한 유저** (자전거래 제외)
-- **유저 노출 문구**: 거래자 100 ICX는 이벤트 페이지에서 `100 ICX (~$5 airdrop)`로 함께 노출합니다 (참조 시세 약 $0.05/ICX 기준 — 시세 변동 시 코드의 `en.rewards.icxAmountWithValue` 한 곳에서 조정. 100이 아닌 금액으로 바뀌면 `(~$5 airdrop)` 주석은 자동 미부착). 사용자 학습 동선 확보를 위해 IcxRewardCard 하단에 `Trade ICX on OKX ↗` 외부 link-out(`https://www.okx.com/trade-spot/icx-usdt`, `target="_blank" rel="noopener noreferrer"`)도 함께 노출. 비거래자(⏳) 케이스는 USD 환산 문구 미부착.
-- **Pre-survey 거래자 디폴트 헤드라인**: 설문 완료 전(`!state.surveyCompleted`)에는 `effectiveIcxPayout`이 `null`을 반환하지만, IcxRewardCard는 가치 프레이밍 가시성 확보를 위해 **거래자 디폴트(100 ICX)로 헤드라인을 낙관적 렌더**(`headlineAmount = payout.amount ?? (surveyCompleted ? null : 100)`, `IcxRewardCard.tsx`)합니다. 설문 완료 후에는 실제 `payout.amount`가 우선되어 비거래자 케이스는 `Bonus ICX` 헤드라인(`en.rewards.icxAmount`)으로 회귀합니다. 즉, "사전: 모두에게 100 ICX (~$5) 노출 / 사후: 거래자만 100 ICX, 비거래자는 Bonus ICX(TBD)".
+- **유저 노출 문구**: 거래자 100 ICX는 이벤트 페이지에서 `100 ICX (~$5 airdrop)`로 함께 노출합니다 (참조 시세 약 $0.05/ICX 기준 — 시세 변동 시 코드의 `en.rewards.icxAmountWithValue` 한 곳에서 조정. 100이 아닌 금액으로 바뀌면 `(~$5 airdrop)` 주석은 자동 미부착). 사용자 학습 동선 확보를 위해 IcxRewardCard 하단에 `Trade ICX on OKX ↗` 외부 link-out(`https://www.okx.com/trade-spot/icx-usdt`, `target="_blank" rel="noopener noreferrer"`)도 함께 노출. 비거래자 케이스도 헤드라인은 동일한 `N ICX` (또는 `?? ICX` placeholder) 형태로 유지 — 기존 `Bonus ICX` 문구는 더 이상 사용하지 않습니다.
+- **헤드라인 분기** (`IcxRewardCard.tsx`):
+  1. **Pre-survey** — 거래자 디폴트로 `Up to 100 ICX (~$5 airdrop)` 노출 (`icxAmountUpTo`). 비거래자 풀 share가 100보다 작을 수 있어 cap 의미의 "Up to" 사용
+  2. **Post-survey + 거래자** — `100 ICX (~$5 airdrop)` (`icxAmountWithValue(100)`)
+  3. **Post-survey + 비거래자, `nonTraderIcxAmount !== null`** — `N ICX` (`icxAmountWithValue(N)`)
+  4. **Post-survey + 비거래자, `nonTraderIcxAmount === null`** — `?? ICX` placeholder (`icxAmountPending`)
 
 ### 거래 보상 — 총 10,000 USDT
 - 500명 × 20 USDT
@@ -473,7 +477,7 @@
 
 | Enum 키 (§8.2) | 칩 라벨 (§8.2 정합 기준) | USDT 카드 본문 | ICX 카드 본문 |
 |------|------|------|------|
-| `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the 12-question survey` (`en.rewards.icxCondition`). 헤드라인은 pre-survey 거래자 디폴트로 `100 ICX (~$5 airdrop)` 노출 (§3 가치 프레이밍, §4.2). 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
+| `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the survey` (`en.rewards.icxCondition`). 헤드라인 분기는 §3 4가지 케이스 참조: pre-survey → `Up to 100 ICX (~$5 airdrop)`, post-survey 거래자 → `100 ICX (~$5 airdrop)`, post-survey 비거래자(amount 확정) → `N ICX`, post-survey 비거래자(amount TBD) → `?? ICX` placeholder. 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
 | `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) |
 | `PAID` | `Paid` (`en.status.completed`) | `OKX UID: 1234567890 · payout via Internal Transfer` (AWAITING_PAYOUT과 동일 — 송금된 목적지를 그대로 노출해 자가 확인 우선) | 동일 — `OKX UID: 1234567890 · payout via Internal Transfer` |
 
@@ -715,10 +719,10 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 | 2 | YouthMeta 커뮤니티 채널 존재 여부 | 디스코드/텔레그램 부재 시 Tier 2 전략 조정 |
 | 3 | 슬롯 조기 소진 시 확장 결정자 | +200슬롯 확장 권한 결정자 지정 |
 | 4 | ICX/USDT OKX Internal Transfer 운영 책임자 지정 | 자격 충족자 리스트 확인 + OKX Internal Transfer 실행 담당자, 권한 분리 여부 |
-| **5** | **비거래자 ICX 인당 지급량 확정** | **§3 풀 분리 정책 — 30,000 ICX를 몇 명에게 인당 얼마씩 지급할지 (예: 600명 × 50 ICX, 또는 300명 × 100 ICX 등) 확정 필요** |
+| **5** | **비거래자 ICX 인당 지급량 확정** | **§3 풀 분리 정책 — 30,000 ICX를 몇 명에게 인당 얼마씩 지급할지 (예: 600명 × 50 ICX, 또는 300명 × 100 ICX 등) 확정 필요. UI 측은 이미 준비 완료 — `state.nonTraderIcxAmount` 에 값을 주입하면 IcxRewardCard / SurveyCompleteModal / ProgressTracker Step 5 헤드라인이 모두 자동 갱신됨 (placeholder `?? ICX` → `N ICX`).** |
 | **6** | **개발 일정 정합성** | **D-day(2026-06-08) vs 개발 리드타임 — 이벤트 페이지 / 슬롯 카운터 / 진척도 바 완료 시점 점검** |
 | **7** | **이벤트 페이지 archive 정책** | **캠페인 종료 후 페이지 유지 기간, archive 모드 전환 방식** |
-| **8** | **SurveyCompleteModal 비거래자 분기** | `src/components/modals/SurveyCompleteModal.tsx`가 현재 모든 완료자에게 `100 ICX (~$5 airdrop) incoming.`을 하드코드. Issue #5 (비거래자 인당 지급량) 확정 후 `effectiveIcxPayout(state)` 결과를 읽어 거래자/비거래자에 따라 다른 카피를 렌더하도록 분기 필요. 미해결 시 비거래자 완료자에게 잘못된 금액이 노출됨. |
+| ~~**8**~~ | ~~SurveyCompleteModal 비거래자 분기~~ | ✅ 해결됨 (`bc30bcd` 이후). SurveyCompleteModal 이 `state.isTrader` 와 `state.nonTraderIcxAmount` 를 읽어 거래자/비거래자/TBD 케이스를 모두 분기 렌더. Issue #5 미해결인 동안은 비거래자에게 `?? ICX` placeholder 가 노출되어 잘못된 숫자 노출 위험 제거. |
 
 > 📌 **본 서비스 인프라/인증/배포 관련 결정** (이벤트 페이지 도메인, SSO/JWT 인증 공유 방식, 본 서비스 Deeplink 스킴 등)은 **본 서비스 개발팀과 별도 협의**로 처리하며 본 명세 범위 외입니다. §7.5 외부 페이지 연동 사양은 인터페이스 요구사항만 정의합니다.
 
