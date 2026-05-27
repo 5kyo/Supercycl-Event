@@ -37,6 +37,19 @@ export function daysUntilEnd(s: MockState): number {
   return diffDays(CAMPAIGN_END, s.simulatedDate);
 }
 
+/**
+ * Next weekly USDT payout date (Monday 10:00 KST), returned as YYYY-MM-DD.
+ * If the given date is already a Monday, returns that same date — the user
+ * is in the operator's current settlement window.
+ */
+export function nextWeeklyPayoutDate(simulatedDate: string): string {
+  const d = new Date(simulatedDate + 'T00:00:00Z');
+  const dow = d.getUTCDay(); // 0=Sun … 1=Mon … 6=Sat
+  const daysUntilMon = dow === 1 ? 0 : (8 - dow) % 7;
+  const next = new Date(d.getTime() + daysUntilMon * 86_400_000);
+  return next.toISOString().slice(0, 10);
+}
+
 export function inCampaignWindow(s: MockState): boolean {
   return s.simulatedDate >= CAMPAIGN_START && s.simulatedDate <= CAMPAIGN_END;
 }
@@ -106,4 +119,16 @@ export function maskOkxUid(uid: string): string {
   const head = uid.slice(0, 2);
   const tail = uid.slice(-2);
   return `${head}${'*'.repeat(Math.max(2, uid.length - 4))}${tail}`;
+}
+
+/**
+ * Shorten an ICON-style account address (e.g. `hx` + 40 hex chars) to
+ * `hxfedcba98…ba9876` so it fits on one line. Callers should keep the
+ * full string in `title=` for hover/copy access.
+ */
+export function shortenAccountAddress(addr: string): string {
+  const HEAD = 10;
+  const TAIL = 6;
+  if (addr.length <= HEAD + TAIL + 1) return addr;
+  return `${addr.slice(0, HEAD)}…${addr.slice(-TAIL)}`;
 }

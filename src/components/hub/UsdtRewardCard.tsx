@@ -9,6 +9,7 @@ import {
   maskOkxUid,
   tradeRewardClosed,
   volumeReachedNoOkx,
+  nextWeeklyPayoutDate,
 } from '@/lib/mock-state';
 
 export function UsdtRewardCard() {
@@ -66,6 +67,20 @@ export function UsdtRewardCard() {
           </span>
         ) : closed ? (
           <span className="chip chip-muted">Closed</span>
+        ) : volumeReachedNoOkx(state) ? (
+          // OKX-first guard: a plain "Locked" chip hides the actual blocker.
+          // Surface the action directly — clickable amber affordance that
+          // routes to the main service where OKX OAuth lives.
+          <a
+            href="https://supercycl-mobile.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber hover:bg-amber/25"
+            data-testid="usdt-needs-okx-chip"
+          >
+            <span aria-hidden>⚠</span>
+            {en.rewards.usdtConditionNeedsOkx} →
+          </a>
         ) : (
           <RewardStatusLabel status={effectiveStatus} />
         )}
@@ -87,20 +102,25 @@ export function UsdtRewardCard() {
             {en.rewards.usdtAmount}
           </h3>
         )}
-        {volumeReachedNoOkx(state) && !closed ? (
-          // OKX-first guard: render the condition line as an amber pill so the
-          // user notices Step 1 is the real blocker, not "trade more". Pairs
-          // visually with MyAccountCard's "Not connected" chip.
-          <span
-            className="inline-flex items-center gap-1.5 self-start rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
-            data-testid="usdt-needs-okx"
-          >
-            <span aria-hidden>⚠</span>
-            {conditionLine}
-          </span>
-        ) : (
-          <p className="text-body-md text-text-secondary">{conditionLine}</p>
-        )}
+        {/* When volumeReachedNoOkx fires, the top-right chip already carries
+            the "Connect OKX to unlock" affordance — skip the body line to
+            avoid duplicating the same message. */}
+        {!(volumeReachedNoOkx(state) && !closed) &&
+          (qualified && !closed ? (
+            // Qualified: surface the exact next-payout date so the user
+            // knows WHEN they're paid, not just that it's "scheduled".
+            <div className="flex flex-col gap-1">
+              <p className="text-body-md text-text-secondary">
+                {en.rewards.usdtConditionReady}
+              </p>
+              <p className="text-body-md font-semibold text-accent">
+                <span aria-hidden style={{ marginRight: 6 }}>📅</span>
+                {en.rewards.usdtPayoutOn(nextWeeklyPayoutDate(state.simulatedDate))}
+              </p>
+            </div>
+          ) : (
+            <p className="text-body-md text-text-secondary">{conditionLine}</p>
+          ))}
       </div>
       {!loggedOut && (
         <SlotTension

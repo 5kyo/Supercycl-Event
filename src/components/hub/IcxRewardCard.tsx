@@ -1,6 +1,6 @@
 'use client';
 
-import { en } from '@/content/en';
+import { en, shortDate } from '@/content/en';
 import { RewardStatusLabel } from '@/components/shared/RewardStatusLabel';
 import {
   useMockState,
@@ -69,7 +69,18 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
             Sign in to view
           </span>
         ) : (
-          <RewardStatusLabel status={effectiveStatus} />
+          <RewardStatusLabel
+            status={effectiveStatus}
+            // Surface the survey open date alongside the Locked chip while
+            // the window is still in the future — matches ProgressTracker
+            // Step 3's `Opens Jun 29` override and the in-card info box.
+            suffix={
+              effectiveStatus === 'NOT_REACHED' &&
+              state.simulatedDate < SURVEY_TRACK_START
+                ? `Opens ${shortDate(SURVEY_TRACK_START)}`
+                : undefined
+            }
+          />
         )}
       </header>
       <div className="flex flex-col gap-xs">

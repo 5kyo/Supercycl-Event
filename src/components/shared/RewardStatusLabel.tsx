@@ -7,7 +7,12 @@ import type { UsdtPayoutStatus, IcxPayoutStatus } from '@/lib/mock-state';
  * below the chip. */
 export type UiOnlyStatus = 'open';
 
-type Props = { status: UsdtPayoutStatus | IcxPayoutStatus | UiOnlyStatus };
+type Props = {
+  status: UsdtPayoutStatus | IcxPayoutStatus | UiOnlyStatus;
+  /** Optional context appended after a `·` separator (e.g. "Opens Jun 29"
+   * on a Locked chip before the survey window opens). */
+  suffix?: string;
+};
 
 /* Chip class names intentionally retain the legacy palette tokens (amber, blue,
  * orange, mono-green) so existing tests and contrast expectations are unchanged.
@@ -23,7 +28,7 @@ const config: Record<string, { text: string; cls: string }> = {
   'CAP_FULL':        { text: en.status.capFull,        cls: 'bg-surface-2 text-text-tertiary border border-border-subtle italic' },
 };
 
-export function RewardStatusLabel({ status }: Props) {
+export function RewardStatusLabel({ status, suffix }: Props) {
   const c = config[status];
   if (!c) return null;
   return (
@@ -32,6 +37,7 @@ export function RewardStatusLabel({ status }: Props) {
       data-status={status}
     >
       {c.text}
+      {suffix && <span className="opacity-70"> · {suffix}</span>}
     </span>
   );
 }

@@ -44,7 +44,7 @@ describe('UsdtRewardCard slot block', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders an amber "Connect OKX" pill when volume is met but OKX is not linked', () => {
+  it('renders an actionable "Connect OKX" chip when volume is met but OKX is not linked', () => {
     mockStateWith({
       authStatus: 'logged_in',
       hasOkxLinked: false,
@@ -52,9 +52,14 @@ describe('UsdtRewardCard slot block', () => {
       usdtPayoutStatus: 'NOT_REACHED',
     });
     render(<UsdtRewardCard />);
-    const pill = screen.getByTestId('usdt-needs-okx');
-    expect(pill).toBeInTheDocument();
-    expect(pill).toHaveTextContent(/Connect OKX to unlock/);
+    const chip = screen.getByTestId('usdt-needs-okx-chip');
+    expect(chip).toBeInTheDocument();
+    expect(chip.tagName).toBe('A');
+    expect(chip).toHaveAttribute('href', 'https://supercycl-mobile.vercel.app');
+    expect(chip).toHaveAttribute('target', '_blank');
+    expect(chip).toHaveTextContent(/Connect OKX to unlock/);
+    // Generic "Locked" status must not leak through in this state.
+    expect(screen.queryByText(/^Locked$/)).not.toBeInTheDocument();
     // The misleading "Trade $0 more to unlock" copy must not leak through.
     expect(screen.queryByText(/Trade \$0 more to unlock/i)).not.toBeInTheDocument();
   });

@@ -32,13 +32,17 @@ describe('MyAccountCard', () => {
     });
     render(<MyAccountCard />);
     expect(screen.getByText('My account')).toBeInTheDocument();
-    expect(screen.getByText(mockState.MOCK_ACCOUNT_ADDRESS)).toBeInTheDocument();
+    const addr = screen.getByTestId('account-address');
+    // Visible text is truncated; the full value is preserved on the title
+    // attribute for hover/screen-reader/copy access.
+    expect(addr).toHaveTextContent('hxfedcba98…ba9876');
+    expect(addr).toHaveAttribute('title', mockState.MOCK_ACCOUNT_ADDRESS);
     expect(screen.getByText('Not connected')).toBeInTheDocument();
     const connect = screen.getByTestId('okx-connect-cta');
     expect(connect).toHaveAttribute('href', 'https://supercycl-mobile.vercel.app');
   });
 
-  it('shows the full address + full UID when both are present', () => {
+  it('shows the truncated address + full UID when both are present', () => {
     mockUseStateWith({
       authStatus: 'logged_in',
       accountAddress: mockState.MOCK_ACCOUNT_ADDRESS,
@@ -46,7 +50,9 @@ describe('MyAccountCard', () => {
       okxUid: mockState.MOCK_OKX_UID,
     });
     render(<MyAccountCard />);
-    expect(screen.getByText(mockState.MOCK_ACCOUNT_ADDRESS)).toBeInTheDocument();
+    const addr = screen.getByTestId('account-address');
+    expect(addr).toHaveTextContent('hxfedcba98…ba9876');
+    expect(addr).toHaveAttribute('title', mockState.MOCK_ACCOUNT_ADDRESS);
     expect(screen.getByText(mockState.MOCK_OKX_UID)).toBeInTheDocument();
     expect(screen.queryByText(/Connect OKX/i)).not.toBeInTheDocument();
   });

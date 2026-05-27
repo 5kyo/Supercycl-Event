@@ -35,9 +35,25 @@ export function MyProgressMeter() {
         />
 
         <div className="relative flex flex-col gap-md">
-          <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
-            Cumulative volume on Supercycl
-          </p>
+          {/* Header row — label on the left, OKX-first guard pill on the
+              right (desktop only). Pulling the pill up here frees the line
+              under the big stat from a long warning and keeps the eye on
+              the number; on mobile the pill stays inline below the stat
+              because there isn't horizontal room for a header-right chip. */}
+          <div className="flex items-start justify-between gap-3">
+            <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
+              Cumulative volume on Supercycl
+            </p>
+            {volumeReachedNoOkx(state) && (
+              <span
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
+                data-testid="volume-needs-okx-desktop"
+              >
+                <span aria-hidden>⚠</span>
+                {en.progress.remainingNeedsOkx}
+              </span>
+            )}
+          </div>
 
           {/* Big stat — primary anchor */}
           <div className="flex items-baseline gap-2">
@@ -67,12 +83,12 @@ export function MyProgressMeter() {
           </div>
 
           {/* Friendly line — when volume is met but OKX is still unlinked,
-              swap the celebratory "Goal reached!" for an amber OKX-first
-              guard rail pill (matches UsdtRewardCard + MyAccountCard chips)
-              so the user knows the real blocker is Step 1, not more volume. */}
+              show the amber OKX-first guard pill inline (mobile only; the
+              desktop copy lives in the header row above). Otherwise show
+              the remaining-to-goal helper text on every breakpoint. */}
           {volumeReachedNoOkx(state) ? (
             <span
-              className="inline-flex items-center gap-1.5 self-start rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
+              className="inline-flex md:hidden items-center gap-1.5 self-start rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
               data-testid="volume-needs-okx"
             >
               <span aria-hidden>⚠</span>

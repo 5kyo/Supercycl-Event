@@ -12,6 +12,8 @@ import {
   hubVariant,
   slotTension,
   volumeReachedNoOkx,
+  nextWeeklyPayoutDate,
+  shortenAccountAddress,
 } from '@/lib/mock-state/selectors';
 import { initialState } from '@/lib/mock-state/initial';
 
@@ -98,6 +100,17 @@ describe('selectors', () => {
     ).toBe('default');
   });
 
+  it('nextWeeklyPayoutDate returns the next Monday (today if already Monday)', () => {
+    // 2026-06-08 is a Monday → returns same date.
+    expect(nextWeeklyPayoutDate('2026-06-08')).toBe('2026-06-08');
+    // 2026-06-09 is Tuesday → next Monday is 2026-06-15.
+    expect(nextWeeklyPayoutDate('2026-06-09')).toBe('2026-06-15');
+    // 2026-06-14 is Sunday → next Monday is 2026-06-15.
+    expect(nextWeeklyPayoutDate('2026-06-14')).toBe('2026-06-15');
+    // 2026-06-13 is Saturday → next Monday is 2026-06-15.
+    expect(nextWeeklyPayoutDate('2026-06-13')).toBe('2026-06-15');
+  });
+
   it('slotTension stages: none > 100 > 50 > 10 > full (0)', () => {
     expect(slotTension({ ...initialState, slotsRemaining: 423 })).toBe('none');
     expect(slotTension({ ...initialState, slotsRemaining: 100 })).toBe('tension-100');
@@ -114,5 +127,14 @@ describe('selectors', () => {
     // 5 chars: middle is 1 char, padded up to 2 stars to avoid leaking the
     // full UID via a single-character mask.
     expect(maskOkxUid('12345')).toBe('12**45');
+  });
+
+  it('shortenAccountAddress keeps first 10 + last 6 with ellipsis', () => {
+    expect(shortenAccountAddress('hxfedcba9876fedcba9876fedcba9876fedcba9876')).toBe(
+      'hxfedcba98…ba9876',
+    );
+    // Short enough to display in full — no truncation.
+    expect(shortenAccountAddress('hxshortaddress')).toBe('hxshortaddress');
+    expect(shortenAccountAddress('hxfedcba98ba9876')).toBe('hxfedcba98ba9876');
   });
 });

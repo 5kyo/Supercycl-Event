@@ -1,7 +1,7 @@
 'use client';
 
 import { en } from '@/content/en';
-import { useMockState } from '@/lib/mock-state';
+import { useMockState, shortenAccountAddress } from '@/lib/mock-state';
 
 /**
  * Read-only "My account" panel — surfaces the two identifiers a logged-in
@@ -26,9 +26,10 @@ export function MyAccountCard() {
           <dt className="text-body-sm text-text-tertiary">{en.account.addressLabel}</dt>
           <dd
             className="font-mono text-body-sm text-text-primary"
-            style={{ wordBreak: 'break-all' }}
+            title={state.accountAddress ?? undefined}
+            data-testid="account-address"
           >
-            {state.accountAddress ?? '—'}
+            {state.accountAddress ? shortenAccountAddress(state.accountAddress) : '—'}
           </dd>
           <dt className="text-body-sm text-text-tertiary">{en.account.uidLabel}</dt>
           <dd className="text-body-sm">

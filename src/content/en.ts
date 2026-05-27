@@ -1,6 +1,14 @@
 export const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
+export const shortDateWithWeekday = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
 export const en = {
   meta: {
     title: 'Supercycl Mobile Launch Event',
@@ -26,7 +34,9 @@ export const en = {
     usdtAmount: '20 USDT',
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
-    usdtConditionReady: '$500 reached — payout scheduled',
+    usdtConditionReady: '$500 reached',
+    usdtPayoutOn: (date: string) =>
+      `Payout: ${shortDateWithWeekday(date)} · 10:00 KST`,
     usdtConditionNeedsOkx: 'Connect OKX to unlock',
     usdtClosed: 'Trade window closed — reward no longer available',
     icxAmount: 'Bonus ICX',
