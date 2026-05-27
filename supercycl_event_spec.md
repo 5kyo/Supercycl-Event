@@ -116,7 +116,8 @@
 - 거래자의 인당 지급량과 풀 크기는 §4.2와 정합
 - 비거래자의 인당 지급량은 운영팀 의사결정 후 확정 (§12 Open Issues 참조)
 - "거래자" 정의 = **캠페인 기간 내 Supercycl 통해 1회 이상 체결한 유저** (자전거래 제외)
-- **유저 노출 문구**: 거래자 100 ICX는 이벤트 페이지에서 `100 ICX (~$5 airdrop)`로 함께 노출합니다 (참조 시세 약 $0.05/ICX 기준 — 시세 변동 시 코드의 `en.rewards.icxAmountWithValue` 한 곳에서 조정). 사용자 학습 동선 확보를 위해 IcxRewardCard 하단에 `Trade ICX on OKX` 외부 link-out(`https://www.okx.com/trade-spot/icx-usdt`)도 함께 노출. 비거래자(⏳) 케이스는 USD 환산 문구 미부착.
+- **유저 노출 문구**: 거래자 100 ICX는 이벤트 페이지에서 `100 ICX (~$5 airdrop)`로 함께 노출합니다 (참조 시세 약 $0.05/ICX 기준 — 시세 변동 시 코드의 `en.rewards.icxAmountWithValue` 한 곳에서 조정. 100이 아닌 금액으로 바뀌면 `(~$5 airdrop)` 주석은 자동 미부착). 사용자 학습 동선 확보를 위해 IcxRewardCard 하단에 `Trade ICX on OKX ↗` 외부 link-out(`https://www.okx.com/trade-spot/icx-usdt`, `target="_blank" rel="noopener noreferrer"`)도 함께 노출. 비거래자(⏳) 케이스는 USD 환산 문구 미부착.
+- **Pre-survey 거래자 디폴트 헤드라인**: 설문 완료 전(`!state.surveyCompleted`)에는 `effectiveIcxPayout`이 `null`을 반환하지만, IcxRewardCard는 가치 프레이밍 가시성 확보를 위해 **거래자 디폴트(100 ICX)로 헤드라인을 낙관적 렌더**(`headlineAmount = payout.amount ?? (surveyCompleted ? null : 100)`, `IcxRewardCard.tsx`)합니다. 설문 완료 후에는 실제 `payout.amount`가 우선되어 비거래자 케이스는 `Bonus ICX` 헤드라인(`en.rewards.icxAmount`)으로 회귀합니다. 즉, "사전: 모두에게 100 ICX (~$5) 노출 / 사후: 거래자만 100 ICX, 비거래자는 Bonus ICX(TBD)".
 
 ### 거래 보상 — 총 10,000 USDT
 - 500명 × 20 USDT
@@ -233,7 +234,7 @@
 - **USDT 보상 카드 내부에 슬롯 카운터를 통합 노출** (`UsdtRewardCard` → 보상 금액·조건 아래 슬롯 sub-block). 슬롯과 그 슬롯이 게이팅하는 보상이 같은 카드 안에서 한 번에 읽힘.
 - 표시 형식: `"Trade reward slots · 423 / 500"` + 색·진행바 (구현: `src/components/shared/SlotTension.tsx`, `layout="inline"`)
 - 단계별 색상: `none`(>100, green) → `tension-100`(51-100, amber) → `tension-50`(11-50, orange + 약한 pulse) → `tension-10`(1-10, red + 강한 pulse) → `full`(0, muted red, pulse 없음, **FULL** 배지)
-- **5분마다 갱신**
+- **갱신 주기 (백엔드 계약)**: 슬롯 수치는 **백엔드 API 폴링/푸시로 5분 이내 최신화**되어야 합니다. 현재 프로토타입(`src/lib/mock-state/`)은 reducer 기반 mock이라 **클라이언트 폴링 미구현** — 본 서비스 연동 시 SWR/Realtime/cron-revalidate 등 구체 방식은 본 서비스 개발팀과 협의 (§7.5 인터페이스 요구사항)
 - 100슬롯 단위 도달 시 **이벤트 페이지 상단 배너로 인앱 안내** (다음 페이지 방문 시 표시)
   - 예: "이벤트 잔여 슬롯 100개! 지금 거래 시작하세요"
 - 슬롯 0 (cap-full) 상태에서는 별도 상단 배너 없이 카드 내부 `FULL` 배지 + 카드 상단 `Closed` chip + 금액 strikethrough 조합으로 마감을 표시 (§5.5).
@@ -388,12 +389,22 @@
 
 ```
 ┌──────────────────────────────────────┐
-│  Supercycl Mobile Launch Festival    │
-│  2026.06.08 ─ 07.07 · 1 MONTH        │
-│  [로그인 상태]   [본 서비스로 →]      │
+│  CampaignHero                         │
+│   · MOBILE LAUNCH EVENT (eyebrow)     │
+│   · 🟢 LIVE  ·  N days left           │
+│   · Trade $500 → Get 20 USDT (h1)     │
+│   · [My volume $X / $500   ████░░]    │
+│        (비로그인 시: [Sign in] +       │
+│         "Open to YouthMeta only ·     │
+│          Learn how to join")          │
 ├──────────────────────────────────────┤
 │  ✦ MY ACCOUNT                         │
-│  Supercycl address  hx1234…5678       │
+│  Supercycl address  hxfedcba98…ba9876 │
+│   (truncated: HEAD=10 + TAIL=6,        │
+│    원본은 title 속성으로 보존 → hover/   │
+│    copy/스크린리더 접근. 헬퍼:           │
+│    `shortenAccountAddress(addr)`,      │
+│    `src/lib/mock-state/selectors.ts`)  │
 │  OKX UID            1234567890        │
 │   (OKX 미연동 시: [Not connected] chip   │
 │    + 옆에 [Connect OKX →] link-out)     │
@@ -403,8 +414,9 @@
 │       (OKX 미연동 시 라벨 아래             │
 │        "OKX not connected" 서브라인 노출) │
 │  ✅ STEP 1: Sign up + connect OKX [DONE]│
-│  ⏳ STEP 2: Trade $500 → 20 USDT       │
-│  ⬜ STEP 3: Complete survey → ICX      │
+│  ⏳ STEP 2: Trade $500 → Get 20 USDT   │
+│  ⬜ STEP 3: Complete survey →            │
+│             Get ICX (~$5)                │
 ├──────────────────────────────────────┤
 │  📊 실시간 슬롯                        │
 │  거래 슬롯 잔여        423 / 500       │
@@ -416,7 +428,13 @@
 │   OKX UID: 12******78 (자동 송금 예정)│
 │                                       │
 │  ICX 보상 — 설문 완료 시                │
-│   (거래자 100 ICX / 비거래자 ⏳)        │
+│   100 ICX (~$5 airdrop)                │
+│   (pre-survey 거래자 디폴트 노출, §3)   │
+│   - Survey opens Jun 29 (pre-window)   │
+│   - Traders ($500+): 100 ICX            │
+│   - Non-traders: share of remaining pool│
+│   [Trade ICX on OKX ↗] (외부 link-out: │
+│    okx.com/trade-spot/icx-usdt)         │
 │   상태: AWAITING_PAYOUT                │
 │   OKX UID: 12******78 (자동 송금 예정)│
 ├──────────────────────────────────────┤
@@ -429,30 +447,33 @@
 
 | Step | 라벨 (en.ts) | done 조건 |
 |---|---|---|
-| 1 | `Sign up + connect OKX` | `state.hasOkxLinked` |
-| 2 | `Trade $500 → 20 USDT` | Step 1 done **AND** `state.tradingVolume >= 500` |
-| 3 | `Complete survey → ICX` | Step 2 done **AND** `state.surveyCompleted` |
+| 1 | `Sign up + connect OKX` (en.ts `steps.step1`) | `state.hasOkxLinked` |
+| 2 | `Trade $500 → \nGet 20 USDT` (en.ts `steps.step2`, 두 줄) | Step 1 done **AND** `state.tradingVolume >= 500` |
+| 3 | `Complete survey → \nGet ICX (~$5)` (en.ts `steps.step3`, 두 줄 — `~$5`는 ICX 가치 프레이밍, §3) | Step 2 done **AND** `state.surveyCompleted` |
 
 상태 enum: `done | inProgress | locked`. **Strict sequential gating** — 각 단계의 `done`은 이전 단계가 `done`이어야만 진입 가능 (디버그 토글로 Step 2만 끄고 Step 3 done이 되는 케이스 방지). 이전 단계 미완 시 후속 단계는 `locked`.
 
-> 📌 **거래량 도달 + OKX 미연결 엣지 케이스**: `state.tradingVolume >= 500 && !state.hasOkxLinked` 인 경우 (디버그 토글 또는 백엔드 동기화 지연 등), Step 1이 strict gate이므로 보상 자격은 아직 충족되지 않은 상태입니다. 이를 명확히 알리기 위해 두 표면의 문구를 교체합니다:
-> - **UsdtRewardCard** 조건 라인: `Trade $0 more to unlock` 대신 **"Connect OKX to unlock"** (`en.rewards.usdtConditionNeedsOkx`)
-> - **MyProgressMeter** 친화 라인: `Goal reached!` 대신 **"Volume reached — connect OKX to claim"** (`en.progress.remainingNeedsOkx`)
+> 📌 **거래량 도달 + OKX 미연결 엣지 케이스** (`volumeReachedNoOkx` selector, `src/lib/mock-state/selectors.ts`): `state.tradingVolume >= 500 && !state.hasOkxLinked` 인 경우 (디버그 토글 또는 백엔드 동기화 지연 등), Step 1이 strict gate이므로 보상 자격은 아직 충족되지 않은 상태입니다. 이를 명확히 알리기 위해 다음 세 표면을 교체합니다:
+> - **UsdtRewardCard 우상단 칩**: `RewardStatusLabel`의 `Locked` 칩 대신 **클릭 가능한 amber 링크** `⚠ Connect OKX to unlock →` (외부 link-out: `https://supercycl-mobile.vercel.app`, `target="_blank" rel="noopener noreferrer"`, `data-testid="usdt-needs-okx-chip"`). 칩 자체가 액션 진입점 역할을 합니다.
+> - **UsdtRewardCard 본문 조건 라인**: 위 칩이 이미 동일 메시지를 전달하므로 본문 라인은 **렌더하지 않습니다** (중복 제거). 다른 상태에서는 기존 조건 라인이 그대로 노출됩니다.
+> - **MyProgressMeter** 친화 라인: `Goal reached!` 대신 **"Volume reached — connect OKX to claim"** (`en.progress.remainingNeedsOkx`).
 >
-> 액션 진입점은 추가하지 않습니다 — MyAccountCard의 `Connect OKX →` link-out이 계속 그 역할을 담당합니다 (§7.3 본문 3번 항목).
+> 추가로 **MyAccountCard**의 `Not connected` chip 옆 `Connect OKX →` link-out(§7.4 본문 3번 항목)이 동일 동선을 보조 진입점으로 계속 제공합니다.
 
 #### 보상 영역 상태별 표시
 
-내부 enum 키는 §8.3을 따르며, UX 라벨은 영문 단일 UI(§7.5 다국어 정책)로 다음과 같이 표시합니다.
+**상태 칩 UX 라벨은 §8.2 enum 매핑이 정합 기준입니다** (§7.5 다국어 정책: 영문 단일 UI). 본 표는 enum별 카드 내부의 보조 라인(조건/지급일/UID)까지 포함한 **카드 전체 렌더 사양**을 정리합니다.
 
-| Enum 키 (§8.2) | USDT 영역 표시 | ICX 영역 표시 |
-|------|----------|---------|
-| `NOT_REACHED` | "Trading in progress ($X / $500)" + 영역 비활성 | "Available after survey completion" + 영역 비활성 |
-| `AWAITING_PAYOUT` | "Awaiting payout · OKX UID 12****78" | "Awaiting payout · OKX UID 12****78" |
-| `PENDING_PAYOUT` | "Pending payout · OKX UID 12****78" | "Pending payout · OKX UID 12****78" |
-| `ON_HOLD` | "Under review (max 7 days)" | "Under review (max 7 days)" |
-| `PAID` | "✓ Paid (YYYY-MM-DD · TX hash)" | "✓ Paid (YYYY-MM-DD · TX hash)" |
-| `CAP_FULL` (USDT 전용) | "$500 reached — slot capacity full. Thank you." | — |
+| Enum 키 (§8.2) | 칩 라벨 (§8.2 정합 기준) | USDT 카드 본문 | ICX 카드 본문 |
+|------|------|------|------|
+| `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the 12-question survey` (`en.rewards.icxCondition`). 헤드라인은 pre-survey 거래자 디폴트로 `100 ICX (~$5 airdrop)` 노출 (§3 가치 프레이밍, §4.2). 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
+| `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 12****78 · payout via Internal Transfer` | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 12****78 · payout via Internal Transfer` |
+| `PENDING_PAYOUT` | `Pending payout` (`en.status.pending`) | 본문 동일(조건 라인 + UID 표시) | 본문 동일 |
+| `ON_HOLD` | `Under review (max 7 days)` (`en.status.review`) | 본문: 조건 라인 + UID | 본문: 조건 라인 + UID |
+| `PAID` | `Paid` (`en.status.completed`) | 별도 라인: `TX: <앞 10자>…` (TX 해시 존재 시) — 완료일자는 별도 표시하지 않음 | 별도 라인: `TX: <앞 10자>…` (동일) |
+| `CAP_FULL` (USDT 전용) | `$500 reached — slot capacity full. Thank you.` (`en.status.capFull`) | 금액 strikethrough + 슬롯 sub-block이 `full` 단계(§5.3) | — |
+
+> 📌 `PAID` 표기: 칩은 **`Paid` 단일 문구**입니다. 운영 SOP에서 자주 언급되는 "YYYY-MM-DD · TX 해시"는 칩이 아니라 **카드 내부 별도 라인**으로 TX 해시만 렌더하며, 완료일자는 현재 UI에 노출하지 않습니다 (운영자 도구에서만 보유).
 
 > UX 라벨은 동일 enum 값을 유저에게 친숙하게 풀어쓴 영문 표현입니다. 운영자/개발자는 enum 키(`NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL`)로 통일해서 소통합니다.
 
@@ -495,8 +516,8 @@
 
 1. **단일 URL 진입점** — 로그인 여부에 따라 콘텐츠만 분기 (공개 랜딩 ↔ 이벤트 허브)
 2. **3섹션 구조** (로그인) — 진척도 / 슬롯 / 보상
-3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). OKX 미연동 시: My account UID 자리에 `Not connected` chip + 우측에 `Connect OKX →` 인라인 링크(본 서비스 `https://supercycl-mobile.vercel.app`로 link-out — OAuth 동선은 본 서비스에서 처리), ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
-4. **실시간 슬롯** — 5분 갱신, 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통)
+3. **My account 상단 노출** — 로그인 즉시 Supercycl 계정 주소 + 연동된 OKX UID를 Hero 바로 아래 read-only 카드로 노출 (지급 대상 식별·자가확인 가능). 계정 주소는 `shortenAccountAddress(addr)` 헬퍼(`HEAD=10, TAIL=6`)로 `hxfedcba98…ba9876` 형태로 잘라 표시하고, **원본 전체 값은 `<dd>`의 `title` 속성에 보존**해 hover / copy / 스크린리더 경로로 접근 가능하게 합니다(테스트 픽스: `account-address` testid). OKX UID는 마스킹 없는 원문(예: `1234567890`)을 그대로 노출 — 자가확인 우선. OKX 미연동 시: My account UID 자리에 `Not connected` chip + 우측에 `Connect OKX →` 인라인 링크(본 서비스 `https://supercycl-mobile.vercel.app`로 link-out — OAuth 동선은 본 서비스에서 처리), ProgressTracker step 1 라벨 아래에 `OKX not connected` 서브라인을 노출해 어떤 sub-action이 막혔는지 명시. **연동된 경우는 별도 "Connected" 표기 없이** Done 배지와 UID 값 자체로 신호 (중복 표기 제거).
+4. **실시간 슬롯** — 백엔드 데이터 5분 이내 최신화 (§5.3 갱신 주기), 100/50/10 도달 시 페이지 상단 배너 표시 (로그인/비로그인 공통). **클라이언트 측 폴링 로직은 본 서비스 연동 시 결정** — mock 단에서는 미구현.
 5. **개인화** — 로그인 시 진행 단계에 따라 CTA 자동 전환
 6. **보상 상태 표시** — `NOT_REACHED / AWAITING_PAYOUT / PENDING_PAYOUT / ON_HOLD / PAID / CAP_FULL` (§8.2 enum/UX 라벨 매핑 참조)
 7. **전환 동선** — 가입 → 거래 → 설문 CTA로 sequential 흐름
@@ -713,7 +734,7 @@ YouthMeta 정책의 핵심 의사결정에 직결되는 단일 최우선 인사�
 - [ ] **🆕 YouthMeta 멤버십 게이팅** — 공개 랜딩에 자격 고지 라인(§7.2) + 비유스메타 로그인 유저 차단 화면(§7.3.1, `YouthMetaGate`) + 외부 가입 link-out(`NEXT_PUBLIC_YOUTHMETA_JOIN_URL`)
 - [ ] **🆕 i18n 구조 셋업 (`next-intl`)** — UI 텍스트는 **영어 단일** 운영(상태 라벨, 안내 메시지, CTA 포함). 한국어는 **설문 12문항 콘텐츠 한정**(`src/content/survey-ko.md`). 언어 전환 토글 미제공. locale 분리 구조는 유지하여 향후 한국어 UI 확장 대비
 - [ ] 설문 12문항 폼 + 응답 저장 (`src/content/survey-ko.md` 참조)
-- [ ] 슬롯 카운터 (5분 갱신)
+- [ ] 슬롯 카운터 (백엔드 5분 이내 최신화 — 클라이언트 폴링 방식은 §5.3 / §7.5 연동 협의)
 - [ ] 진척도 바 (실시간 거래량 표시)
 - [ ] 보상 상태 표시 (`NOT_REACHED/AWAITING_PAYOUT/PENDING_PAYOUT/ON_HOLD/PAID/CAP_FULL` — §8.2 매핑 참조)
 - [ ] **연동된 OKX UID 마스킹 노출** (자격 충족 시 보상 카드에 read-only로 표시 — 별도 입력 모달 없음)
