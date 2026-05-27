@@ -33,8 +33,16 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
       ? 'AWAITING_PAYOUT'
       : state.icxPayoutStatus;
 
+  // Pre-survey, fall back to the trader-tier default (100 ICX) so the
+  // "~$5 airdrop" value framing is visible from the start. After the survey
+  // completes, the actual payout takes over — non-trader resolves to the
+  // generic "Bonus ICX" headline (TBD pool).
+  const headlineAmount =
+    payout.amount ?? (state.surveyCompleted ? null : 100);
   const amountText =
-    payout.amount !== null ? en.rewards.icxAmountWithValue(payout.amount) : en.rewards.icxAmount;
+    headlineAmount !== null
+      ? en.rewards.icxAmountWithValue(headlineAmount)
+      : en.rewards.icxAmount;
   const conditionLine = qualifiedForIcx
     ? en.rewards.icxConditionReady
     : payout.amount === null && state.surveyCompleted && !state.isTrader
