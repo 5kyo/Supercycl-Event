@@ -87,7 +87,20 @@ export function UsdtRewardCard() {
             {en.rewards.usdtAmount}
           </h3>
         )}
-        <p className="text-body-md text-text-secondary">{conditionLine}</p>
+        {volumeReachedNoOkx(state) && !closed ? (
+          // OKX-first guard: render the condition line as an amber pill so the
+          // user notices Step 1 is the real blocker, not "trade more". Pairs
+          // visually with MyAccountCard's "Not connected" chip.
+          <span
+            className="inline-flex items-center gap-1.5 self-start rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
+            data-testid="usdt-needs-okx"
+          >
+            <span aria-hidden>⚠</span>
+            {conditionLine}
+          </span>
+        ) : (
+          <p className="text-body-md text-text-secondary">{conditionLine}</p>
+        )}
       </div>
       {!loggedOut && (
         <SlotTension

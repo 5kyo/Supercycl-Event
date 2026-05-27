@@ -67,16 +67,24 @@ export function MyProgressMeter() {
           </div>
 
           {/* Friendly line — when volume is met but OKX is still unlinked,
-              swap the celebratory "Goal reached!" for an OKX-first guard rail
-              so the card doesn't conflict with the reward card and the user
-              knows the real blocker is Step 1, not more volume. */}
-          <p className="text-body-md text-text-secondary-strong">
-            <span className="text-accent font-semibold">
-              {volumeReachedNoOkx(state)
-                ? en.progress.remainingNeedsOkx
-                : en.progress.remaining(remaining)}
+              swap the celebratory "Goal reached!" for an amber OKX-first
+              guard rail pill (matches UsdtRewardCard + MyAccountCard chips)
+              so the user knows the real blocker is Step 1, not more volume. */}
+          {volumeReachedNoOkx(state) ? (
+            <span
+              className="inline-flex items-center gap-1.5 self-start rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
+              data-testid="volume-needs-okx"
+            >
+              <span aria-hidden>⚠</span>
+              {en.progress.remainingNeedsOkx}
             </span>
-          </p>
+          ) : (
+            <p className="text-body-md text-text-secondary-strong">
+              <span className="text-accent font-semibold">
+                {en.progress.remaining(remaining)}
+              </span>
+            </p>
+          )}
 
           {/* Progress bar */}
           <ProgressBar

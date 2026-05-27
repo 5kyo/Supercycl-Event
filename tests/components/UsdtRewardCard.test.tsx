@@ -44,7 +44,7 @@ describe('UsdtRewardCard slot block', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows "Connect OKX to unlock" when volume is met but OKX is not linked', () => {
+  it('renders an amber "Connect OKX" pill when volume is met but OKX is not linked', () => {
     mockStateWith({
       authStatus: 'logged_in',
       hasOkxLinked: false,
@@ -52,7 +52,9 @@ describe('UsdtRewardCard slot block', () => {
       usdtPayoutStatus: 'NOT_REACHED',
     });
     render(<UsdtRewardCard />);
-    expect(screen.getByText('Connect OKX to unlock')).toBeInTheDocument();
+    const pill = screen.getByTestId('usdt-needs-okx');
+    expect(pill).toBeInTheDocument();
+    expect(pill).toHaveTextContent(/Connect OKX to unlock/);
     // The misleading "Trade $0 more to unlock" copy must not leak through.
     expect(screen.queryByText(/Trade \$0 more to unlock/i)).not.toBeInTheDocument();
   });
