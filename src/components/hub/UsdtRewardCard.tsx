@@ -15,6 +15,7 @@ export function UsdtRewardCard() {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
   const qualified = isQualifiedForUsdt(state);
+  const isPaid = state.usdtPayoutStatus === 'PAID';
   // Trade reward is closed when the slot path is shut (slots exhausted or
   // trade-track date passed) AND the user has not yet moved past NOT_REACHED.
   // Any non-NOT_REACHED payout state means the user already cleared the gate
@@ -109,16 +110,20 @@ export function UsdtRewardCard() {
             avoid duplicating the same message. */}
         {!(volumeReachedNoOkx(state) && !closed) &&
           (qualified && !closed ? (
-            // Qualified: surface the exact next-payout date so the user
-            // knows WHEN they're paid, not just that it's "scheduled".
+            // Qualified pre-payout: surface the exact next-payout date so the
+            // user knows WHEN they're paid. Once PAID, drop the future-tense
+            // date line — the new "Sent to your OKX Main Account" notice
+            // below carries the post-payment messaging.
             <div className="flex flex-col gap-1">
               <p className="text-body-md text-text-secondary">
                 {en.rewards.usdtConditionReady}
               </p>
-              <p className="text-body-md font-semibold text-accent">
-                <span aria-hidden style={{ marginRight: 6 }}>📅</span>
-                {en.rewards.usdtPayoutOn(nextWeeklyPayoutDate(state.simulatedDate))}
-              </p>
+              {!isPaid && (
+                <p className="text-body-md font-semibold text-accent">
+                  <span aria-hidden style={{ marginRight: 6 }}>📅</span>
+                  {en.rewards.usdtPayoutOn(nextWeeklyPayoutDate(state.simulatedDate))}
+                </p>
+              )}
             </div>
           ) : (
             <p className="text-body-md text-text-secondary">{conditionLine}</p>
@@ -134,6 +139,12 @@ export function UsdtRewardCard() {
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(state.okxUid)}
+        </p>
+      )}
+      {isPaid && (
+        <p className="text-body-sm font-medium text-accent">
+          <span aria-hidden style={{ marginRight: 4 }}>→</span>
+          {en.rewards.paidNotice}
         </p>
       )}
     </article>

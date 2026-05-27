@@ -16,6 +16,7 @@ type Props = {
 export function IcxRewardCard({ onStartSurvey }: Props) {
   const { state } = useMockState();
   const loggedOut = state.authStatus === 'logged_out';
+  const isPaid = state.icxPayoutStatus === 'PAID';
   const payout = effectiveIcxPayout(state);
   const showSurveyCta = surveyTrackOpen(state) && !state.surveyCompleted;
   // Mirror UsdtRewardCard: as soon as the user qualifies (survey done +
@@ -96,7 +97,12 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
         <h3 className="accent-text" style={{ font: 'var(--font-display-lg)' }}>
           {amountText}
         </h3>
-        <p className="text-body-md text-text-secondary">{conditionLine}</p>
+        {/* Drop the "Survey complete — payout scheduled" line post-PAID — it
+            reads as future-tense and is superseded by the new "Sent to your
+            OKX Main Account" notice below. */}
+        {!isPaid && (
+          <p className="text-body-md text-text-secondary">{conditionLine}</p>
+        )}
       </div>
       {!state.surveyCompleted && (
         <div
@@ -122,6 +128,12 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(state.okxUid)}
+        </p>
+      )}
+      {isPaid && (
+        <p className="text-body-sm font-medium text-accent">
+          <span aria-hidden style={{ marginRight: 4 }}>→</span>
+          {en.rewards.paidNotice}
         </p>
       )}
       {showSurveyCta && (

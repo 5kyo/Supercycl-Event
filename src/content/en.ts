@@ -56,6 +56,7 @@ export const en = {
     icxTradeLinkLabel: 'Trade ICX on OKX',
     payoutChannel: (uid: string) =>
       `OKX UID: ${uid} · payout via Internal Transfer`,
+    paidNotice: 'Sent to your OKX Main Account.',
     icxPayoutInfo: {
       traderTier: 'Trade $500+ → earn 100 ICX each',
       nonTraderTier: 'Otherwise → share of the remaining pool',
