@@ -8,9 +8,12 @@ type Props = {
   onClose: () => void;
   children: ReactNode;
   size?: 'md' | 'lg';
+  /** Optional element rendered in the header before the close button — used by
+   * SurveyModal for its KO|EN language toggle. */
+  headerExtra?: ReactNode;
 };
 
-export function Modal({ title, onClose, children, size = 'md' }: Props) {
+export function Modal({ title, onClose, children, size = 'md', headerExtra }: Props) {
   const ref = useFocusTrap(true);
 
   useEffect(() => {
@@ -42,14 +45,17 @@ export function Modal({ title, onClose, children, size = 'md' }: Props) {
       >
         <header className="mb-lg flex items-start justify-between gap-md">
           <h2 className="text-title-lg">{title}</h2>
-          <button
-            type="button"
-            aria-label="Close"
-            onClick={onClose}
-            className="btn-ghost shrink-0"
-          >
-            ✕
-          </button>
+          <div className="flex shrink-0 items-center gap-sm">
+            {headerExtra}
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={onClose}
+              className="btn-ghost shrink-0"
+            >
+              ✕
+            </button>
+          </div>
         </header>
         {children}
       </div>

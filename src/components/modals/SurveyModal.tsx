@@ -2,35 +2,104 @@
 
 import { useState } from 'react';
 import { Modal } from './Modal';
-import { en } from '@/content/en';
 import { surveyKo } from '@/content/survey-ko';
+import { surveyEn } from '@/content/survey-en';
 import { useMockState } from '@/lib/mock-state';
 
 type Answer = string | string[] | number;
+type Locale = 'ko' | 'en';
+
+// Free-text trigger labels — kept in sync with the matching option labels in
+// survey-ko.md / survey-en.md so the "..." → text-input UX works in both
+// languages. If the option label is renamed, update both halves.
+const OTHER_LABEL: Record<Locale, string> = { ko: '기타', en: 'Other' };
+const CUSTOM_LABEL: Record<Locale, string> = { ko: '직접 입력', en: 'Custom' };
+
+const STRINGS: Record<Locale, {
+  title: string;
+  multiHint: string;
+  singleHint: string;
+  scaleHint: string;
+  freeHint: string;
+  otherPlaceholder: string;
+  customPlaceholder: string;
+  freePlaceholder: string;
+  scaleLow: string;
+  scaleHigh: string;
+  requiredHint: string;
+  next: string;
+  submit: string;
+}> = {
+  ko: {
+    title: '슈퍼사이클 설문조사',
+    multiHint: '복수선택 가능',
+    singleHint: '하나만 선택',
+    scaleHint: '1(아니오) ~ 5(예)',
+    freeHint: '자유 응답',
+    otherPlaceholder: '기타 — 자세히 적어주세요',
+    customPlaceholder: '직접 입력 — 예: 7x',
+    freePlaceholder: '응답을 입력해주세요…',
+    scaleLow: '1 — 아니오',
+    scaleHigh: '5 — 예',
+    requiredHint: '응답을 선택 또는 입력해주세요',
+    next: '다음',
+    submit: '제출',
+  },
+  en: {
+    title: 'Supercycl Survey',
+    multiHint: 'Multi-select',
+    singleHint: 'Single-select',
+    scaleHint: '1 (No) – 5 (Yes)',
+    freeHint: 'Free response',
+    otherPlaceholder: 'Other — please describe',
+    customPlaceholder: 'Custom — e.g. 7x',
+    freePlaceholder: 'Type your answer…',
+    scaleLow: '1 — No',
+    scaleHigh: '5 — Yes',
+    requiredHint: 'Please select or enter a response',
+    next: 'Next',
+    submit: 'Submit',
+  },
+};
 
 /**
  * V2 Festival Survey — segmented progress bar, section chip, big question,
  * selected option with accent-tint + accent border + glow + ✓ icon.
- * Functional behavior (state, dispatch, completion) unchanged.
+ * Supports a KO|EN toggle in the modal header; option labels differ between
+ * languages, so flipping locale resets in-progress answers.
  */
 export function SurveyModal({ onClose }: { onClose: () => void }) {
   const { state, dispatch } = useMockState();
+  const [locale, setLocale] = useState<Locale>('ko');
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
-  // Free-text companion to a "기타" multi-select choice. Kept in a parallel
+  // Free-text companion to an "Other"/"Custom" choice. Kept in a parallel
   // record (rather than inlined into the answer array) so the option-array
-  // typing stays clean and the input value isn't lost when "기타" is
-  // toggled off and back on.
+  // typing stays clean and the input value isn't lost when the trigger
+  // option is toggled off and back on.
   const [freeTextAnswers, setFreeTextAnswers] = useState<Record<number, string>>({});
   // Surfaces a hint under the current question only after the user has
   // attempted to advance without answering. Resets on step change and on
   // any user input (setAnswer clears it).
   const [showRequiredHint, setShowRequiredHint] = useState(false);
 
-  const q = surveyKo[step];
-  const total = surveyKo.length;
+  const survey = locale === 'ko' ? surveyKo : surveyEn;
+  const strings = STRINGS[locale];
+  const q = survey[step];
+  const total = survey.length;
   const last = step === total - 1;
   const current = step + 1;
+
+  function changeLocale(next: Locale) {
+    if (next === locale) return;
+    // Option labels differ between languages; stored answers like "기타" or
+    // "Custom" wouldn't match the rendered options after a flip. Reset.
+    setLocale(next);
+    setStep(0);
+    setAnswers({});
+    setFreeTextAnswers({});
+    setShowRequiredHint(false);
+  }
 
   function setAnswer(v: Answer) {
     if (!q) return;
@@ -79,8 +148,35 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
 
   if (!q) return null;
 
+  const localeToggle = (
+    <div
+      role="group"
+      aria-label="Language"
+      className="inline-flex overflow-hidden rounded-md text-label-sm ring-1 ring-white/15"
+    >
+      {(['ko', 'en'] as const).map((l) => {
+        const active = l === locale;
+        return (
+          <button
+            key={l}
+            type="button"
+            onClick={() => changeLocale(l)}
+            aria-pressed={active}
+            className={
+              active
+                ? 'bg-accent px-2 py-1 font-medium text-text-inverse'
+                : 'px-2 py-1 text-text-tertiary hover:bg-white/5'
+            }
+          >
+            {l === 'ko' ? 'KO' : 'EN'}
+          </button>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <Modal title={en.modal.survey.title} onClose={onClose} size="lg">
+    <Modal title={strings.title} onClose={onClose} size="lg" headerExtra={localeToggle}>
       {/* Segmented progress bar — one rectangle per question */}
       <div className="mb-sm flex gap-[3px]">
         {Array.from({ length: total }, (_, i) => {
@@ -117,13 +213,19 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         {q.question}
       </h2>
       <p className="mt-sm text-body-sm text-text-tertiary">
-        {q.type === 'multi' ? '복수선택 가능' : q.type === 'single' ? '하나만 선택' : q.type === 'scale5' ? '1(아니오) ~ 5(예)' : '자유 응답'}
+        {q.type === 'multi'
+          ? strings.multiHint
+          : q.type === 'single'
+            ? strings.singleHint
+            : q.type === 'scale5'
+              ? strings.scaleHint
+              : strings.freeHint}
       </p>
 
       {/* Options */}
       {q.type === 'multi' && (() => {
         const cur = (answers[q.id] as string[]) ?? [];
-        const otherSelected = cur.includes('기타');
+        const otherSelected = cur.includes(OTHER_LABEL[locale]);
         return (
           <div className="mt-lg flex flex-col gap-sm">
             {q.options.map((opt) => {
@@ -177,7 +279,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
                 }
                 className="input w-full"
                 style={{ padding: '12px 14px' }}
-                placeholder="기타 — 자세히 적어주세요"
+                placeholder={strings.otherPlaceholder}
               />
             )}
           </div>
@@ -227,7 +329,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
               </label>
             );
           })}
-          {answers[q.id] === '직접 입력' && (
+          {answers[q.id] === CUSTOM_LABEL[locale] && (
             <input
               type="text"
               value={freeTextAnswers[q.id] ?? ''}
@@ -236,7 +338,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
               }
               className="input w-full"
               style={{ padding: '12px 14px' }}
-              placeholder="직접 입력 — 예: 7x"
+              placeholder={strings.customPlaceholder}
             />
           )}
         </div>
@@ -249,7 +351,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
           className="input mt-lg w-full"
           style={{ height: 'auto', minHeight: 96, padding: '12px 14px', resize: 'vertical' }}
           rows={4}
-          placeholder="Type your answer…"
+          placeholder={strings.freePlaceholder}
         />
       )}
 
@@ -274,8 +376,8 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
           {/* Polar labels — make the 1/5 semantic explicit (the bare numbers
               alone don't communicate which end is "high"). */}
           <div className="flex justify-between px-1 text-body-sm text-text-tertiary">
-            <span>1 — 아니오</span>
-            <span>5 — 예</span>
+            <span>{strings.scaleLow}</span>
+            <span>{strings.scaleHigh}</span>
           </div>
         </div>
       )}
@@ -287,7 +389,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
           aria-live="polite"
           className="mt-md text-body-sm font-medium text-amber"
         >
-          ⚠ {en.modal.survey.requiredHint}
+          ⚠ {strings.requiredHint}
         </p>
       )}
 
@@ -310,7 +412,7 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
           onClick={next}
           className="btn-primary-sm flex-1"
         >
-          {last ? en.modal.survey.submit : `${en.modal.survey.next} →`}
+          {last ? strings.submit : `${strings.next} →`}
         </button>
       </div>
     </Modal>
