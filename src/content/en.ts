@@ -97,7 +97,7 @@ export const en = {
   },
   modal: {
     survey: {
-      title: 'Profile & Earn — 12 questions',
+      title: '슈퍼사이클 설문조사',
       submit: 'Submit',
       next: 'Next',
       previous: 'Back',

@@ -17,6 +17,11 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
   const { state, dispatch } = useMockState();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
+  // Free-text companion to a "기타" multi-select choice. Kept in a parallel
+  // record (rather than inlined into the answer array) so the option-array
+  // typing stays clean and the input value isn't lost when "기타" is
+  // toggled off and back on.
+  const [freeTextAnswers, setFreeTextAnswers] = useState<Record<number, string>>({});
 
   const q = surveyKo[step];
   const total = surveyKo.length;
@@ -67,79 +72,88 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
         })}
       </div>
       <div
-        className="mb-2xl flex justify-between font-mono text-text-tertiary"
+        className="mb-2xl font-mono text-text-tertiary"
         style={{ fontSize: 11, letterSpacing: '0.08em' }}
       >
         <span className="text-accent">
           Q{current} OF {total}
         </span>
-        <span>~{Math.max(1, total - current)} MIN LEFT</span>
       </div>
-
-      {/* Section chip */}
-      <span className="chip chip-accent" style={{ marginBottom: 12 }}>
-        {q.area}
-      </span>
 
       {/* Big question */}
       <h2
-        className="mt-md font-bold"
+        className="font-bold"
         style={{ fontSize: 24, lineHeight: 1.25, letterSpacing: '-0.015em' }}
       >
         {q.question}
       </h2>
       <p className="mt-sm text-body-sm text-text-tertiary">
-        {q.type === 'multi' ? 'Select all that apply.' : q.type === 'single' ? 'Pick one — there\'s no wrong answer.' : q.type === 'scale5' ? 'Slide 1 (no) to 5 (yes).' : 'Optional.'}
+        {q.type === 'multi' ? '복수선택 가능' : q.type === 'single' ? '하나만 선택' : q.type === 'scale5' ? '1(아니오) ~ 5(예)' : '자유 응답'}
       </p>
 
       {/* Options */}
-      {q.type === 'multi' && (
-        <div className="mt-lg flex flex-col gap-sm">
-          {q.options.map((opt) => {
-            const cur = (answers[q.id] as string[]) ?? [];
-            const selected = cur.includes(opt);
-            return (
-              <label
-                key={opt}
-                className="flex cursor-pointer items-center gap-md transition-all"
-                style={{
-                  padding: '16px 18px',
-                  borderRadius: 14,
-                  background: selected ? 'var(--accent-tint)' : 'var(--surface-2)',
-                  border: `1px solid ${selected ? 'var(--accent)' : 'var(--border-subtle)'}`,
-                  boxShadow: selected ? '0 0 0 4px rgba(0,230,118,0.12)' : 'none',
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={selected}
-                  onChange={(e) =>
-                    setAnswer(e.target.checked ? [...cur, opt] : cur.filter((x) => x !== opt))
-                  }
-                  className="sr-only"
-                />
-                <span className="flex-1 text-title-sm" style={{ fontSize: 15 }}>
-                  {opt}
-                </span>
-                {selected && (
-                  <span
-                    className="inline-flex items-center justify-center rounded-full font-bold"
-                    style={{
-                      width: 22,
-                      height: 22,
-                      background: 'var(--accent)',
-                      color: 'var(--text-inverse)',
-                      fontSize: 13,
-                    }}
-                  >
-                    ✓
+      {q.type === 'multi' && (() => {
+        const cur = (answers[q.id] as string[]) ?? [];
+        const otherSelected = cur.includes('기타');
+        return (
+          <div className="mt-lg flex flex-col gap-sm">
+            {q.options.map((opt) => {
+              const selected = cur.includes(opt);
+              return (
+                <label
+                  key={opt}
+                  className="flex cursor-pointer items-center gap-md transition-all"
+                  style={{
+                    padding: '16px 18px',
+                    borderRadius: 14,
+                    background: selected ? 'var(--accent-tint)' : 'var(--surface-2)',
+                    border: `1px solid ${selected ? 'var(--accent)' : 'var(--border-subtle)'}`,
+                    boxShadow: selected ? '0 0 0 4px rgba(0,230,118,0.12)' : 'none',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={(e) =>
+                      setAnswer(e.target.checked ? [...cur, opt] : cur.filter((x) => x !== opt))
+                    }
+                    className="sr-only"
+                  />
+                  <span className="flex-1 text-title-sm" style={{ fontSize: 15 }}>
+                    {opt}
                   </span>
-                )}
-              </label>
-            );
-          })}
-        </div>
-      )}
+                  {selected && (
+                    <span
+                      className="inline-flex items-center justify-center rounded-full font-bold"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        background: 'var(--accent)',
+                        color: 'var(--text-inverse)',
+                        fontSize: 13,
+                      }}
+                    >
+                      ✓
+                    </span>
+                  )}
+                </label>
+              );
+            })}
+            {otherSelected && (
+              <input
+                type="text"
+                value={freeTextAnswers[q.id] ?? ''}
+                onChange={(e) =>
+                  setFreeTextAnswers((a) => ({ ...a, [q.id]: e.target.value }))
+                }
+                className="input w-full"
+                style={{ padding: '12px 14px' }}
+                placeholder="기타 — 자세히 적어주세요"
+              />
+            )}
+          </div>
+        );
+      })()}
 
       {q.type === 'single' && (
         <div className="mt-lg flex flex-col gap-sm">
