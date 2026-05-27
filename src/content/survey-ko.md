@@ -77,16 +77,6 @@
 - question: Supercycl의 2x 레버리지 제한이 리스크 관리에 도움이 되나요
 
 ## Q8
-- area: 2x 레버리지
-- type: multi
-- question: Supercycl의 2x 제한에 대한 본인의 입장
-- options:
-  - 리스크 관리에 적합
-  - 시그널 품질
-  - 2x 제한 때문에 이용 안 함
-  - 기타
-
-## Q9
 - area: 인지
 - type: single
 - question: Supercycl을 어떻게 알게 되었나요
@@ -97,7 +87,7 @@
   - 검색
   - 기타
 
-## Q10
+## Q9
 - area: 프로필
 - type: single
 - question: 월평균 크립토 거래 금액대
@@ -108,7 +98,7 @@
   - $50,000 – $200,000
   - $200,000 이상
 
-## Q11
+## Q10
 - area: 시그널 개인화
 - type: multi
 - question: 관심 자산 카테고리
@@ -118,3 +108,8 @@
   - Alt
   - Meme
   - RWA (하이닉스, 삼성전자, 코스피 등)
+
+## Q11
+- area: 피드백
+- type: free
+- question: Supercycl에서 개선되었으면 하는 점이 있다면 알려주세요 (선택)
