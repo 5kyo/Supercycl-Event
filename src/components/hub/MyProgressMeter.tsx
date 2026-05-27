@@ -40,16 +40,16 @@ export function MyProgressMeter() {
         />
 
         <div className="relative flex flex-col gap-md">
-          {/* Header row — label on the left, OKX-first guard pill on the
-              right (desktop only). Pulling the pill up here frees the line
-              under the big stat from a long warning and keeps the eye on
-              the number; on mobile the pill stays inline below the stat
-              because there isn't horizontal room for a header-right chip. */}
+          {/* Header row — label on the left. The right side carries the
+              OKX-needs guard pill when it fires (desktop only — too tight on
+              mobile, so it falls back inline under the stat); otherwise the
+              "Last updated …" freshness hint sits there so it doesn't
+              clutter the line under the milestone scale. */}
           <div className="flex items-start justify-between gap-3">
             <p className="text-label-sm uppercase tracking-[0.22em] text-text-secondary">
               Cumulative volume on Supercycl
             </p>
-            {volumeReachedNoOkx(state) && (
+            {volumeReachedNoOkx(state) ? (
               <span
                 className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-amber/40 bg-amber/15 px-2.5 py-1 text-label-sm font-medium text-amber"
                 data-testid="volume-needs-okx-desktop"
@@ -57,6 +57,14 @@ export function MyProgressMeter() {
                 <span aria-hidden>⚠</span>
                 {en.progress.remainingNeedsOkx}
               </span>
+            ) : (
+              <p
+                className="hidden md:block text-text-tertiary whitespace-nowrap"
+                style={{ fontSize: 11, letterSpacing: '0.04em' }}
+                data-testid="volume-last-sync-desktop"
+              >
+                Last updated {lastSyncLabel}
+              </p>
             )}
           </div>
 
@@ -121,10 +129,12 @@ export function MyProgressMeter() {
             <span>$500</span>
           </div>
 
-          {/* Freshness hint — the volume isn't tick-by-tick, backend snapshot
-              is on a ~5 min cadence (spec §5.3 / §7.5). */}
+          {/* Mobile-only freshness hint — desktop carries the same label in
+              the header row above where there's room next to the section
+              title. On mobile the header line is already tight, so the hint
+              stays below the milestone scale. */}
           <p
-            className="text-text-tertiary"
+            className="md:hidden text-text-tertiary"
             style={{ fontSize: 11, letterSpacing: '0.04em' }}
             data-testid="volume-last-sync"
           >
