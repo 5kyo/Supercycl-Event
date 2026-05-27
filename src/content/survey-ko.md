@@ -17,7 +17,9 @@
 - question: Supercycl을 쓰면서 가장 좋았던 점
 - options:
   - 속도/반응성
-  - 시그널 품질
+  - 시그널 알림(매수/매도 시그널)
+  - 시그널 알림(역방향 경고 시그널)
+  - 원탭 주문 / 간편 매매
   - 기타
 
 ## Q2
@@ -39,22 +41,11 @@
 - question: 추가되었으면 하는 기능 TOP 1 (선택)
 
 ## Q4
-- area: 가치제안
-- type: single
-- question: Supercycl을 쓴다면 가장 매력적인 기능
-- options:
-  - 시그널 품질
-  - 차트
-  - 거래소 통합
-  - 수수료
-  - 리워드
-
-## Q5
 - area: 자동매매
 - type: scale5
 - question: AI 자동매매 출시 시 사용 의향 (1~5)
 
-## Q6
+## Q5
 - area: 거래소
 - type: multi
 - question: 현재 가장 많이 쓰는 거래소 3곳
@@ -65,24 +56,23 @@
   - Binance
   - 기타
 
-## Q7
+## Q6
 - area: 2x 레버리지
 - type: single
 - question: 다른 거래소 평균 사용 레버리지
 - options:
-  - 1x
   - 2x
   - 3x
   - 5x
   - 10x+
-  - 거래 안 함
+  - 직접 입력
 
-## Q8
+## Q7
 - area: 2x 레버리지
 - type: scale5
 - question: 2x 제한이 Supercycl 사용에 영향을 미치나요 (1~5)
 
-## Q9
+## Q8
 - area: 2x 레버리지
 - type: multi
 - question: 2x 제한 있어도 쓸 의향이 있다면 그 이유
@@ -93,7 +83,7 @@
   - 리워드
   - 기타
 
-## Q10
+## Q9
 - area: 인지
 - type: single
 - question: Supercycl을 어떻게 알게 되었나요
@@ -104,7 +94,7 @@
   - 검색
   - 기타
 
-## Q11
+## Q10
 - area: 프로필
 - type: single
 - question: 월평균 크립토 거래 금액대 (익명 보장)
@@ -115,7 +105,7 @@
   - $50k – $200k
   - $200k+
 
-## Q12
+## Q11
 - area: 시그널 개인화
 - type: multi
 - question: 관심 자산 카테고리

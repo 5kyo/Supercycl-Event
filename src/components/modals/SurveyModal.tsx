@@ -198,6 +198,18 @@ export function SurveyModal({ onClose }: { onClose: () => void }) {
               </label>
             );
           })}
+          {answers[q.id] === '직접 입력' && (
+            <input
+              type="text"
+              value={freeTextAnswers[q.id] ?? ''}
+              onChange={(e) =>
+                setFreeTextAnswers((a) => ({ ...a, [q.id]: e.target.value }))
+              }
+              className="input w-full"
+              style={{ padding: '12px 14px' }}
+              placeholder="직접 입력 — 예: 7x"
+            />
+          )}
         </div>
       )}
 
