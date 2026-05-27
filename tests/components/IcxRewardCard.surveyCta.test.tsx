@@ -68,4 +68,40 @@ describe('IcxRewardCard — survey CTA visibility', () => {
     screen.getByText(/Start survey/i).click();
     expect(onStartSurvey).toHaveBeenCalledTimes(1);
   });
+
+  it('shows the OKX trade link for signed-in users', () => {
+    mockUseStateWith({ authStatus: 'logged_in' });
+    render(<IcxRewardCard onStartSurvey={noop} />);
+    const link = screen.getByRole('link', { name: /Trade ICX on OKX/i });
+    expect(link).toHaveAttribute('href', 'https://www.okx.com/trade-spot/icx-usdt');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('hides the OKX trade link when logged out', () => {
+    mockUseStateWith({ authStatus: 'logged_out' });
+    render(<IcxRewardCard onStartSurvey={noop} />);
+    expect(screen.queryByRole('link', { name: /Trade ICX on OKX/i })).not.toBeInTheDocument();
+  });
+
+  it('annotates the trader amount with ~$5 airdrop but leaves Bonus ICX untouched', () => {
+    mockUseStateWith({
+      authStatus: 'logged_in',
+      isTrader: true,
+      surveyCompleted: true,
+    });
+    const { unmount } = render(<IcxRewardCard onStartSurvey={noop} />);
+    expect(screen.getByText(/100 ICX \(~\$5 airdrop\)/)).toBeInTheDocument();
+    unmount();
+    vi.restoreAllMocks();
+
+    mockUseStateWith({
+      authStatus: 'logged_in',
+      isTrader: false,
+      surveyCompleted: true,
+    });
+    render(<IcxRewardCard onStartSurvey={noop} />);
+    expect(screen.getByText('Bonus ICX')).toBeInTheDocument();
+    expect(screen.queryByText(/~\$5 airdrop/)).not.toBeInTheDocument();
+  });
 });

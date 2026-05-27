@@ -46,7 +46,7 @@ export function SurveyCompleteModal({
         <br />
         your time.
         <br />
-        <span className="accent-text">100 ICX</span> incoming.
+        <span className="accent-text">{en.rewards.icxAmountWithValue(100)}</span> incoming.
       </h2>
       <p className="mt-md text-body-md text-text-secondary">
         {maskedUid

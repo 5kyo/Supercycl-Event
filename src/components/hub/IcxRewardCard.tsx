@@ -86,6 +86,16 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           </ul>
         </div>
       )}
+      {!loggedOut && (
+        <a
+          href={en.rewards.icxTradeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-body-sm text-accent underline-offset-2 hover:underline"
+        >
+          {en.rewards.icxTradeLinkLabel} ↗
+        </a>
+      )}
       {showPayoutChannel && state.okxUid && (
         <p className="text-body-sm text-text-tertiary">
           {en.rewards.payoutChannel(maskOkxUid(state.okxUid))}

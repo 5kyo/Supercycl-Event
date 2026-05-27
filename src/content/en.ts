@@ -30,9 +30,12 @@ export const en = {
     usdtConditionNeedsOkx: 'Connect OKX to unlock',
     usdtClosed: 'Trade window closed — reward no longer available',
     icxAmount: 'Bonus ICX',
-    icxAmountWithValue: (amount: number) => `${amount} ICX`,
+    icxAmountWithValue: (amount: number) =>
+      amount === 100 ? `${amount} ICX (~$5 airdrop)` : `${amount} ICX`,
     icxCondition: 'Complete the 12-question survey',
     icxConditionReady: 'Survey complete — payout scheduled',
+    icxTradeUrl: 'https://www.okx.com/trade-spot/icx-usdt',
+    icxTradeLinkLabel: 'Trade ICX on OKX',
     payoutChannel: (maskedUid: string) =>
       `OKX UID: ${maskedUid} · payout via Internal Transfer`,
     icxPayoutInfo: {
@@ -46,7 +49,7 @@ export const en = {
     step1: 'Sign up + connect OKX',
     step1OkxNotConnected: 'OKX not connected',
     step2: 'Trade $500 →\nGet 20 USDT',
-    step3: 'Complete survey →\nGet ICX',
+    step3: 'Complete survey →\nGet ICX (~$5)',
   },
   slot: {
     label: 'Trading slots remaining',

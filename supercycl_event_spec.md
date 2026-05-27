@@ -116,6 +116,7 @@
 - 거래자의 인당 지급량과 풀 크기는 §4.2와 정합
 - 비거래자의 인당 지급량은 운영팀 의사결정 후 확정 (§12 Open Issues 참조)
 - "거래자" 정의 = **캠페인 기간 내 Supercycl 통해 1회 이상 체결한 유저** (자전거래 제외)
+- **유저 노출 문구**: 거래자 100 ICX는 이벤트 페이지에서 `100 ICX (~$5 airdrop)`로 함께 노출합니다 (참조 시세 약 $0.05/ICX 기준 — 시세 변동 시 코드의 `en.rewards.icxAmountWithValue` 한 곳에서 조정). 사용자 학습 동선 확보를 위해 IcxRewardCard 하단에 `Trade ICX on OKX` 외부 link-out(`https://www.okx.com/trade-spot/icx-usdt`)도 함께 노출. 비거래자(⏳) 케이스는 USD 환산 문구 미부착.
 
 ### 거래 보상 — 총 10,000 USDT
 - 500명 × 20 USDT
@@ -433,6 +434,12 @@
 | 3 | `Complete survey → ICX` | Step 2 done **AND** `state.surveyCompleted` |
 
 상태 enum: `done | inProgress | locked`. **Strict sequential gating** — 각 단계의 `done`은 이전 단계가 `done`이어야만 진입 가능 (디버그 토글로 Step 2만 끄고 Step 3 done이 되는 케이스 방지). 이전 단계 미완 시 후속 단계는 `locked`.
+
+> 📌 **거래량 도달 + OKX 미연결 엣지 케이스**: `state.tradingVolume >= 500 && !state.hasOkxLinked` 인 경우 (디버그 토글 또는 백엔드 동기화 지연 등), Step 1이 strict gate이므로 보상 자격은 아직 충족되지 않은 상태입니다. 이를 명확히 알리기 위해 두 표면의 문구를 교체합니다:
+> - **UsdtRewardCard** 조건 라인: `Trade $0 more to unlock` 대신 **"Connect OKX to unlock"** (`en.rewards.usdtConditionNeedsOkx`)
+> - **MyProgressMeter** 친화 라인: `Goal reached!` 대신 **"Volume reached — connect OKX to claim"** (`en.progress.remainingNeedsOkx`)
+>
+> 액션 진입점은 추가하지 않습니다 — MyAccountCard의 `Connect OKX →` link-out이 계속 그 역할을 담당합니다 (§7.3 본문 3번 항목).
 
 #### 보상 영역 상태별 표시
 
