@@ -42,7 +42,7 @@ export const en = {
     icxAmount: 'Bonus ICX',
     icxAmountWithValue: (amount: number) =>
       amount === 100 ? `${amount} ICX (~$5 airdrop)` : `${amount} ICX`,
-    icxCondition: 'Complete the 12-question survey',
+    icxCondition: 'Complete the survey',
     icxConditionReady: 'Survey complete — payout scheduled',
     icxTradeUrl: 'https://www.okx.com/trade-spot/icx-usdt',
     icxTradeLinkLabel: 'Trade ICX on OKX',
