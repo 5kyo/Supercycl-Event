@@ -49,9 +49,8 @@ export const en = {
     payoutChannel: (maskedUid: string) =>
       `OKX UID: ${maskedUid} · payout via Internal Transfer`,
     icxPayoutInfo: {
-      surveyOpens: (start: string) => `Survey opens ${shortDate(start)}`,
-      traderTier: 'Traders ($500+): 100 ICX',
-      nonTraderTier: 'Non-traders: share of the remaining pool',
+      traderTier: 'Trade $500+ → earn 100 ICX each',
+      nonTraderTier: 'Otherwise → share of the remaining pool',
     },
   },
   steps: {

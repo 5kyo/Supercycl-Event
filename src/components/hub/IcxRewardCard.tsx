@@ -94,11 +94,6 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
           className="flex flex-col gap-1.5 rounded-md text-body-sm"
           style={{ background: 'var(--surface-2)', padding: '10px 12px' }}
         >
-          {state.simulatedDate < SURVEY_TRACK_START && (
-            <p className="text-text-secondary">
-              {en.rewards.icxPayoutInfo.surveyOpens(SURVEY_TRACK_START)}
-            </p>
-          )}
           <ul className="flex flex-col gap-1 text-text-tertiary">
             <li>{en.rewards.icxPayoutInfo.traderTier}</li>
             <li>{en.rewards.icxPayoutInfo.nonTraderTier}</li>
