@@ -7,6 +7,7 @@ import {
   effectiveIcxPayout,
   surveyTrackOpen,
   SURVEY_TRACK_START,
+  CAMPAIGN_END,
 } from '@/lib/mock-state';
 
 type Props = {
@@ -102,6 +103,15 @@ export function IcxRewardCard({ onStartSurvey }: Props) {
             OKX Main Account" notice below. */}
         {!isPaid && (
           <p className="text-body-md text-text-secondary">{conditionLine}</p>
+        )}
+        {/* Mirror UsdtRewardCard's payout-date emphasis line — ICX is sent
+            in a single post-campaign batch on CAMPAIGN_END (2026-07-07), so
+            we can surface the exact date as soon as the user qualifies. */}
+        {effectiveStatus === 'AWAITING_PAYOUT' && (
+          <p className="text-body-md font-semibold text-accent">
+            <span aria-hidden style={{ marginRight: 6 }}>📅</span>
+            {en.rewards.payoutOn(CAMPAIGN_END)}
+          </p>
         )}
       </div>
       {!state.surveyCompleted && (

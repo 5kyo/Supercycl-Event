@@ -149,7 +149,7 @@
 | 항목 | 내용 |
 |------|------|
 | 보상 | **거래자 100 ICX / 비거래자 ⏳추후 확정** (§3 풀 분리 참조) |
-| 지급 시점 | 응답 완료 후 7영업일 이내 |
+| 지급 시점 | **단일 배치 — 캠페인 종료일 `2026-07-07 (Tue) 10:00 KST`**. AWAITING_PAYOUT 카드 UI 가 이 일자를 명시 노출 (`en.rewards.payoutOn(CAMPAIGN_END)`, IcxRewardCard). 응답 완료 후 운영팀이 사전 자격 검토 → 종료일 일괄 송금. 운영 사정으로 늦어질 경우 7영업일 SLA 한도 내. |
 | 지급 방식 | **운영팀 수동 송금** — 로그인 시 연동된 OKX UID로 OKX Internal Transfer (유저 액션 불필요) |
 | 클레임 버튼 | **없음** (자동 지급, 유저 액션 불필요) |
 | 검증 데이터 | 거래자/비거래자별 응답 완료율 |
@@ -478,7 +478,7 @@
 | Enum 키 (§8.2) | 칩 라벨 (§8.2 정합 기준) | USDT 카드 본문 | ICX 카드 본문 |
 |------|------|------|------|
 | `NOT_REACHED` | `Locked` (`en.status.locked`) | 조건 라인: `Trade $500 to unlock` / `Trade $X more to unlock` (`en.rewards.usdtCondition*`). OKX-first 가드 발동 시 칩과 본문이 위 박스(§7.3 ProgressTracker 하단) 규칙으로 교체됨 | 조건 라인: `Complete the survey` (`en.rewards.icxCondition`). 헤드라인 분기는 §3 4가지 케이스 참조: pre-survey → `Up to 100 ICX (~$5 airdrop)`, post-survey 거래자 → `100 ICX (~$5 airdrop)`, post-survey 비거래자(amount 확정) → `N ICX`, post-survey 비거래자(amount TBD) → `?? ICX` placeholder. 카드 하단에 외부 link-out `Trade ICX on OKX ↗` (`en.rewards.icxTradeUrl/icxTradeLinkLabel`) 상시 노출 |
-| `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.usdtPayoutOn`, `nextWeeklyPayoutDate` selector — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) |
+| `AWAITING_PAYOUT` | `Awaiting payout` (`en.status.awaitingPayout`) | 본문: `$500 reached` + 강조 라인 **`📅 Payout: <Mon, MMM D> · 10:00 KST`** (`en.rewards.payoutOn(nextWeeklyPayoutDate(simulatedDate))` — `simulatedDate` 이후의 첫 월요일을 반환, 오늘이 월요일이면 오늘) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) | 본문: `Survey complete — payout scheduled` (`en.rewards.icxConditionReady`) + 강조 라인 **`📅 Payout: Tue, Jul 7 · 10:00 KST`** (`en.rewards.payoutOn(CAMPAIGN_END)` — ICX 는 단일 post-campaign 배치로 일괄 송금하므로 고정일 `2026-07-07`) + `OKX UID: 1234567890 · payout via Internal Transfer` (마스킹 없이 원문) |
 | `PAID` | `Paid` (`en.status.completed`) | `OKX UID: 1234567890 · payout via Internal Transfer` (AWAITING_PAYOUT과 동일 — 송금된 목적지를 그대로 노출해 자가 확인 우선) | 동일 — `OKX UID: 1234567890 · payout via Internal Transfer` |
 
 > 📌 `PAID` 표기: 칩은 **`Paid` 단일 문구**이며, 카드 본문은 **AWAITING_PAYOUT과 동일하게 OKX UID 라인을 그대로 유지**합니다 (이전에 노출했던 `TX: <앞 10자>…` 라인은 제거 — 유저는 자기 OKX 계정에서 직접 입금 내역을 확인하므로 TX 해시를 별도로 노출할 필요 없음). TX 해시는 운영자 도구에서만 보유.
@@ -545,7 +545,7 @@
 | **세션 동기화** | 본 서비스에서 KYC/거래 완료 시 이벤트 페이지 자동 갱신 (실시간 또는 새로고침) |
 | **반응형** | 모바일/PC 모두 대응 (이벤트 페이지 단일 코드베이스) |
 | **다국어** | **영어 단일 UI 운영** — 모든 UI 텍스트, 상태 라벨, 안내 메시지는 영어로만 운영. 한국어는 **설문 콘텐츠**(`src/content/survey-ko.md`, 현재 11문항 — `surveyKo.length` 자동 반영)에만 한정. 언어 전환 토글 미제공. 라이브러리는 **`next-intl`**을 사용하여 locale 분리 구조는 유지(향후 한국어 UI 확장 시 키 매핑만 추가하면 되도록 대비). |
-| **날짜 포맷** | `src/content/en.ts` 의 두 헬퍼로 일원화 — `shortDate(iso)` = `"Jun 29"` (월/일만, 설문 오픈일 등 컨텍스트가 명확한 경우), `shortDateWithWeekday(iso)` = `"Mon, Jun 15"` (요일 강조가 필요한 경우 — USDT 주간 정산일 표기 `usdtPayoutOn`에서 사용, §8.1). 운영 일정 표기는 항상 KST 기준으로 통일하고 시각은 `· 10:00 KST` 형태의 suffix로 부여합니다. |
+| **날짜 포맷** | `src/content/en.ts` 의 두 헬퍼로 일원화 — `shortDate(iso)` = `"Jun 29"` (월/일만, 설문 오픈일 등 컨텍스트가 명확한 경우), `shortDateWithWeekday(iso)` = `"Mon, Jun 15"` (요일 강조가 필요한 경우 — `en.rewards.payoutOn(date)` 으로 USDT/ICX AWAITING_PAYOUT 라인에 공통 적용). 운영 일정 표기는 항상 KST 기준으로 통일하고 시각은 `· 10:00 KST` 형태의 suffix로 부여합니다. |
 | **SEO/공유** | 단일 URL 운영 — 비로그인 진입 시 공개 랜딩 콘텐츠 자동 노출. OG 태그, 검색 노출 허용 |
 
 ---
@@ -554,7 +554,7 @@
 
 | 보상 | 주기 | 채널 |
 |------|------|------|
-| ICX (설문) — 거래자 100 / 비거래자 ⏳ | 완료 후 7영업일 이내 | OKX Internal Transfer (연동된 OKX UID) |
+| ICX (설문) — 거래자 100 / 비거래자 ⏳ | 단일 배치 — 캠페인 종료일 `2026-07-07 (Tue) 10:00 KST` (운영 사정 지연 시 7영업일 SLA) | OKX Internal Transfer (연동된 OKX UID) |
 | 20 USDT (거래) | 매주 월 10:00 KST | OKX Internal Transfer (연동된 OKX UID) |
 
 > 이벤트 페이지 보상 영역에서 "지급 대기 / 완료" 상태 동기화 표시

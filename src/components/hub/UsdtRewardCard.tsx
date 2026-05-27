@@ -121,7 +121,7 @@ export function UsdtRewardCard() {
               {!isPaid && (
                 <p className="text-body-md font-semibold text-accent">
                   <span aria-hidden style={{ marginRight: 6 }}>📅</span>
-                  {en.rewards.usdtPayoutOn(nextWeeklyPayoutDate(state.simulatedDate))}
+                  {en.rewards.payoutOn(nextWeeklyPayoutDate(state.simulatedDate))}
                 </p>
               )}
             </div>

@@ -34,7 +34,10 @@ export const en = {
     usdtCondition: 'Trade $500 to unlock',
     usdtConditionRemaining: (remaining: number) => `Trade $${remaining} more to unlock`,
     usdtConditionReady: '$500 reached',
-    usdtPayoutOn: (date: string) =>
+    // Shared payout-date copy — USDT (weekly Monday batch) and ICX (single
+    // post-campaign batch on CAMPAIGN_END) both render this format with the
+    // appropriate date computed at the call site.
+    payoutOn: (date: string) =>
       `Payout: ${shortDateWithWeekday(date)} · 10:00 KST`,
     usdtConditionNeedsOkx: 'Connect OKX to unlock',
     usdtClosed: 'Trade window closed — reward no longer available',
